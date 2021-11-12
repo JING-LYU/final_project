@@ -1,0 +1,73 @@
+---
+title: "Project Proposal"
+date: "11/10/2021"
+output: 
+  html_document
+---
+
+### Group members:
+Yushan Wang(yw3772), Jing Lyu(jl6049), Yiqun Jin(yj2686), Mengfan Luo(ml4701)
+
+### Tentative project title:
+Smoking in NYC
+
+### Motivation for project and intended final products:
+
+Public concern over the use of cigarettes had lasted for years, as many believed that smoking contributes to air pollution and is detrimental to other people’s health. We want to first introduce some background about smoking facts. We are interested in exploring the relationship between air quality and cigarette use in New York City. In addition, we also want to explore the places where people like to buy cigarettes, and cigarette store locations with respect to cigarette use.
+
+
+### Anticipated data sources
+
+* Adult tobacco survey - ​​https://health.data.ny.gov/Health/Adult-Tobacco-Survey-Beginning-2003/ckfz-a669
+
+* Facts about cigarette - https://www.medicalnewstoday.com/releases/12481#1
+
+* Smoking rate by borough - https://nycsmokefree.org/resources/smoking-statistics/ 
+
+* Active Retail Tobacco and Vapor Product Vendors - https://health.data.ny.gov/Health/Active-Retail-Tobacco-and-Vapor-Product-Vendors/9ma3-vsuk 
+
+* NYC air quality - https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r
+
+* NYC air pollution- https://nyccas.cityofnewyork.us/nyccas2020/web/report
+https://a816-dohbesp.nyc.gov/IndicatorPublic/Traffic/index.html 
+
+
+
+### The planned analyses / visualizations / coding challenges
+
+* Analyses:
+
+Analyse the concentration of particle that smoking contributes with respect to smoking rate in that borough;
+
+Connecting the analysis of air quality with public opinion about smoking outdoor;
+
+Analyse where people like to buy cigarettes.
+
+
+
+* Visualizations: 
+
+Mapping of cigarette use in NYC;
+
+Mapping of cigarette store in NYC;
+
+Relationship between air quality and smoking;
+
+Plots of popular places where people buy cigarettes. 
+
+
+* Coding challenges: 
+
+Difficulty of cleaning dataset and extract desired content from a survey of adult tobacco survey of New York State
+
+
+
+### Anticipated Timeline:
+
+* November 11: Create project proposal and github repository
+* November 12-19: Finalized project goal, datasets, divide responsibilities for each member
+* November 20-26: Data cleaning and data visualization
+* November 27- December 3: Data analyses and analysis report
+* December 4-10: Finalize everything, create website
+* December 11: Final project due
+
