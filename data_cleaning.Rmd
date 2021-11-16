@@ -1,0 +1,46 @@
+---
+title: "Data cleaning"
+author: "Mengfan Luo"
+date: "11/11/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(rvest)
+library(httr)
+library(haven)
+```
+
+
+## Smoking data
+
+```{r, eval = FALSE}
+
+data = read_sas("NYATS_2003_2019_PublicUse.sas7bdat")
+
+#names(data)
+
+nyc_08_19 = data%>% 
+  janitor::clean_names() %>% 
+  filter(nyc == 1,
+         year > 2007)
+
+write_csv(nyc_08_19,"data/nyc_08_19")
+```
+
+
+## tobacco_retail data
+
+```{r}
+#tobacco_retail = 
+  #GET("https://health.data.ny.gov/resource/9ma3-vsuk.csv") %>% 
+  #content("parsed")
+## only 1000 lines. Colnames changed
+
+tobacco_retail = read_csv("data/Active_Retail_Tobacco_and_Vapor_Product_Vendors.csv") %>% 
+  janitor::clean_names()
+names(tobacco_retail)
+```
+
