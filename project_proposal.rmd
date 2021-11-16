@@ -18,19 +18,18 @@ Public concern over the use of cigarettes had lasted for years, as many believed
 
 ### Anticipated data sources
 
-* Adult tobacco survey - ​​https://health.data.ny.gov/Health/Adult-Tobacco-Survey-Beginning-2003/ckfz-a669
+* Adult tobacco survey - https://health.data.ny.gov/Health/Adult-Tobacco-Survey-Beginning-2003/ckfz-a669
 
 * Facts about cigarette - https://www.medicalnewstoday.com/releases/12481#1
 
-* Smoking rate by borough - https://nycsmokefree.org/resources/smoking-statistics/ 
+* Smoking rate by borough - https://nycsmokefree.org/resources/smoking-statistics/ (need to compile into csv or excel)
 
 * Active Retail Tobacco and Vapor Product Vendors - https://health.data.ny.gov/Health/Active-Retail-Tobacco-and-Vapor-Product-Vendors/9ma3-vsuk 
 
 * NYC air quality - https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r
 
-* NYC air pollution- https://nyccas.cityofnewyork.us/nyccas2020/web/report
-https://a816-dohbesp.nyc.gov/IndicatorPublic/Traffic/index.html 
-
+* NYC air pollution - https://nyccas.cityofnewyork.us/nyccas2020/web/report
+https://a816-dohbesp.nyc.gov/IndicatorPublic/Traffic/index.html (could not be opened)
 
 
 ### The planned analyses / visualizations / coding challenges
