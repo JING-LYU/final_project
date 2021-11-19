@@ -14,19 +14,13 @@ Smoking in NYC
 ### Motivation for project and intended final products:
 
 Plan A:
+
 Public concern over the use of cigarettes had lasted for years, as many believed that smoking contributes to air pollution and is detrimental to other people’s health. We would like to investigate the density of smoking in each borough in NYC, and explore the relationship between air quality and cigarette use in New York City. We would then proceed to analyse which particle in air pollution are contributed most by smoking. 
 We will also give an overlook of the amount of smokers in each borough, and categories of the smokers (light smokers, heavy smokers, etc). In addition, we are also thinking to explore the confounder in this correlation.
 
 Plan B:
-mental health and smoke,
 
-social behavior and smoke,
-
-Insurance/health coverage and smoke,
-
-
-
-smoke and mood
+We are interested in exploring the correlation between Insurance/health coverage and smoke. We will also investigate on confounder that contributes to this correlation.
 
 ### Anticipated data sources
 
