@@ -24,8 +24,13 @@ each borough, and categories of the smokers (light smokers, heavy
 smokers, etc). In addition, we are also thinking to explore the
 confounder in this correlation.
 
-Plan B: mental health and smoke social behavior and smoke
-Insurance/health coverage and smoke
+Plan B: mental health and smoke,
+
+social behavior and smoke,
+
+Insurance/health coverage and smoke,
+
+smoke and mood
 
 ### Anticipated data sources
 
