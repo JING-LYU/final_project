@@ -9,49 +9,34 @@ Luo(ml4701)
 
 ### Tentative project title:
 
-Smoking in NYC
+Smoker and their health Insurance/recources in NYC
 
 ### Motivation for project and intended final products:
 
-Plan A (unable to get geographical information):
-
-Public concern over the use of cigarettes had lasted for years, as many
-believed that smoking contributes to air pollution and is detrimental to
-other people’s health. We would like to investigate the density of
-smoking in each borough in NYC, and explore the relationship between air
-quality and cigarette use in New York City. We would then proceed to
-analyse which particle in air pollution are contributed most by smoking.
-We will also give an overlook of the amount of smokers in each borough,
-and categories of the smokers (light smokers, heavy smokers, etc). In
-addition, we are also thinking to explore the confounder in this
-correlation.
-
-Plan B:
-
 We are interested in exploring the correlation between access to health
-coverage/resources and smoking. We will also investigate on confounder
-that contributes to this correlation.
+coverage/resources and smoking. We will also investigate on factors that
+affect whether or not a person can get insurance.
 
 Aspects:
 
 1.  Self-awareness - has insurance, time length of no insurance, told
     doctor not accepting insurance, where go when sick or need
-    advice(also related with good/bad resources)
+    advice(also related with good/bad resources)…
 
-2.  Able to get health resources - “want but didn’t get needed care”.
+2.  Access to health resources - need but not get, not fill a
+    prescription because of cost, can’t afford…
 
 ### Anticipated data sources
+
+Smoking and Health Insurance price:
+<https://www.healthmarkets.com/content/smoking-and-health-insurance>
 
 -   Community Health Survey Public Use Data -
     <https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page>
 
 -   Facts about cigarette -
-    <https://www.medicalnewstoday.com/releases/12481#1> (only facts, no
-    data)
-
--   Smoking rate by borough -
-    <https://nycsmokefree.org/resources/smoking-statistics/> (need to
-    compile into csv or excel)
+    <https://www.medicalnewstoday.com/releases/12481#1> (only facts, not
+    dataset)
 
 -   Primary Care Access and Planning - Health Insurance Enrollment -
     <https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h>
@@ -62,20 +47,26 @@ Aspects:
 
 Analyse relationship between access to health resources and smoking;
 
-Analyse confounder/biases that contributes the correlation.
+Analyse different aspects in relation with whether or not getting
+insurance.
+
+(Analyse confounder/biases that contributes the correlation.)
 
 -   Visualizations:
 
 Mapping of health center in NYC
 
-Relationship between access to health resources and smoking;
+Will think of more visualizations during analysis (use plotly)
 
 -   Coding challenges:
 
 Difficulty of cleaning dataset and extract desired content from a
 survey;
 
-Unmatched variable names in each year dataset.
+Unmatched variable names in each year;
+
+Different survey questions in each years - can not analyse correlation
+when the data are from different years.
 
 ### Anticipated Timeline:
 
