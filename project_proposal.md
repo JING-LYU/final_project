@@ -13,9 +13,19 @@ Smoker and their health Insurance/recources in NYC
 
 ### Motivation for project and intended final products:
 
-We are interested in exploring the correlation between access to health
-coverage/resources and smoking. We will also investigate on factors that
-affect whether or not a person can get insurance.
+-   Motivation: It is known that smokers have higher price for health
+    insurance than non-smokers. As such, we are interested in exploring
+    if smokers in NYC tend to get insurance, and what type of insurance
+    they prefer.
+
+-   Final products: Correlation between access to health
+    coverage/resources and smoking.
+
+Factors that affect whether or not a smoker choose to buy insurance,
+such as self-awareness, access to health resources, and other factors.
+
+Suggestion and mapping on where to get consulting for insurance/health
+center location.
 
 Aspects:
 
@@ -23,13 +33,12 @@ Aspects:
     doctor not accepting insurance, where go when sick or need
     advice(also related with good/bad resources)…
 
-2.  Access to health resources - need but not get, not fill a
+2.  Access to health resources - not get insurance when need, not fill a
     prescription because of cost, can’t afford…
 
-### Anticipated data sources
+3.  Other co-variables - general health
 
-Smoking and Health Insurance price:
-<https://www.healthmarkets.com/content/smoking-and-health-insurance>
+### Anticipated data sources
 
 -   Community Health Survey Public Use Data -
     <https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page>
@@ -60,13 +69,13 @@ Will think of more visualizations during analysis (use plotly)
 
 -   Coding challenges:
 
+Different survey questions in each years - can not analyse correlation
+when the data are from different years.
+
 Difficulty of cleaning dataset and extract desired content from a
 survey;
 
 Unmatched variable names in each year;
-
-Different survey questions in each years - can not analyse correlation
-when the data are from different years.
 
 ### Anticipated Timeline:
 
