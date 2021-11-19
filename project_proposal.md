@@ -13,13 +13,15 @@ Smoker and their health Insurance/recources in NYC
 
 ### Motivation for project and intended final products:
 
--   Motivation: It is known that smokers have higher price for health
-    insurance than non-smokers. As such, we are interested in exploring
-    if smokers in NYC tend to get insurance, and what type of insurance
-    they prefer.
+-   Motivation:
 
--   Final products: Correlation between access to health
-    coverage/resources and smoking.
+It is known that smokers have higher price for health insurance than
+non-smokers. As such, we are interested in exploring if smokers in NYC
+tend to get insurance, and what type of insurance they prefer.
+
+-   Final products:
+
+Correlation between access to health coverage/resources and smoking.
 
 Factors that affect whether or not a smoker choose to buy insurance,
 such as self-awareness, access to health resources, and other factors.
@@ -43,12 +45,12 @@ Aspects:
 -   Community Health Survey Public Use Data -
     <https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page>
 
+-   Primary Care Access and Planning - Health Insurance Enrollment -
+    <https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h>
+
 -   Facts about cigarette -
     <https://www.medicalnewstoday.com/releases/12481#1> (only facts, not
     dataset)
-
--   Primary Care Access and Planning - Health Insurance Enrollment -
-    <https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h>
 
 ### The planned analyses / visualizations / coding challenges
 
@@ -63,7 +65,9 @@ insurance.
 
 -   Visualizations:
 
-Mapping of health center in NYC
+Mapping of NYC health center location where health insurance enrollment
+and assistance with SNAP benefits are offered (it can be used by general
+public seeking assistance with signing up for health insurance);
 
 Will think of more visualizations during analysis (use plotly)
 
