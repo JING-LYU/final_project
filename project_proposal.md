@@ -13,7 +13,7 @@ Smoking in NYC
 
 ### Motivation for project and intended final products:
 
-Plan A:
+Plan A (unable to get geographical information):
 
 Public concern over the use of cigarettes had lasted for years, as many
 believed that smoking contributes to air pollution and is detrimental to
@@ -28,9 +28,17 @@ correlation.
 
 Plan B:
 
-We are interested in exploring the correlation between Insurance/health
-coverage and smoke. We will also investigate on confounder that
-contributes to this correlation.
+We are interested in exploring the correlation between access to health
+coverage/resources and smoking. We will also investigate on confounder
+that contributes to this correlation.
+
+Aspects:
+
+1.  Self-awareness - has insurance, time length of no insurance, told
+    doctor not accepting insurance, where go when sick or need
+    advice(also related with good/bad resources)
+
+2.  Able to get health resources - “want but didn’t get needed care”.
 
 ### Anticipated data sources
 
@@ -45,27 +53,22 @@ contributes to this correlation.
     <https://nycsmokefree.org/resources/smoking-statistics/> (need to
     compile into csv or excel)
 
--   NYC air quality -
-    <https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r>
+-   Primary Care Access and Planning - Health Insurance Enrollment -
+    <https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h>
 
 ### The planned analyses / visualizations / coding challenges
 
 -   Analyses:
 
-Analyse the pollution level with respect to smoking rate in that
-borough;
+Analyse relationship between access to health resources and smoking;
 
-Analyse the survey for smokers, connecting the result to air pollution.
-
-Analyse which particle in air pollution are contributed most by smoking.
+Analyse confounder/biases that contributes the correlation.
 
 -   Visualizations:
 
-Mapping of cigarette use in NYC;
+Mapping of health center in NYC
 
-Relationship between air quality and smoking;
-
-Plot the amount of different kinds of smoker with respect to borough.
+Relationship between access to health resources and smoking;
 
 -   Coding challenges:
 
