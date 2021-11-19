@@ -2,7 +2,7 @@
 title: "Project Proposal"
 date: "11/10/2021"
 output: 
-  html_document
+  github_document
 ---
 
 ### Group members:
