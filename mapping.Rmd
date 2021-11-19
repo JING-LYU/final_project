@@ -1,0 +1,13 @@
+---
+title: "Mapping of NYC health center location"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+# Loading data
+
+
+
+

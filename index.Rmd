@@ -1,0 +1,37 @@
+---
+title: "Insert name of the website"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+# This is xxx website
+
+
+
+## Here's a subsection
+
+here's some additional text
+
+
+
+# Links to other website
+
+
+*[P8105](https://www.p8105.com)
+
+
+
+
+# link to page within the site
+
+[About me](about.html)
+
+
+
+
+
+
+
