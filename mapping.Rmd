@@ -6,8 +6,47 @@ output:
     toc_float: true
 ---
 
-# Loading data
+For general public seeking assistance with signing up for health insurance or SNAP (Supplemental Nutrition Assistance Program), here is a mapping of health center locations, where health insurance enrollment and assistance with SNAP benefits (Food Stamps) are offered.
+
+```{r load packages, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(plotly)
+```
+
+```{r loading data, echo = FALSE}
+location = read.csv("data/Primary_Care_Access_and_Planning_-_Health_Insurance_Enrollment.csv") %>% 
+  janitor::clean_names() 
+```
+
+```{r plotly mapping, echo = FALSE, warning = FALSE}
+
+# geo styling
+g <- list(
+  scope = 'usa',
+  projection = list(type = 'albers usa'),
+  showland = TRUE,
+  landcolor = toRGB("gray95"),
+  subunitcolor = toRGB("gray85"),
+  countrycolor = toRGB("gray85"),
+  countrywidth = 0.5,
+  subunitwidth = 0.5
+)
+
+fig <- plot_geo(location, lat = ~latitude, lon = ~longitude)
+
+fig <- fig %>% add_markers(
+    text = ~paste(health_center, street_address, telephone_number, sep = "<br />"),
+    color = ~borough, symbol = I("square"), size = I(8), hoverinfo = "text"
+  )
+fig <- fig %>% colorbar(title = "Borough")
+fig <- fig %>% layout(
+    title = 'Mapping of NYC health center location)', geo = g
+  )
+
+fig
+```
 
 
 
+Source: Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
 
