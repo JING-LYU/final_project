@@ -2,23 +2,70 @@
 title: "Mapping of NYC health center location"
 output: 
   html_document:
+    code_folding: hide
     toc: true
     toc_float: true
 ---
+
+## Location mapping
 
 For general public seeking assistance with signing up for health insurance or SNAP (Supplemental Nutrition Assistance Program), here is a mapping of health center locations, where health insurance enrollment and assistance with SNAP benefits (Food Stamps) are offered.
 
 ```{r load packages, echo = FALSE, message = FALSE}
 library(tidyverse)
-library(plotly)
+library(leaflet)
+#library(plotly)
+
 ```
+
 
 ```{r loading data, echo = FALSE}
 location = read.csv("data/Primary_Care_Access_and_Planning_-_Health_Insurance_Enrollment.csv") %>% 
   janitor::clean_names() 
 ```
 
-```{r plotly mapping, echo = FALSE, warning = FALSE}
+
+```{r leaflet mapping, echo = FALSE}
+leaflet(location) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>% 
+  addMarkers(lat = ~latitude, 
+             lng = ~longitude, 
+             popup = paste("Health Center name:", location$health_center, "<br>", "Street address:", location$street_address, "<br>", "Telephone number:", location$telephone_number, "<br>", "Borough:", location$borough),
+             clusterOptions = markerClusterOptions())
+```
+
+## More information on time of operation and walk-in
+
+```{r}
+location_table = location %>% 
+  select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  mutate(
+    accept_walk_ins = c(rep("Yes",11))
+  ) %>% 
+  relocate(
+    health_center, days_of_operation, hours_of_operation, accept_walk_ins,
+    street_address, telephone_number
+    ) %>% 
+  rename(
+    "Health Center name" = health_center,
+    "Street address" = street_address,
+    "Telephone number" = telephone_number,
+    "Days of operation" = days_of_operation,
+    "Hours of operation" = hours_of_operation,
+    "Accept walk in" = accept_walk_ins
+  )
+  
+rmarkdown::paged_table(location_table)
+```
+
+
+## Source
+
+Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
+
+
+
+```{r plotly mapping, echo = FALSE, warning = FALSE, eval = FALSE}
 
 # geo styling
 g <- list(
@@ -45,8 +92,4 @@ fig <- fig %>% layout(
 
 fig
 ```
-
-
-
-Source: Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
 
