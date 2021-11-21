@@ -67,7 +67,7 @@ svyby(~diabetes17==2,~allsex2,chs.stdes,svyciprop,vartype = "ci",method="xlogit"
 
 ## Data loading and crude cleaning
 
-We select year 2014-2016 and variables relating to smoking and insurance.
+We select year 2014-2016 and variables relating to smoking and insurance. 
 
 ```{r}
 
