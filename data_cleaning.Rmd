@@ -111,6 +111,12 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
 ```
 
 
+```{r}
+k = 3
+k
+```
+
+
 
 
 
