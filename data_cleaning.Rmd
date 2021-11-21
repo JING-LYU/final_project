@@ -74,34 +74,25 @@ We select year 2014-2016 and variables relating to smoking and insurance.
 chs16 = read_sas("data/chs2016_public.sas7bdat")
 
 chs16_filter = chs16 %>% 
-  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,reasoner16,didntgetcare16,insaccept,didntfillin,medcost,everyday,numberperdaya,cost20cigarettes,smokeecig12m,smokeecig30days,ecighelpquit,didntfillin,timeunins16) %>% 
-  mutate(year = 2016)
+  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,didntfillin,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %>% 
+  mutate(year = 2016) %>% 
+  rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
 
 
 chs15 = read_sas("data/chs2015_public.sas7bdat")
 
 chs15_filter = chs15 %>% 
-  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,insaccept,didntfillin,medcost,everyday,numberperdaya,cost20cigarettes,didntfillin) %>% 
-  mutate(timeunins15 = NA,
-         reasoner15 = NA,
-         smokeecig12m = NA,
-         smokeecig30days = NA,
-         ecighelpquit = NA,
-         year = 2015) 
+  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,didntfillin,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %>% 
+  mutate(year = 2015) %>% 
+  rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
 
 
 chs14 = read_sas("data/chs2014_public.sas7bdat")
 
 chs14_filter = chs14 %>% 
-  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,didntgetcare14,everyday,numberperdaya,cost20cigarettes,smokeecig12m,smokeecig30days) %>% 
-  mutate(timeunins14 = NA,
-         reasoner14 = NA,
-         sickplace4 = NA,
-         insaccept = NA,
-         didntfillin = NA,
-         medcost = NA,
-         ecighelpquit = NA,
-         year = 2014) 
+  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,everyday,numberperdaya,cost20cigarettes,smokeecig12m,smokeecig30days,imputed_povertygroup,fluvaccineshot) %>% 
+  mutate(year = 2014) %>% 
+  rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
 
 
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
