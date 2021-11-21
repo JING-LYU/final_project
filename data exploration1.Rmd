@@ -1,9 +1,10 @@
 ---
-title: "Data cleaning"
-author: "Mengfan Luo"
-date: "11/11/2021"
-output: github_document
+title: "Data Exploaration"
+author: "LYU JING"
+date: "11/21/2021"
+output: html_document
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -11,6 +12,7 @@ library(tidyverse)
 library(rvest)
 library(httr)
 library(haven)
+library(patchwork)
 ```
 
 
@@ -113,7 +115,27 @@ dataset_basic = chs_14_16 %>%
 
 
 ```{r}
-summary(dataset_basic)
+insurance_data = dataset_basic %>% 
+  select(insuredgateway,insure,sickadvice,didntgetcare)
+
+
+plot1 = insurance_data %>% 
+  ggplot(aes(x = insuredgateway)) +
+  geom_histogram() 
+ 
+plot2 =insurance_data %>% 
+  ggplot(aes(x = insure)) +
+  geom_histogram()  
+
+plot3 =insurance_data %>% 
+  ggplot(aes(x = sickadvice)) +
+  geom_histogram() 
+
+plot4 =insurance_data %>% 
+  ggplot(aes(x = didntgetcare)) +
+  geom_histogram() 
+
+plot1 + plot2 + plot3 + plot4
 ```
 
 
