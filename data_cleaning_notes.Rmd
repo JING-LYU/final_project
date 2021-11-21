@@ -1,0 +1,134 @@
+---
+title: "Note for data cleaning"
+date: "11/10/2021"
+output: 
+  github_document
+---
+
+
+
+### Insurance
+
+* `insuredgateway`: Have health insurance? 
+
+```
+1=Yes
+2=No
+.d=Don’t know
+.r=Refused
+```
+
+* `insure5`: Type of health insurance coverage
+
+```
+1=Private
+2=Medicare
+3=Medicaid
+4=Others
+5=Uninsured
+.d=Don’t know
+.r=Refused
+.= Missing
+```
+
+* `sickadvice`: when sick, where usually go?
+
+```
+1= A private doctor,
+2= Non-retail clinic,
+3= Urgent Care Center,
+4= Hospital ED,
+5= Retail clinic,
+6=Alternative health care provider,
+7= Family/friend/self/ resources,
+8= Other,
+9= No usual place,
+.d=Don’t know,
+.r=Refused, 
+.=Missing/not asked
+```
+
+* `didntgetcare`: Was there a time in the past 12 months when you
+needed medical care but did NOT get it? 
+
+```
+1=Yes
+2=No
+.d=Don’t know
+.r=Refused
+```
+
+### Smoking related
+
+* `smoker`: Whether smoker (smoked at least 100 cigarettes in your entire life?)
+
+```
+1= Never
+2= Current
+3= Former
+.d= Don’t know
+.r= Refused
+```
+
+* `everyday`: Smoke every day vs some days
+
+```
+1= Yes, every day
+2= No, some days
+.d= Don’t know
+.r= Refused
+. = Missing/Not asked
+```
+
+* `numberperdaya`:  average cigs smoked per day, continuous
+
+* `cost20cigarettes`: Cost of 20 cigarettes (one pack), continuous
+
+```
+d= Don’t know
+.r= Refused  
+. = Missing/Not asked
+```
+
+### Others
+
+* `generalhealth`: general health status (self evaluated)
+
+```
+1=Excellent, 
+2=Very good, 
+3=Good, 
+4=Fair, 
+5=Poor, 
+.d=Don’t know,  
+.r= Refused
+```
+
+* `fluvaccineshot`:  Had a flu shot during the past 12 month?
+
+```
+1=Yes
+2=No
+.d=Don’t know
+.r=Refused
+```
+
+* `imputed_povertygroup`: Household annual income from all sources (FPL: federal poverty level)
+
+```
+1= <100% FPL
+2=100 - <200% FPL
+3=200 - <400% FPL
+4=400 - <600% FPL
+5= >600% FPL
+```
+
+
+
+
+
+
+
+
+
+
