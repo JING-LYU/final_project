@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Mengfan Luo" />
+
+<meta name="date" content="2021-11-11" />
+
+<title>Data exploration</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="mapping.html">Mapping</a>
+</li>
+<li>
+  <a href="dashboard.html">Dashboard</a>
+</li>
+<li>
+  <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/wyshanw/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Data exploration</h1>
+<h4 class="author">Mengfan Luo</h4>
+<h4 class="date">11/11/2021</h4>
+
+</div>
+
+
+<div id="sample-code-given-with-the-source-data" class="section level3">
+<h3>Sample code given with the source data</h3>
+<pre><code>rm(list=ls(all=TRUE))
+library(&quot;haven&quot;)
+library(&quot;survey&quot;)
+library(dplyr)
+require(data.table)
+chs17&lt;-read_sas(&quot;data/chs2017_public.sas7bdat&quot;)
+
+#city-wide estimates
+chs&lt;-transform(chs17,strata=as.character(strata),all=as.factor(survey))
+
+#define the survey
+chs.dsgn&lt;-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
+#age adjusted survey
+pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
+chs.stdes&lt;-svystandardize(subset(chs.dsgn,diabetes17&gt;0 ),by=~agegroup,over=~all,population=pop.agecat4,excluding.missing =~ agegroup+ ~all)
+
+#weighted N
+aggregate(chs17$wt18_dual, by=list(Category=chs17$diabetes17), FUN=sum)
+
+#crude prevalance estimates
+svyby(~diabetes17==1,~all,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~all,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+#age adjusted prevalance estimates
+
+svyby(~diabetes17==1,~all,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~all,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+#estimate by sex
+chs&lt;-transform(chs17,strata=as.character(strata),allsex2=as.factor(sex))
+
+#define the survey
+chs.dsgn&lt;-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
+#age adjusted survey
+pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
+chs.stdes&lt;-svystandardize(subset(chs.dsgn,diabetes17&gt;0 ),by=~agegroup,over=~allsex2,population=pop.agecat4,excluding.missing =~ agegroup+ ~allsex2)
+
+#crude prevalance estimates
+svyby(~diabetes17==1,~allsex2,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~allsex2,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+
+#age adjusted prevalance estimates
+
+svyby(~diabetes17==1,~allsex2,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~allsex2,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))</code></pre>
+</div>
+<div id="data-loading-and-crude-cleaning" class="section level2">
+<h2>Data loading and crude cleaning</h2>
+<p>We select year 2014-2016 and variables relating to smoking and insurance.</p>
+<pre class="r"><code>chs16 = read_sas(&quot;data/chs2016_public.sas7bdat&quot;)
+
+chs16_filter = chs16 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2016) %&gt;% 
+  rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
+
+
+chs15 = read_sas(&quot;data/chs2015_public.sas7bdat&quot;)
+
+chs15_filter = chs15 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2015) %&gt;% 
+  rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
+
+
+chs14 = read_sas(&quot;data/chs2014_public.sas7bdat&quot;)
+
+chs14_filter = chs14 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2014) %&gt;% 
+  rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
+
+
+chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
+<pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
+  select(agegroup,insuredgateway,insure5,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %&gt;% 
+  mutate(numberperdaya = round(numberperdaya,1))</code></pre>
+<pre class="r"><code>smoke_df = dataset_basic %&gt;% 
+  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes) %&gt;% 
+  drop_na(smoker) %&gt;% 
+  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
+         everyday = factor(everyday))
+
+skimr::skim(smoke_df)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">smoke_df</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">28573</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">5</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">smoker</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">nev: 18729, for: 6188, cur: 3656</td>
+</tr>
+<tr class="even">
+<td align="left">everyday</td>
+<td align="right">24917</td>
+<td align="right">0.13</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">1: 2251, 2: 1405</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">agegroup</td>
+<td align="right">61</td>
+<td align="right">1.00</td>
+<td align="right">2.79</td>
+<td align="right">0.90</td>
+<td align="right">1.0</td>
+<td align="right">2.0</td>
+<td align="right">3</td>
+<td align="right">3.0</td>
+<td align="right">4</td>
+<td align="left">▂▇▁▇▆</td>
+</tr>
+<tr class="even">
+<td align="left">numberperdaya</td>
+<td align="right">24917</td>
+<td align="right">0.13</td>
+<td align="right">7.70</td>
+<td align="right">8.33</td>
+<td align="right">0.0</td>
+<td align="right">1.6</td>
+<td align="right">5</td>
+<td align="right">10.0</td>
+<td align="right">200</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">cost20cigarettes</td>
+<td align="right">25517</td>
+<td align="right">0.11</td>
+<td align="right">10.29</td>
+<td align="right">3.45</td>
+<td align="right">0.1</td>
+<td align="right">8.0</td>
+<td align="right">11</td>
+<td align="right">12.5</td>
+<td align="right">40</td>
+<td align="left">▃▇▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>smoke_df %&gt;% 
+  ggplot(aes(x = smoker))+
+  geom_bar()</code></pre>
+<p><img src="data_exploration2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
