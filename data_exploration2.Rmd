@@ -107,7 +107,7 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
 
 ```{r}
 dataset_basic = chs_14_16 %>% 
-  select(agegroup,insuredgateway,insure5,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %>% 
+  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %>% 
   mutate(numberperdaya = round(numberperdaya,1))
 ```
 
@@ -236,8 +236,56 @@ current_smoker %>%
 ```
 
 
+Chi-squared test for `insure` and 
+1. Flu
+
+```{r}
+analyse_flu_insurancetype = 
+  dataset_basic %>%
+  drop_na(fluvaccineshot,insure) %>% 
+  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c("Yes","No"))) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
+  group_by(fluvaccineshot,insure) %>% 
+  summarize(n = n())
+```
 
 
+```{r}
+test_data_flu_insurance = analyse_flu_insurancetype %>% 
+  pivot_wider(
+  names_from = "insure", 
+  values_from = "n")
+```
+
+```{r}
+chisq.test(test_data_flu_insurance[-1])
+
+```
+
+2.
+
+```{r}
+analyse_poverty_insurancetype = 
+  dataset_basic %>%
+  drop_na(imputed_povertygroup,insure) %>% 
+  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
+  group_by(imputed_povertygroup,insure) %>% 
+  summarize(n = n())
+```
+
+
+```{r}
+test_data_poverty_insurance = analyse_poverty_insurancetype %>% 
+  pivot_wider(
+  names_from = "insure", 
+  values_from = "n")
+```
+
+```{r}
+chisq.test(test_data_poverty_insurance[-1])
+
+```
 
 
 

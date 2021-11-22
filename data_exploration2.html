@@ -363,7 +363,7 @@ chs14_filter = chs14 %&gt;%
 
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
 <pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
-  select(agegroup,insuredgateway,insure5,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %&gt;% 
+  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %&gt;% 
   mutate(numberperdaya = round(numberperdaya,1))</code></pre>
 <pre class="r"><code>smoke_df = dataset_basic %&gt;% 
   select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %&gt;% 
@@ -627,6 +627,46 @@ current_smoker %&gt;%
       title = &#39;Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday&#39;)</code></pre>
 <pre><code>## Warning: Removed 600 rows containing missing values (geom_point).</code></pre>
 <p><img src="data_exploration2_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p>Chi-squared test for <code>insure</code> and 1. Flu</p>
+<pre class="r"><code>analyse_flu_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(fluvaccineshot,insure) %&gt;% 
+  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c(&quot;Yes&quot;,&quot;No&quot;))) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
+  group_by(fluvaccineshot,insure) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;fluvaccineshot&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>test_data_flu_insurance = analyse_flu_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;)</code></pre>
+<pre class="r"><code>chisq.test(test_data_flu_insurance[-1])</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  test_data_flu_insurance[-1]
+## X-squared = 1170.3, df = 6, p-value &lt; 2.2e-16</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>analyse_poverty_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(imputed_povertygroup,insure) %&gt;% 
+  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
+  group_by(imputed_povertygroup,insure) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;imputed_povertygroup&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>test_data_poverty_insurance = analyse_poverty_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;)</code></pre>
+<pre class="r"><code>chisq.test(test_data_poverty_insurance[-1])</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  test_data_poverty_insurance[-1]
+## X-squared = 9907.9, df = 24, p-value &lt; 2.2e-16</code></pre>
 </div>
 
 
