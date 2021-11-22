@@ -2,63 +2,70 @@
 title: "Project Proposal"
 date: "11/10/2021"
 output: 
-  html_document
+  github_document
 ---
 
 ### Group members:
 Yushan Wang(yw3772), Jing Lyu(jl6049), Yiqun Jin(yj2686), Mengfan Luo(ml4701)
 
 ### Tentative project title:
-Smoking in NYC
+Smoker and their health Insurance/recources in NYC
 
 ### Motivation for project and intended final products:
 
-Public concern over the use of cigarettes had lasted for years, as many believed that smoking contributes to air pollution and is detrimental to other people’s health. We want to first introduce some background about smoking facts. We are interested in exploring the relationship between air quality and cigarette use in New York City. In addition, we also want to explore the places where people like to buy cigarettes, and cigarette store locations with respect to cigarette use.
+* Motivation: 
 
+It is known that smokers have higher price for health insurance than non-smokers. As such, we are interested in exploring if smokers in NYC tend to get insurance, and what type of insurance they prefer.
+
+* Final products:
+
+Correlation between access to health coverage/resources and smoking. 
+
+Factors that affect whether or not a smoker choose to buy insurance, such as self-awareness, access to health resources, and other factors.
+
+Suggestion and mapping on where to get consulting for insurance/health center location.
+
+Aspects:
+
+1. Self-awareness - has insurance, time length of no insurance, told doctor not accepting insurance, where go when sick or need advice(also related with good/bad resources)...
+
+2. Access to health resources - not get insurance when need, not fill a prescription because of cost, can't afford...
+
+3. Other co-variables - general health
 
 ### Anticipated data sources
 
-* Adult tobacco survey - https://health.data.ny.gov/Health/Adult-Tobacco-Survey-Beginning-2003/ckfz-a669
+* Community Health Survey Public Use Data - https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page
 
-* Facts about cigarette - https://www.medicalnewstoday.com/releases/12481#1
+* Primary Care Access and Planning - Health Insurance Enrollment - https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h
 
-* Smoking rate by borough - https://nycsmokefree.org/resources/smoking-statistics/ (need to compile into csv or excel)
-
-* Active Retail Tobacco and Vapor Product Vendors - https://health.data.ny.gov/Health/Active-Retail-Tobacco-and-Vapor-Product-Vendors/9ma3-vsuk 
-
-* NYC air quality - https://data.cityofnewyork.us/Environment/Air-Quality/c3uy-2p5r
-
-* NYC air pollution - https://nyccas.cityofnewyork.us/nyccas2020/web/report
-https://a816-dohbesp.nyc.gov/IndicatorPublic/Traffic/index.html (could not be opened)
-
+* Facts about cigarette - https://www.medicalnewstoday.com/releases/12481#1 (only facts, not dataset)
 
 ### The planned analyses / visualizations / coding challenges
 
 * Analyses:
 
-Analyse the concentration of particle that smoking contributes with respect to smoking rate in that borough;
+Analyse relationship between access to health resources and smoking;
 
-Connecting the analysis of air quality with public opinion about smoking outdoor;
+Analyse different aspects in relation with whether or not getting insurance.
 
-Analyse where people like to buy cigarettes.
-
+(Analyse confounder/biases that contributes the correlation.)
 
 
 * Visualizations: 
 
-Mapping of cigarette use in NYC;
+Mapping of NYC health center location where health insurance enrollment and assistance with SNAP benefits are offered (it can be used by general public seeking assistance with signing up for health insurance);
 
-Mapping of cigarette store in NYC;
-
-Relationship between air quality and smoking;
-
-Plots of popular places where people buy cigarettes. 
+Will think of more visualizations during analysis (use plotly)
 
 
 * Coding challenges: 
 
-Difficulty of cleaning dataset and extract desired content from a survey of adult tobacco survey of New York State
+Different survey questions in each years - can not analyse correlation when the data are from different years.
 
+Difficulty of cleaning dataset and extract desired content from a survey;
+
+Unmatched variable names in each year;
 
 
 ### Anticipated Timeline:
@@ -69,4 +76,3 @@ Difficulty of cleaning dataset and extract desired content from a survey of adul
 * November 27- December 3: Data analyses and analysis report
 * December 4-10: Finalize everything, create website
 * December 11: Final project due
-
