@@ -118,15 +118,41 @@ smoke_df = dataset_basic %>%
   select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes) %>% 
   drop_na(smoker) %>% 
   mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
-         everyday = factor(everyday))
+         everyday = factor(everyday),
+         agegroup = factor(agegroup,ordered = TRUE),
+         smoker_cat = case_when(
+           numberperdaya <= 10 ~ 1,
+           (numberperdaya > 10) & (numberperdaya <= 20) ~2,
+           numberperdaya > 20 ~ 3
+         ),
+         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c("light","normal","heavy")))
 
 skimr::skim(smoke_df)
 
+
+
 smoke_df %>% 
-  ggplot(aes(x = smoker))+
-  geom_bar()
+  ggplot(aes(x = agegroup))+
+  geom_bar()+
+  geom_point(data = smoke_sum, aes(y = avg_cig_day))
 
 
+smoke_df %>% 
+  filter(smoker == "current") %>%
+  drop_na(agegroup) %>% 
+  group_by(agegroup) %>%
+  summarize(
+    count = n(),
+    avg_cig_day = mean(numberperdaya)
+  ) 
+  
+  
+smoke_df %>% 
+  filter(smoker == "current") %>%
+  drop_na(agegroup) %>%
+  ggplot(aes(x = numberperdaya, y = cost20cigarettes))+
+  geom_point()
+  
 
 
 
