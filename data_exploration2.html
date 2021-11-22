@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Mengfan Luo" />
+
+<meta name="date" content="2021-11-11" />
+
+<title>Data exploration2</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="mapping.html">Mapping</a>
+</li>
+<li>
+  <a href="dashboard.html">Dashboard</a>
+</li>
+<li>
+  <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/wyshanw/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Data exploration2</h1>
+<h4 class="author">Mengfan Luo</h4>
+<h4 class="date">11/11/2021</h4>
+
+</div>
+
+
+<div id="sample-code-given-with-the-source-data" class="section level3">
+<h3>Sample code given with the source data</h3>
+<pre><code>rm(list=ls(all=TRUE))
+library(&quot;haven&quot;)
+library(&quot;survey&quot;)
+library(dplyr)
+require(data.table)
+chs17&lt;-read_sas(&quot;data/chs2017_public.sas7bdat&quot;)
+
+#city-wide estimates
+chs&lt;-transform(chs17,strata=as.character(strata),all=as.factor(survey))
+
+#define the survey
+chs.dsgn&lt;-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
+#age adjusted survey
+pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
+chs.stdes&lt;-svystandardize(subset(chs.dsgn,diabetes17&gt;0 ),by=~agegroup,over=~all,population=pop.agecat4,excluding.missing =~ agegroup+ ~all)
+
+#weighted N
+aggregate(chs17$wt18_dual, by=list(Category=chs17$diabetes17), FUN=sum)
+
+#crude prevalance estimates
+svyby(~diabetes17==1,~all,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~all,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+#age adjusted prevalance estimates
+
+svyby(~diabetes17==1,~all,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~all,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+#estimate by sex
+chs&lt;-transform(chs17,strata=as.character(strata),allsex2=as.factor(sex))
+
+#define the survey
+chs.dsgn&lt;-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
+#age adjusted survey
+pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
+chs.stdes&lt;-svystandardize(subset(chs.dsgn,diabetes17&gt;0 ),by=~agegroup,over=~allsex2,population=pop.agecat4,excluding.missing =~ agegroup+ ~allsex2)
+
+#crude prevalance estimates
+svyby(~diabetes17==1,~allsex2,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~allsex2,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+
+#age adjusted prevalance estimates
+
+svyby(~diabetes17==1,~allsex2,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~allsex2,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))</code></pre>
+</div>
+<div id="data-loading-and-crude-cleaning" class="section level2">
+<h2>Data loading and crude cleaning</h2>
+<p>We select year 2014-2016 and variables relating to smoking and insurance.</p>
+<pre class="r"><code>chs16 = read_sas(&quot;data/chs2016_public.sas7bdat&quot;)
+
+chs16_filter = chs16 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2016) %&gt;% 
+  rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
+
+
+chs15 = read_sas(&quot;data/chs2015_public.sas7bdat&quot;)
+
+chs15_filter = chs15 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2015) %&gt;% 
+  rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
+
+
+chs14 = read_sas(&quot;data/chs2014_public.sas7bdat&quot;)
+
+chs14_filter = chs14 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2014) %&gt;% 
+  rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
+
+
+chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
+<pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
+  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %&gt;% 
+  mutate(numberperdaya = round(numberperdaya,1))</code></pre>
+<pre class="r"><code>smoke_df = dataset_basic %&gt;% 
+  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %&gt;% 
+  drop_na(smoker) %&gt;% 
+  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
+         everyday = factor(everyday),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c(&quot;18-24yrs&quot;,&quot;25-44yrs&quot;, &quot;45-64yrs&quot;, &quot;65+yrs&quot;)),
+         smoker_cat = case_when(
+           numberperdaya &lt;= 10 ~ 1,
+           (numberperdaya &gt; 10) &amp; (numberperdaya &lt;= 20) ~2,
+           numberperdaya &gt; 20 ~ 3),
+         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c(&quot;light&quot;,&quot;normal&quot;,&quot;heavy&quot;)),
+         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c(&quot;Poor&quot;,&quot;Fair&quot;,&quot;Good&quot;,&quot;Very good&quot;,&quot;Excellent&quot;)),
+         fluvaccineshot = factor(fluvaccineshot, levels = c(1,2), labels = c(&quot;yes&quot;,&quot;no&quot;)),
+         imputed_povertygroup = factor(imputed_povertygroup)
+         
+         )
+
+skimr::skim(smoke_df)</code></pre>
+<table>
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">smoke_df</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">28573</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">9</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">7</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">2</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">agegroup</td>
+<td align="right">61</td>
+<td align="right">1.00</td>
+<td align="left">TRUE</td>
+<td align="right">4</td>
+<td align="left">45-: 10479, 25-: 8940, 65+: 7040, 18-: 2053</td>
+</tr>
+<tr class="even">
+<td align="left">smoker</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">nev: 18729, for: 6188, cur: 3656</td>
+</tr>
+<tr class="odd">
+<td align="left">everyday</td>
+<td align="right">24917</td>
+<td align="right">0.13</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">1: 2251, 2: 1405</td>
+</tr>
+<tr class="even">
+<td align="left">generalhealth</td>
+<td align="right">212</td>
+<td align="right">0.99</td>
+<td align="left">FALSE</td>
+<td align="right">5</td>
+<td align="left">Goo: 9219, Ver: 7505, Fai: 5037, Exc: 4614</td>
+</tr>
+<tr class="odd">
+<td align="left">fluvaccineshot</td>
+<td align="right">160</td>
+<td align="right">0.99</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">no: 14824, yes: 13589</td>
+</tr>
+<tr class="even">
+<td align="left">imputed_povertygroup</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="left">FALSE</td>
+<td align="right">5</td>
+<td align="left">1: 7675, 2: 6135, 3: 5063, 5: 4976</td>
+</tr>
+<tr class="odd">
+<td align="left">smoker_cat</td>
+<td align="right">24917</td>
+<td align="right">0.13</td>
+<td align="left">FALSE</td>
+<td align="right">3</td>
+<td align="left">lig: 2853, nor: 708, hea: 95</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">numberperdaya</td>
+<td align="right">24917</td>
+<td align="right">0.13</td>
+<td align="right">7.70</td>
+<td align="right">8.33</td>
+<td align="right">0.0</td>
+<td align="right">1.6</td>
+<td align="right">5</td>
+<td align="right">10.0</td>
+<td align="right">200</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">cost20cigarettes</td>
+<td align="right">25517</td>
+<td align="right">0.11</td>
+<td align="right">10.29</td>
+<td align="right">3.45</td>
+<td align="right">0.1</td>
+<td align="right">8.0</td>
+<td align="right">11</td>
+<td align="right">12.5</td>
+<td align="right">40</td>
+<td align="left">▃▇▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Age distribution among different types of smokers</li>
+</ul>
+<pre class="r"><code>smoke_df %&gt;% 
+  drop_na(agegroup) %&gt;% 
+  group_by(agegroup,smoker) %&gt;% 
+  summarize(
+    count = n(),
+  ) %&gt;% 
+  mutate(smoker = fct_reorder(smoker,count)) %&gt;% 
+  ggplot(aes(x = smoker, y = count, fill = agegroup)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;Number of smokers&#39;,
+      title = &#39;Age distribution among different smoking status&#39;)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;agegroup&#39;. You can override using the `.groups` argument.</code></pre>
+<p><img src="data_exploration2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<ul>
+<li>Self-evaluation of health conditions among different types of smokers</li>
+</ul>
+<pre class="r"><code>smokegroup_count = smoke_df %&gt;% 
+  drop_na(smoker) %&gt;% 
+  group_by(smoker) %&gt;% 
+  summarize(
+    smokegroup_count = n()) %&gt;% 
+  pull()
+
+smoke_df %&gt;% 
+  drop_na(generalhealth) %&gt;% 
+  group_by(generalhealth,smoker) %&gt;% 
+  summarize(
+    count = n())%&gt;% 
+  mutate(smokegroup_count = smokegroup_count,
+         health_percent = count/smokegroup_count)%&gt;% 
+  ggplot(aes(x = smoker, y = health_percent, fill = generalhealth)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Type of smokers&#39;,
+      y = &#39;Health self-evaluation \n(% in each types of smoker)&#39;,
+      title = &#39;Self-evaluation of health conditions among different types of smokers\n(% in each types of smoker)&#39;)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;generalhealth&#39;. You can override using the `.groups` argument.</code></pre>
+<p><img src="data_exploration2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>smoke_df %&gt;% 
+  drop_na(imputed_povertygroup) %&gt;% 
+  group_by(imputed_povertygroup,smoker) %&gt;% 
+  summarize(
+    count = n(),
+  ) %&gt;% 
+  mutate(
+    smokegroup_count = smokegroup_count,
+    poverty_percent = count/smokegroup_count,
+    smoker = fct_reorder(smoker,count)) %&gt;% 
+  ggplot(aes(x = smoker, y = poverty_percent, fill = imputed_povertygroup)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;imputed_povertygroup&#39;,
+      title = &#39;povertygroup among different smoking status&#39;)</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;imputed_povertygroup&#39;. You can override using the `.groups` argument.</code></pre>
+<p><img src="data_exploration2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>For <code>never</code> and <code>former</code> smokers, no data for variables <code>everyday</code>, <code>numberperdaya</code>, <code>cost20cigarettes</code>, so next we focus on the current smokers.</p>
+<ul>
+<li>Cost and number of daily consumption</li>
+</ul>
+<pre class="r"><code>current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)
+
+current_smoker %&gt;%
+  ggplot(aes(x = smoker_cat, y = cost20cigarettes, fill = smoker_cat))+
+  geom_violin() +
+    labs(
+      x = &#39;Type of smokers&#39;,
+      y = &#39;Cost of every 20 (one pack) cigrattes&#39;,
+      title = &#39;Cost of every 20 (one pack) cigrattes\namong different type of smokers&#39;)</code></pre>
+<pre><code>## Warning: Removed 600 rows containing non-finite values (stat_ydensity).</code></pre>
+<p><img src="data_exploration2_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>current_smoker %&gt;% 
+  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = smoker_cat))+
+  geom_point(alpha = .5,size = 3) +
+  facet_grid(.~smoker_cat,scales = &quot;free&quot;) +
+    labs(
+      x = &#39;Number of cigrattes consumed everyday&#39;,
+      y = &#39;Cost of every 20 (one pack) cigrattes&#39;,
+      title = &#39;Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday&#39;)</code></pre>
+<pre><code>## Warning: Removed 600 rows containing missing values (geom_point).</code></pre>
+<p><img src="data_exploration2_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
+<p>Chi-squared test for <code>insure</code> and 1. Flu</p>
+<pre class="r"><code>analyse_flu_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(fluvaccineshot,insure) %&gt;% 
+  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c(&quot;Yes&quot;,&quot;No&quot;))) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
+  group_by(fluvaccineshot,insure) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;fluvaccineshot&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>test_data_flu_insurance = analyse_flu_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;)</code></pre>
+<pre class="r"><code>chisq.test(test_data_flu_insurance[-1])</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  test_data_flu_insurance[-1]
+## X-squared = 1170.3, df = 6, p-value &lt; 2.2e-16</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li></li>
+</ol>
+<pre class="r"><code>analyse_poverty_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(imputed_povertygroup,insure) %&gt;% 
+  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
+  group_by(imputed_povertygroup,insure) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;imputed_povertygroup&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>test_data_poverty_insurance = analyse_poverty_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;)</code></pre>
+<pre class="r"><code>chisq.test(test_data_poverty_insurance[-1])</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  test_data_poverty_insurance[-1]
+## X-squared = 9907.9, df = 24, p-value &lt; 2.2e-16</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 title: "Data cleaning"
 author: "Mengfan Luo"
 date: "11/11/2021"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -14,33 +14,115 @@ library(haven)
 ```
 
 
-## Smoking data
+### Sample code given with the source data
 
-```{r, eval = FALSE}
+```{}
+rm(list=ls(all=TRUE))
+library("haven")
+library("survey")
+library(dplyr)
+require(data.table)
+chs17<-read_sas("data/chs2017_public.sas7bdat")
 
-data = read_sas("NYATS_2003_2019_PublicUse.sas7bdat")
+#city-wide estimates
+chs<-transform(chs17,strata=as.character(strata),all=as.factor(survey))
 
-#names(data)
+#define the survey
+chs.dsgn<-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
+#age adjusted survey
+pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
+chs.stdes<-svystandardize(subset(chs.dsgn,diabetes17>0 ),by=~agegroup,over=~all,population=pop.agecat4,excluding.missing =~ agegroup+ ~all)
 
-nyc_08_19 = data%>% 
-  janitor::clean_names() %>% 
-  filter(nyc == 1,
-         year > 2007)
+#weighted N
+aggregate(chs17$wt18_dual, by=list(Category=chs17$diabetes17), FUN=sum)
 
-write_csv(nyc_08_19,"data/nyc_08_19")
+#crude prevalance estimates
+svyby(~diabetes17==1,~all,subset(chs.dsgn,diabetes17>0),svyciprop,vartype = "ci",method="xlogit",df=degf(chs.dsgn))
+svyby(~diabetes17==2,~all,subset(chs.dsgn,diabetes17>0),svyciprop,vartype = "ci",method="xlogit",df=degf(chs.dsgn))
+
+#age adjusted prevalance estimates
+
+svyby(~diabetes17==1,~all,chs.stdes,svyciprop,vartype = "ci",method="xlogit",df=degf(chs.dsgn))
+svyby(~diabetes17==2,~all,chs.stdes,svyciprop,vartype = "ci",method="xlogit",df=degf(chs.dsgn))
+
+#estimate by sex
+chs<-transform(chs17,strata=as.character(strata),allsex2=as.factor(sex))
+
+#define the survey
+chs.dsgn<-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
+#age adjusted survey
+pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
+chs.stdes<-svystandardize(subset(chs.dsgn,diabetes17>0 ),by=~agegroup,over=~allsex2,population=pop.agecat4,excluding.missing =~ agegroup+ ~allsex2)
+
+#crude prevalance estimates
+svyby(~diabetes17==1,~allsex2,subset(chs.dsgn,diabetes17>0),svyciprop,vartype = "ci",method="xlogit",df=degf(chs.dsgn))
+svyby(~diabetes17==2,~allsex2,subset(chs.dsgn,diabetes17>0),svyciprop,vartype = "ci",method="xlogit",df=degf(chs.dsgn))
+
+
+#age adjusted prevalance estimates
+
+svyby(~diabetes17==1,~allsex2,chs.stdes,svyciprop,vartype = "ci",method="xlogit",df=degf(chs.dsgn))
+svyby(~diabetes17==2,~allsex2,chs.stdes,svyciprop,vartype = "ci",method="xlogit",df=degf(chs.dsgn))
 ```
 
+## Data loading and crude cleaning
 
-## tobacco_retail data
+We select year 2014-2016 and variables relating to smoking and insurance. 
 
 ```{r}
-#tobacco_retail = 
-  #GET("https://health.data.ny.gov/resource/9ma3-vsuk.csv") %>% 
-  #content("parsed")
-## only 1000 lines. Colnames changed
 
-tobacco_retail = read_csv("data/Active_Retail_Tobacco_and_Vapor_Product_Vendors.csv") %>% 
-  janitor::clean_names()
-names(tobacco_retail)
+chs16 = read_sas("data/chs2016_public.sas7bdat")
+
+chs16_filter = chs16 %>% 
+  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %>% 
+  mutate(year = 2016) %>% 
+  rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
+
+
+chs15 = read_sas("data/chs2015_public.sas7bdat")
+
+chs15_filter = chs15 %>% 
+  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %>% 
+  mutate(year = 2015) %>% 
+  rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
+
+
+chs14 = read_sas("data/chs2014_public.sas7bdat")
+
+chs14_filter = chs14 %>% 
+  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %>% 
+  mutate(year = 2014) %>% 
+  rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
+
+
+chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
+  
+
+
+
+
+
 ```
+
+
+```{r}
+dataset_basic = chs_14_16 %>% 
+  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %>% 
+  mutate(numberperdaya = round(numberperdaya,1))
+```
+
+
+```{r}
+summary(dataset_basic)
+```
+
+
+1. 
+
+
+
+
+
+
+
 
