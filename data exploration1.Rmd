@@ -281,6 +281,77 @@ test_data_generalhealth_insurancetype = analyse_generalhealth_insurancetype %>%
 test_generalhealth = chisq.test(test_data_generalhealth_insurancetype[-1])
 
 ```
+
+#### when sick, where usually go?
+
+```{r}
+analyse_sickadvice_insurancetype = 
+  dataset_basic %>%
+  drop_na(sickadvice,insure) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid_Family Health", "milit_champus_tricare", "COBRA_Other", "uninsured")))%>% 
+  mutate(sickadvice = factor(sickadvice,levels = c(1,2,3,4,5,6,7,8,9),labels = c("private_doctor","non-retail_clinic","urgent_care_center", "hospital_ed", "retail_clinic", "alternative_health_care_provider","family_friend_self_resources","other","no_usual_place"))) %>% 
+  group_by(insure,sickadvice) %>% 
+  summarize(n = n())
+  
+analyse_sickadvice_insurancetype %>% 
+  ggplot(aes(x = insure, y = n, fill = sickadvice )) + 
+  geom_bar(stat = "identity",position = "dodge") +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = 'sickadvice',
+      y = 'counts',
+      title = 'The distribution of sickadvice in different smoking group ')
+```
+
+```{r}
+test_data_sickadvice_insurancetype = analyse_sickadvice_insurancetype %>% 
+  pivot_wider(
+  names_from = "insure", 
+  values_from = "n") %>% 
+  mutate(milit_champus_tricare = replace_na(milit_champus_tricare, 0))
+```
+
+```{r}
+test_generalhealth = chisq.test(test_data_sickadvice_insurancetype[-1])
+
+```
 According to above chi-square test result We reject the null hypothesis and conclude that there’s at least one helath stutus group’s proportions of insurance type is different from others at 0.05 significant level.
 
 
+#### Was there a time in the past 12 months when you needed medical care but did NOT get it?
+
+```{r}
+analyse_didntgetcare_insurancetype = 
+  dataset_basic %>%
+  drop_na(didntgetcare,insure) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid_Family Health", "milit_champus_tricare", "COBRA_Other", "uninsured")))%>% 
+  mutate(didntgetcare = factor(didntgetcare,levels = c(1,2),labels = c("Yes","No"))) %>% 
+  group_by(insure,didntgetcare) %>% 
+  summarize(n = n())
+  
+analyse_didntgetcare_insurancetype %>% 
+  ggplot(aes(x = insure, y = n, fill = didntgetcare )) + 
+  geom_bar(stat = "identity",position = "dodge") +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = 'didntgetcare',
+      y = 'counts',
+      title = 'The distribution of didntgetcare in different smoking group ')
+```
+
+```{r}
+test_data_didntgetcare_insurancetype = analyse_didntgetcare_insurancetype %>% 
+  pivot_wider(
+  names_from = "insure", 
+  values_from = "n") 
+  #mutate(milit_champus_tricare = replace_na(milit_champus_tricare, 0))
+```
+
+```{r}
+test_generalhealth = chisq.test(test_data_didntgetcare_insurancetype[-1])
+
+```
