@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="LYU JING" />
+
+<meta name="date" content="2021-11-21" />
+
+<title>Data Exploaration1</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="mapping.html">Mapping</a>
+</li>
+<li>
+  <a href="dashboard.html">Dashboard</a>
+</li>
+<li>
+  <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
+    <span class="fa fa-envelope fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://github.com/wyshanw/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Data Exploaration1</h1>
+<h4 class="author">LYU JING</h4>
+<h4 class="date">11/21/2021</h4>
+
+</div>
+
+
+<div id="sample-code-given-with-the-source-data" class="section level3">
+<h3>Sample code given with the source data</h3>
+<pre><code>rm(list=ls(all=TRUE))
+library(&quot;haven&quot;)
+library(&quot;survey&quot;)
+library(dplyr)
+require(data.table)
+chs17&lt;-read_sas(&quot;data/chs2017_public.sas7bdat&quot;)
+
+#city-wide estimates
+chs&lt;-transform(chs17,strata=as.character(strata),all=as.factor(survey))
+
+#define the survey
+chs.dsgn&lt;-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
+#age adjusted survey
+pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
+chs.stdes&lt;-svystandardize(subset(chs.dsgn,diabetes17&gt;0 ),by=~agegroup,over=~all,population=pop.agecat4,excluding.missing =~ agegroup+ ~all)
+
+#weighted N
+aggregate(chs17$wt18_dual, by=list(Category=chs17$diabetes17), FUN=sum)
+
+#crude prevalance estimates
+svyby(~diabetes17==1,~all,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~all,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+#age adjusted prevalance estimates
+
+svyby(~diabetes17==1,~all,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~all,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+#estimate by sex
+chs&lt;-transform(chs17,strata=as.character(strata),allsex2=as.factor(sex))
+
+#define the survey
+chs.dsgn&lt;-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
+#age adjusted survey
+pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
+chs.stdes&lt;-svystandardize(subset(chs.dsgn,diabetes17&gt;0 ),by=~agegroup,over=~allsex2,population=pop.agecat4,excluding.missing =~ agegroup+ ~allsex2)
+
+#crude prevalance estimates
+svyby(~diabetes17==1,~allsex2,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~allsex2,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+
+
+#age adjusted prevalance estimates
+
+svyby(~diabetes17==1,~allsex2,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
+svyby(~diabetes17==2,~allsex2,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))</code></pre>
+</div>
+<div id="data-loading-and-crude-cleaning" class="section level2">
+<h2>Data loading and crude cleaning</h2>
+<p>We select year 2014-2016 and variables relating to smoking and insurance.</p>
+<pre class="r"><code>chs16 = read_sas(&quot;data/chs2016_public.sas7bdat&quot;)
+
+chs16_filter = chs16 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2016) %&gt;% 
+  rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
+
+
+chs15 = read_sas(&quot;data/chs2015_public.sas7bdat&quot;)
+
+chs15_filter = chs15 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2015) %&gt;% 
+  rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
+
+
+chs14 = read_sas(&quot;data/chs2014_public.sas7bdat&quot;)
+
+chs14_filter = chs14 %&gt;% 
+  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot) %&gt;% 
+  mutate(year = 2014) %&gt;% 
+  rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
+
+
+chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
+<pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
+  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %&gt;% 
+  mutate(numberperdaya = round(numberperdaya,1))</code></pre>
+<pre class="r"><code>insurance_data = dataset_basic %&gt;% 
+  select(insuredgateway,insure,sickadvice,didntgetcare)
+
+
+plot1 = insurance_data %&gt;% 
+  ggplot(aes(x = insuredgateway)) +
+  geom_histogram() 
+ 
+plot2 =insurance_data %&gt;% 
+  ggplot(aes(x = insure)) +
+  geom_histogram()  
+
+plot3 =insurance_data %&gt;% 
+  ggplot(aes(x = sickadvice)) +
+  geom_histogram() 
+
+plot4 =insurance_data %&gt;% 
+  ggplot(aes(x = didntgetcare)) +
+  geom_histogram() 
+
+plot1 + plot2 + plot3 + plot4</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 129 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 510 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 190 rows containing non-finite values (stat_bin).</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 158 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="relation-between-smoke-and-insurance-type" class="section level1">
+<h1>relation between smoke and insurance type</h1>
+<pre class="r"><code>analyse_smoke_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(smoker,insure) %&gt;% 
+  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
+         everyday = factor(everyday)) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
+  group_by(smoker,insure) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;smoker&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>analyse_smoke_insurancetype %&gt;% 
+  ggplot(aes(x = insure, y = n, fill = smoker)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = &#39;insure type&#39;,
+      y = &#39;counts&#39;,
+      title = &#39;The distribution of insure in different smoking group &#39;)</code></pre>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>test_data_smoke_insurance = analyse_smoke_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;)</code></pre>
+<pre class="r"><code>test = chisq.test(test_data_smoke_insurance[-1])</code></pre>
+<p>smoke is significantly associated with insurance type</p>
+</div>
+<div id="relation-between-general-health-status-and-insurance-type" class="section level1">
+<h1>relation between general health status and insurance type</h1>
+<pre class="r"><code>analyse_smoke_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(smoker,insure) %&gt;% 
+  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
+         everyday = factor(everyday)) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
+  group_by(smoker,insure) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;smoker&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>analyse_smoke_insurancetype %&gt;% 
+  ggplot(aes(x = insure, y = n, fill = smoker)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = &#39;insure type&#39;,
+      y = &#39;counts&#39;,
+      title = &#39;The distribution of insure in different smoking group &#39;)</code></pre>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div id="try" class="section level3 tabset">
+<h3 class="tabset">try</h3>
+<div id="insure" class="section level4">
+<h4>insure</h4>
+<pre class="r"><code>analyse_smoke_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(smoker,insure) %&gt;% 
+  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
+         everyday = factor(everyday)) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
+  group_by(smoker,insure) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;smoker&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>analyse_smoke_insurancetype %&gt;% 
+  ggplot(aes(x = insure, y = n, fill = smoker)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = &#39;insure type&#39;,
+      y = &#39;counts&#39;,
+      title = &#39;The distribution of insure in different smoking group &#39;)</code></pre>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;)</code></pre>
+<pre class="r"><code>chisq.test(test_data_smoke_insurancetype[-1])</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  test_data_smoke_insurancetype[-1]
+## X-squared = 763.86, df = 12, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div id="healthstatus" class="section level4">
+<h4>healthstatus</h4>
+<pre class="r"><code>analyse_generalhealth_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(generalhealth,insure) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;)))%&gt;% 
+  mutate(generalhealth = factor(generalhealth,levels = c(1,2,3,4,5),labels = c(&quot;Excellent&quot;,&quot;Very good&quot;,&quot;Good&quot;, &quot;Fair&quot;, &quot;Poor&quot;))) %&gt;% 
+  group_by(insure,generalhealth) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;insure&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>analyse_generalhealth_insurancetype %&gt;% 
+  ggplot(aes(x = insure, y = n, fill = generalhealth )) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = &#39;generalhealth&#39;,
+      y = &#39;counts&#39;,
+      title = &#39;The distribution of generalhealth in different smoking group &#39;)</code></pre>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code>test_data_generalhealth_insurancetype = analyse_generalhealth_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;)</code></pre>
+<pre class="r"><code>test_generalhealth = chisq.test(test_data_generalhealth_insurancetype[-1])</code></pre>
+</div>
+<div id="when-sick-where-usually-go" class="section level4">
+<h4>when sick, where usually go?</h4>
+<pre class="r"><code>analyse_sickadvice_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(sickadvice,insure) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid_Family Health&quot;, &quot;milit_champus_tricare&quot;, &quot;COBRA_Other&quot;, &quot;uninsured&quot;)))%&gt;% 
+  mutate(sickadvice = factor(sickadvice,levels = c(1,2,3,4,5,6,7,8,9),labels = c(&quot;private_doctor&quot;,&quot;non-retail_clinic&quot;,&quot;urgent_care_center&quot;, &quot;hospital_ed&quot;, &quot;retail_clinic&quot;, &quot;alternative_health_care_provider&quot;,&quot;family_friend_self_resources&quot;,&quot;other&quot;,&quot;no_usual_place&quot;))) %&gt;% 
+  group_by(insure,sickadvice) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;insure&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>analyse_sickadvice_insurancetype %&gt;% 
+  ggplot(aes(x = insure, y = n, fill = sickadvice )) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = &#39;sickadvice&#39;,
+      y = &#39;counts&#39;,
+      title = &#39;The distribution of sickadvice in different smoking group &#39;)</code></pre>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>test_data_sickadvice_insurancetype = analyse_sickadvice_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;) %&gt;% 
+  mutate(milit_champus_tricare = replace_na(milit_champus_tricare, 0))</code></pre>
+<pre class="r"><code>test_generalhealth = chisq.test(test_data_sickadvice_insurancetype[-1])</code></pre>
+<pre><code>## Warning in chisq.test(test_data_sickadvice_insurancetype[-1]): Chi-squared
+## approximation may be incorrect</code></pre>
+<p>According to above chi-square test result We reject the null hypothesis and conclude that there’s at least one helath stutus group’s proportions of insurance type is different from others at 0.05 significant level.</p>
+</div>
+<div id="was-there-a-time-in-the-past-12-months-when-you-needed-medical-care-but-did-not-get-it" class="section level4">
+<h4>Was there a time in the past 12 months when you needed medical care but did NOT get it?</h4>
+<pre class="r"><code>analyse_didntgetcare_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(didntgetcare,insure) %&gt;% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid_Family Health&quot;, &quot;milit_champus_tricare&quot;, &quot;COBRA_Other&quot;, &quot;uninsured&quot;)))%&gt;% 
+  mutate(didntgetcare = factor(didntgetcare,levels = c(1,2),labels = c(&quot;Yes&quot;,&quot;No&quot;))) %&gt;% 
+  group_by(insure,didntgetcare) %&gt;% 
+  summarize(n = n())</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;insure&#39;. You can override using the `.groups` argument.</code></pre>
+<pre class="r"><code>analyse_didntgetcare_insurancetype %&gt;% 
+  ggplot(aes(x = insure, y = n, fill = didntgetcare )) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = &#39;didntgetcare&#39;,
+      y = &#39;counts&#39;,
+      title = &#39;The distribution of didntgetcare in different smoking group &#39;)</code></pre>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>test_data_didntgetcare_insurancetype = analyse_didntgetcare_insurancetype %&gt;% 
+  pivot_wider(
+  names_from = &quot;insure&quot;, 
+  values_from = &quot;n&quot;) 
+  #mutate(milit_champus_tricare = replace_na(milit_champus_tricare, 0))</code></pre>
+<pre class="r"><code>test_generalhealth = chisq.test(test_data_didntgetcare_insurancetype[-1])</code></pre>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
