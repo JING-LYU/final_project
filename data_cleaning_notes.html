@@ -293,18 +293,22 @@ $(document).ready(function () {
 .d=Don’t know
 .r=Refused</code></pre>
 <ul>
-<li><code>insure5</code>: Type of health insurance coverage</li>
+<li><code>insure</code>: Type of health insurance coverage</li>
 </ul>
-<pre><code>1=Private
-2=Medicare
-3=Medicaid
-4=Others
-5=Uninsured
+<pre><code>1=Employer
+2=Self-purchase
+3=Medicare
+4=Medicaid/Family Health+
+5=Milit/CHAMPUS/Tricare
+6=COBRA/Other
+7=Uninsured
 .d=Don’t know
 .r=Refused
-.= Missing</code></pre>
+.=Missing
+</code></pre>
 <ul>
-<li><code>sickadvice</code>: when sick, where usually go?</li>
+<li><p><code>insure16</code></p></li>
+<li><p><code>sickadvice</code>: when sick, where usually go?</p></li>
 </ul>
 <pre><code>1= A private doctor,
 2= Non-retail clinic,
@@ -354,6 +358,15 @@ $(document).ready(function () {
 </div>
 <div id="others" class="section level3">
 <h3>Others</h3>
+<ul>
+<li><code>agegroup</code> age groups</li>
+</ul>
+<pre><code>1=18-24yrs
+2=25-44 yrs
+3=45-64 yrs
+4=65+ yrs
+.d=Don’t know
+.r=Refused</code></pre>
 <ul>
 <li><code>generalhealth</code>: general health status (self evaluated)</li>
 </ul>

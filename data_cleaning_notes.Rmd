@@ -18,17 +18,20 @@ output:
 .r=Refused
 ```
 
-* `insure5`: Type of health insurance coverage
+* `insure`: Type of health insurance coverage
 
 ```
-1=Private
-2=Medicare
-3=Medicaid
-4=Others
-5=Uninsured
+1=Employer
+2=Self-purchase
+3=Medicare
+4=Medicaid/Family Health+
+5=Milit/CHAMPUS/Tricare
+6=COBRA/Other
+7=Uninsured
 .d=Don’t know
 .r=Refused
-.= Missing
+.=Missing
+
 ```
 
 * `insure16`
@@ -94,6 +97,18 @@ d= Don’t know
 ```
 
 ### Others
+
+* `agegroup` age groups
+
+```
+1=18-24yrs
+2=25-44 yrs
+3=45-64 yrs
+4=65+ yrs
+.d=Don’t know
+.r=Refused
+```
+
 
 * `generalhealth`: general health status (self evaluated)
 
