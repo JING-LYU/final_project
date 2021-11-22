@@ -1,5 +1,5 @@
 ---
-title: "Data exploration"
+title: "Data exploration2"
 author: "Mengfan Luo"
 date: "11/11/2021"
 output: github_document
@@ -115,45 +115,122 @@ dataset_basic = chs_14_16 %>%
 ```{r}
 
 smoke_df = dataset_basic %>% 
-  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes) %>% 
+  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %>% 
   drop_na(smoker) %>% 
   mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
          everyday = factor(everyday),
-         agegroup = factor(agegroup,ordered = TRUE),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs")),
          smoker_cat = case_when(
            numberperdaya <= 10 ~ 1,
            (numberperdaya > 10) & (numberperdaya <= 20) ~2,
-           numberperdaya > 20 ~ 3
-         ),
-         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c("light","normal","heavy")))
+           numberperdaya > 20 ~ 3),
+         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c("light","normal","heavy")),
+         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c("Poor","Fair","Good","Very good","Excellent")),
+         fluvaccineshot = factor(fluvaccineshot, levels = c(1,2), labels = c("yes","no")),
+         imputed_povertygroup = factor(imputed_povertygroup)
+         
+         )
 
 skimr::skim(smoke_df)
 
+```
 
+
+
+* Age distribution among different types of smokers
+
+```{r}
 
 smoke_df %>% 
-  ggplot(aes(x = agegroup))+
-  geom_bar()+
-  geom_point(data = smoke_sum, aes(y = avg_cig_day))
-
-
-smoke_df %>% 
-  filter(smoker == "current") %>%
   drop_na(agegroup) %>% 
-  group_by(agegroup) %>%
+  group_by(agegroup,smoker) %>% 
   summarize(
     count = n(),
-    avg_cig_day = mean(numberperdaya)
-  ) 
-  
-  
-smoke_df %>% 
-  filter(smoker == "current") %>%
-  drop_na(agegroup) %>%
-  ggplot(aes(x = numberperdaya, y = cost20cigarettes))+
-  geom_point()
-  
+  ) %>% 
+  mutate(smoker = fct_reorder(smoker,count)) %>% 
+  ggplot(aes(x = smoker, y = count, fill = agegroup)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'Smoking status',
+      y = 'Number of smokers',
+      title = 'Age distribution among different smoking status')
 
+```
+
+
+* Self-evaluation of health conditions among different types of smokers
+
+```{r}
+
+smokegroup_count = smoke_df %>% 
+  drop_na(smoker) %>% 
+  group_by(smoker) %>% 
+  summarize(
+    smokegroup_count = n()) %>% 
+  pull()
+
+smoke_df %>% 
+  drop_na(generalhealth) %>% 
+  group_by(generalhealth,smoker) %>% 
+  summarize(
+    count = n())%>% 
+  mutate(smokegroup_count = smokegroup_count,
+         health_percent = count/smokegroup_count)%>% 
+  ggplot(aes(x = smoker, y = health_percent, fill = generalhealth)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'Type of smokers',
+      y = 'Health self-evaluation \n(% in each types of smoker)',
+      title = 'Self-evaluation of health conditions among different types of smokers\n(% in each types of smoker)')
+```
+
+
+```{r}
+smoke_df %>% 
+  drop_na(imputed_povertygroup) %>% 
+  group_by(imputed_povertygroup,smoker) %>% 
+  summarize(
+    count = n(),
+  ) %>% 
+  mutate(
+    smokegroup_count = smokegroup_count,
+    poverty_percent = count/smokegroup_count,
+    smoker = fct_reorder(smoker,count)) %>% 
+  ggplot(aes(x = smoker, y = poverty_percent, fill = imputed_povertygroup)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'Smoking status',
+      y = 'imputed_povertygroup',
+      title = 'povertygroup among different smoking status')
+```
+
+
+
+For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we focus on the current smokers.
+
+
+* Cost and number of daily consumption
+
+```{r}
+current_smoker = smoke_df %>% filter(smoker == "current")
+
+current_smoker %>%
+  ggplot(aes(x = smoker_cat, y = cost20cigarettes, fill = smoker_cat))+
+  geom_violin() +
+    labs(
+      x = 'Type of smokers',
+      y = 'Cost of every 20 (one pack) cigrattes',
+      title = 'Cost of every 20 (one pack) cigrattes\namong different type of smokers')
+  
+  
+current_smoker %>% 
+  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = smoker_cat))+
+  geom_point(alpha = .5,size = 3) +
+  facet_grid(.~smoker_cat,scales = "free") +
+    labs(
+      x = 'Number of cigrattes consumed everyday',
+      y = 'Cost of every 20 (one pack) cigrattes',
+      title = 'Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday')
 
 
 ```
