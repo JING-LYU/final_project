@@ -34,7 +34,6 @@ output:
 
 ```
 
-* `insure16`
 
 
 * `sickadvice`: when sick, where usually go?
