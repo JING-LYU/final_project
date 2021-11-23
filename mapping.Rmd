@@ -1,13 +1,14 @@
 ---
-title: "Mapping of NYC health center and insurance agency location"
+title: "Mapping of NYC health consulting center and insurance agency locations"
 output: 
   html_document:
     code_folding: hide
-    toc: true
-    toc_float: true
+  
 ---
 
-## Health center location mapping
+## {.tabset}
+
+### Health center location mapping
 
 For general public seeking assistance with signing up for health insurance or SNAP (Supplemental Nutrition Assistance Program), here is a mapping of health center locations, where health insurance enrollment and assistance with SNAP benefits (Food Stamps) are offered.
 
@@ -34,8 +35,8 @@ leaflet(health_center) %>%
              clusterOptions = markerClusterOptions())
 ```
 
-### Time of operation and walk-in
-
+<br>
+**Time of operation and walk-in:**
 ```{r}
 health_center_table = health_center %>% 
   select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
@@ -61,7 +62,12 @@ rmarkdown::paged_table(health_center_table)
 *More information can be found on [this website.](nyc.gov/health)
 Search for "insurance" after enter the website
 
-## Insurance agency location mapping
+<br>
+**Source**
+
+Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
+
+### Insurance agency location mapping
 
 This map shows the locatios of major health insurance carriers in NYC.
 
@@ -81,9 +87,8 @@ leaflet(insurance_agency) %>%
              clusterOptions = markerClusterOptions())
 ```
 
-
-### Time of operation and walk-in
-
+<br>
+**Time of operation and walk-in:**
 ```{r}
 insurance_agency_table =insurance_agency %>% 
   select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
@@ -104,9 +109,7 @@ insurance_agency_table =insurance_agency %>%
 rmarkdown::paged_table(insurance_agency_table)
 ```
 
-## Source
 
-Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
 
 
 
