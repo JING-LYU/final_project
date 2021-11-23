@@ -28,7 +28,7 @@ health_center = read.csv("data/health_center.csv") %>%
 
 ```{r leaflet mapping, echo = FALSE}
 leaflet(health_center) %>% 
-  addProviderTiles(providers$CartoDB.Positron) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
   addMarkers(lat = ~latitude, 
              lng = ~longitude, 
              popup = paste("Health Center name:", health_center$health_center, "<br>", "Street address:", health_center$street_address, "<br>", "Telephone number:", health_center$telephone_number, "<br>", "Borough:", health_center$borough),
@@ -80,7 +80,7 @@ insurance_agency = read.csv("data/insurance_agency.csv") %>%
 
 ```{r, echo = FALSE}
 leaflet(insurance_agency) %>% 
-  addProviderTiles(providers$CartoDB.Positron) %>% 
+  addProviderTiles(providers$providers$Esri.NatGeoWorldMap) %>% 
   addMarkers(lat = ~latitude, 
              lng = ~longitude, 
              popup = paste("Insurance agency name:", insurance_agency$insurance_agency, "<br>", "Street address:", insurance_agency$street_address, "<br>", "Telephone number:", insurance_agency$telephone_number, "<br>", "Borough:", insurance_agency$borough),
