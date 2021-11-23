@@ -80,7 +80,7 @@ insurance_agency = read.csv("data/insurance_agency.csv") %>%
 
 ```{r, echo = FALSE}
 leaflet(insurance_agency) %>% 
-  addProviderTiles(providers$providers$Esri.NatGeoWorldMap) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
   addMarkers(lat = ~latitude, 
              lng = ~longitude, 
              popup = paste("Insurance agency name:", insurance_agency$insurance_agency, "<br>", "Street address:", insurance_agency$street_address, "<br>", "Telephone number:", insurance_agency$telephone_number, "<br>", "Borough:", insurance_agency$borough),
