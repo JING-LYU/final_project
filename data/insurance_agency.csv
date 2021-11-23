@@ -1,0 +1,25 @@
+﻿Borough,Insurance agency,Street Address,Latitude,Longitude,Days of Operation,Hours of operation,Telephone Number,accept_walk_ins
+Manhattan,Aetna,101 Park Ave 15th Floor,40.749599,-73.9795,Monday - Sunday,8:00 a.m - 5:00 p.m.,(212) 457-0700,Yes
+Manhattan,Aetna,55 W 125th St #1300,40.8075,-73.94414,Monday - Sunday,12:00 a.m - 11:59 p.m.,(855) 456-9126,Yes
+Brooklyn,United Health Care,4811 Avenue J,40.628323,-73.929349,Monday - Sunday,Weekdays: 9:00 a.m - 5:00 p.m. ; Weekends: 10:00 a.m - 6:00 p.m. ,(917) 858-2816,Yes
+Queens,United Health Care,80-22 Roosevelt Ave,40.747388,-73.885079,Monday - Friday,7:00 a.m - 8:00 p.m.,(877) 842-3210,Yes
+Manhattan,United Health Care,275 7th Ave,40.745548,-73.994158,Monday - Sunday,12:00 a.m - 11:59 p.m.,(888) 835-9637,Yes
+Manhattan,Molina Healthcare,1307 St Nicholas Ave,40.845851,-73.93656,By appointment,By appointment,(866) 247-5678,No
+Bronx,Molina Healthcare,"305 E Fordham Rd, Bronx, NY 10458",40.86245,-73.894615,By appointment,By appointment,(866) 247-5678,No
+Manhattan,Cigna,140 E 45th St,40.75274,-73.974161,Monday - Friday,9:00 a.m - 5:00 p.m.,(800) 244-6224,Yes
+Brooklyn,Well Care,765 61st St,40.635388,-74.01063,Monday - Sunday,7:00 a.m - 10:00 p.m.,(718) 550-3005,Yes
+Queens,Well Care,135-16 Roosevelt Ave,40.758938,-73.831332,Monday - Sunday,7:00 a.m - 10:00 p.m.,(917) 997-8220,Yes
+Bronx,Well Care,1043 Southern Blvd,40.823947,-73.892067,Monday - Friday,9:00 a.m - 5:00 p.m.,(347) 601-2229,Yes
+Manhattan,Humana,244 5th Ave m232,40.744635,-73.987741,Monday - Friday,9:00 a.m - 5:00 p.m.,(646) 979-8545,Yes
+Brooklyn,Empire BlueCross BlueShield,364 Knickerbocker Ave,40.700381,-73.921618,Monday - Saturday,9:00 a.m - 6:00 p.m.,(888) 809-8009,Yes
+Queens,Empire BlueCross BlueShield,40-11 Warren St,40.748787,-73.869848,Monday - Sunday,8:00 a.m - 8:00 p.m.,(800) 626-3643,Yes
+Brooklyn,Empire BlueCross BlueShield,2875 W 8th St,40.577926,-73.975545,Monday - Friday,9:00 a.m - 6:00 p.m.,(718) 265-0040,Yes
+Brooklyn,Empire BlueCross BlueShield,5320 5th Ave,40.643165,-74.012775,Monday - Sunday,7:00 a.m - 10:00 p.m.,(718) 736-2137,Yes
+Manhattan,Empire BlueCross BlueShield,139 Centre St,40.717513,-74.000808,Monday - Friday,9:00 a.m - 5:00 p.m.,(212) 563-5570,Yes
+Bronx,Empire BlueCross BlueShield,2411 Grand Concourse,40.860478,-73.898582,Monday - Saturday,9:00 a.m - 6:00 p.m.,(888) 809-8009,Yes
+Staten Island,Empire BlueCross BlueShield,32 Richmond Terrace,40.643681,-74.076499,Monday - Saturday,9:00 a.m - 6:00 p.m.,(888) 809-8009,Yes
+Staten Island,Empire BlueCross BlueShield,2 Teleport Dr #106,40.605666,-74.179757,Monday - Saturday,Weekdays: 8:00 a.m - 8:00 p.m. ; Saturdays: 9:00 a.m - 5:00 p.m. ,(929) 284-7149,Yes
+Queens,Empire BlueCross BlueShield,136-52 39th Ave,40.760574,-73.828309,Monday - Friday,9:00 a.m - 6:00 p.m.,(347) 732-9130,Yes
+Brooklyn,Oscar,408 Jay St 4th floor,40.691785,-73.987483,Monday - Friday,8:00 a.m - 8:00 p.m.,(855) 961-1942,Yes
+,,,,,,,,
+,,,,,,,,
