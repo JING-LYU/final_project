@@ -109,7 +109,15 @@ insurance_agency_table =insurance_agency %>%
 rmarkdown::paged_table(insurance_agency_table)
 ```
 
-
-
+<br>
+More information of each carrier can be found on their websites:<br>
+*[Aetna](http://www.aetna.com/)<br>
+*[United Health Care](https://www.uhc.com/)<br>
+*[Molina HealthCare](http://www.molinahealthcare.com/)<br>
+*[Cigna](http://www.cigna.com/)<br>
+*[Well Care](http://www.wellcare.com/)<br>
+*[Humana](http://www.humana.com/)<br>
+*[Empire BlueCross BlueShield](http://www.empireblue.com/)<br>
+*[Oscar](http://www.hioscar.com/)
 
 
