@@ -63,13 +63,13 @@ rmarkdown::paged_table(health_center_table)
 Search for "insurance" after enter the website
 
 <br>
-**Source**
-
-Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
+**Source**: Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
 
 ### Insurance agency location mapping
 
-This map shows the locatios of major health insurance carriers in NYC.
+This map shows the locations of major health insurance carriers in NYC.
+
+<img src="images/insurance_agency.jpeg" style="width:70%">
 
 ```{r, echo = FALSE}
 insurance_agency = read.csv("data/insurance_agency.csv") %>% 
@@ -86,6 +86,7 @@ leaflet(insurance_agency) %>%
              popup = paste("Insurance agency name:", insurance_agency$insurance_agency, "<br>", "Street address:", insurance_agency$street_address, "<br>", "Telephone number:", insurance_agency$telephone_number, "<br>", "Borough:", insurance_agency$borough),
              clusterOptions = markerClusterOptions())
 ```
+
 
 <br>
 **Time of operation and walk-in:**
@@ -109,8 +110,9 @@ insurance_agency_table =insurance_agency %>%
 rmarkdown::paged_table(insurance_agency_table)
 ```
 
+
 <br>
-More information of each carrier can be found on their websites:<br>
+**More information of each carrier can be found on their websites:<br>**
 *[Aetna](http://www.aetna.com/)<br>
 *[United Health Care](https://www.uhc.com/)<br>
 *[Molina HealthCare](http://www.molinahealthcare.com/)<br>
@@ -121,3 +123,5 @@ More information of each carrier can be found on their websites:<br>
 *[Oscar](http://www.hioscar.com/)
 
 
+
+**logo source:** https://www.ehealthinsurance.com/health-insurance-companies
