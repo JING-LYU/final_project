@@ -26,7 +26,7 @@ health_center = read.csv("data/health_center.csv") %>%
 ```
 
 
-```{r leaflet mapping, echo = FALSE}
+```{r leaflet mapping}
 leaflet(health_center) %>% 
   addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
   addMarkers(lat = ~latitude, 
@@ -78,7 +78,7 @@ insurance_agency = read.csv("data/insurance_agency.csv") %>%
 ```
 
 
-```{r, echo = FALSE}
+```{r}
 leaflet(insurance_agency) %>% 
   addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
   addMarkers(lat = ~latitude, 
