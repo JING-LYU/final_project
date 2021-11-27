@@ -1,5 +1,6 @@
 ---
-title: "Insert name of the website"
+title: <font size="8"> Smoking in New York City </font> 
+subtitle: <font size="5"> Exploration of smoking and health insurance relationship in New York City from 2014 to 2016 </font> 
 output: 
   html_document:
     code_folding: hide
@@ -7,30 +8,64 @@ output:
     toc_float: true
 ---
 
-# This is xxx website
+<br>
+
+<img src="images/smoke_sign.PNG" style="width:80%">
+
+<font size="2"> A shot of non-smoking sign in the Columbia University Irving Medical Center </font> 
+
+<br>
+
+## Background and Motivation
+
+It is known that smokers have higher price for health insurance than non-smokers. As such, this project explores if smokers in NYC tend to get insurance, and what type of insurance they prefer.
+
+
+<img src="images/tweet.jpeg" style="width:100%">
 
 
 
-## Here's a subsection
 
-here's some additional text
+<br>
 
+## Datasets
 
+For this project, we incorporate datasets from 
+The variable of our interest
 
-# Links to other website
+<br>
 
-
-*[P8105](https://www.p8105.com)
-
-
-
-
-# link to page within the site
-
-[About me](about.html)
+## Research Question
 
 
+<br>
 
+## Website overview
+
+<br>
+
+## Additional information
+
+* [Community Health Survey Public Use Data](https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page)
+
+* [Primary Care Access and Planning - Health Insurance Enrollment](https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h)
+
+<img src="images/nyc_insurance_stat.PNG" style="width:100%">
+<font size="2">Image source: https://www.ehealthinsurance.com/new-york-health-insurance</font> 
+
+<br>
+
+
+## Collaborators
+
+* Jing Lyu
+* Mengfan Luo
+* Yushan Wang
+* Yiqun Jin
+
+We are Biostatistics students from Columbia University Mailman School of Public Health. This is a project for the course P8105 Data Science.
+
+You can find more information about us [here](about.html)
 
 
 
