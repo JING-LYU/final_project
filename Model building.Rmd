@@ -254,13 +254,13 @@ analyse_didntgetcare_insurancetype =
   summarize(n = n())
   
 analyse_didntgetcare_insurancetype %>% 
-  ggplot(aes(x = insure, y = n, fill = didntgetcare )) + 
+  ggplot(aes(x = didntgetcare, y = n, fill = insure  )) + 
   geom_bar(stat = "identity",position = "dodge") +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
     labs(
-      x = 'didntgetcare',
+      x = 'medical care accessibility',
       y = 'counts',
       title = 'The distribution of insurance type in different  group of medical care accessibility')
 ```
@@ -324,24 +324,24 @@ analyse_flu_insurancetype =
   group_by(fluvaccineshot,insure) %>% 
   summarize(n = n())
 
-analyse_didntgetcare_insurancetype %>% 
-  ggplot(aes(x = insure, y = n, fill = didntgetcare )) + 
+analyse_flu_insurancetype %>% 
+  ggplot(aes(x = fluvaccineshot, y = n, fill = insure  )) + 
   geom_bar(stat = "identity",position = "dodge") +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
     labs(
-      x = 'fluvaccineshot',
+      x = 'get flu vaccination shot',
       y = 'counts',
-      title = 'The distribution of didntgetcare in different smoking group ')
+      title = 'The distribution of insurance type in different group of people whether had flu vaccination shot in last 12 months')
 ```
 
 
-##### Chi-quare test  between insurance type and medical care accessibility
+##### Chi-quare test  between insurance type and get flu vaccination shot 
 
-$H_0$ : insurance type and medical care accessibility are independent, there is no relationship between the two categorical variables. 
+$H_0$ : insurance type and get flu vaccination shot are independent, there is no relationship between the two categorical variables. 
 
-$H_1$ : insurance type and medical care accessibility are dependent, there is a relationship between the two categorical variables. 
+$H_1$ : insurance type and get flu vaccination shot are dependent, there is a relationship between the two categorical variables. 
 
 *Test result:*
 
@@ -356,9 +356,9 @@ $H_1$ : insurance type and medical care accessibility are dependent, there is a 
 
 dat = 
   dataset_basic %>%
-  drop_na(didntgetcare,insure) %>% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid_Family Health", "milit_champus_tricare", "COBRA_Other", "uninsured")))%>% 
-  mutate(didntgetcare = factor(didntgetcare,levels = c(1,2),labels = c("Yes","No")))
+  drop_na(fluvaccineshot,insure) %>% 
+  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c("Yes","No"))) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) 
 
 
 
@@ -366,7 +366,7 @@ dat =
 
 # fourth method:
 dat %$%
-  ctable(didntgetcare, insure,
+  ctable(fluvaccineshot, insure,
     prop = "r", chisq = TRUE, headings = FALSE
   ) %>%
   print(
@@ -377,36 +377,85 @@ dat %$%
 
 
 
-mosaic(~ didntgetcare + insure,
+mosaic(~ fluvaccineshot + insure,
   direction = c("v", "h"),
   data = dat,
   shade = TRUE
 )
 ```
 
-####  Poverty
+####  Household annual income(FPL: federal poverty level)
 ##### Plot
 
 ```{r}
 analyse_poverty_insurancetype = 
   dataset_basic %>%
   drop_na(imputed_povertygroup,insure) %>% 
-  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %>% 
+  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5),,labels = c("<100% FPL","100 - <200% FPL","200 - <400% FPL","400 - <600% FPL",">600% FPL"))) %>% 
   mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
   group_by(imputed_povertygroup,insure) %>% 
   summarize(n = n())
+
+
+
+analyse_poverty_insurancetype %>% 
+  ggplot(aes(x = imputed_povertygroup, y = n, fill = insure  )) + 
+  geom_bar(stat = "identity",position = "dodge") +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = 'Household annual income(FPL: federal poverty level)',
+      y = 'counts',
+      title = 'The distribution of insurance type in different Household annual income')
+
 ```
 
 
-```{r}
-test_data_poverty_insurance = analyse_poverty_insurancetype %>% 
-  pivot_wider(
-  names_from = "insure", 
-  values_from = "n")
-```
+##### Chi-quare test  between insurance type and get flu vaccination shot 
+
+$H_0$ : insurance type and get flu vaccination shot are independent, there is no relationship between the two categorical variables. 
+
+$H_1$ : insurance type and get flu vaccination shot are dependent, there is a relationship between the two categorical variables. 
+
+*Test result:*
 
 ```{r}
-chisq.test(test_data_poverty_insurance[-1])
+#test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
+#  pivot_wider(
+#  names_from = "insure", 
+#  values_from = "n")
 
+#test_data_smoke_insurancetype %>% knitr::kable()
+#chisq.test(test_data_smoke_insurancetype[-1])
+
+dat = 
+  dataset_basic %>%
+  drop_na(imputed_povertygroup,insure) %>% 
+  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5),,labels = c("<100% FPL","100 - <200% FPL","200 - <400% FPL","400 - <600% FPL",">600% FPL"))) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured")))
+
+
+
+
+
+# fourth method:
+dat %$%
+  ctable(imputed_povertygroup, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
+
+
+
+mosaic(~ imputed_povertygroup + insure,
+  direction = c("v", "h"),
+  data = dat,
+  shade = TRUE
+)
 ```
 
