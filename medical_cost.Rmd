@@ -1,0 +1,17 @@
+---
+title: "Medical cost analysis"
+author: "Yushan Wang
+output: github_document
+---
+
+```{r, echo = FALSE, message=FALSE}
+library(tidyverse)
+
+```
+
+
+
+```{r}
+cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
+```
+
