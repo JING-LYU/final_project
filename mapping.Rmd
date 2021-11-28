@@ -1,43 +1,44 @@
 ---
-title: "Mapping of NYC health center location"
+title: "Mapping of NYC health consulting center and insurance agency locations"
 output: 
   html_document:
     code_folding: hide
-    toc: true
-    toc_float: true
+  
 ---
 
-## Location mapping
+## {.tabset}
+
+### Health center location mapping
 
 For general public seeking assistance with signing up for health insurance or SNAP (Supplemental Nutrition Assistance Program), here is a mapping of health center locations, where health insurance enrollment and assistance with SNAP benefits (Food Stamps) are offered.
 
 ```{r load packages, echo = FALSE, message = FALSE}
 library(tidyverse)
 library(leaflet)
-#library(plotly)
+#options(knitr.duplicate.label = "allow")
 
 ```
 
 
-```{r loading data, echo = FALSE}
-location = read.csv("data/Primary_Care_Access_and_Planning_-_Health_Insurance_Enrollment.csv") %>% 
+```{r, echo = FALSE}
+health_center = read.csv("data/health_center.csv") %>% 
   janitor::clean_names() 
 ```
 
 
-```{r leaflet mapping, echo = FALSE}
-leaflet(location) %>% 
-  addProviderTiles(providers$CartoDB.Positron) %>% 
+```{r leaflet mapping}
+leaflet(health_center) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
   addMarkers(lat = ~latitude, 
              lng = ~longitude, 
-             popup = paste("Health Center name:", location$health_center, "<br>", "Street address:", location$street_address, "<br>", "Telephone number:", location$telephone_number, "<br>", "Borough:", location$borough),
+             popup = paste("Health Center name:", health_center$health_center, "<br>", "Street address:", health_center$street_address, "<br>", "Telephone number:", health_center$telephone_number, "<br>", "Borough:", health_center$borough),
              clusterOptions = markerClusterOptions())
 ```
 
-## More information on time of operation and walk-in
-
+<br>
+**Time of operation and walk-in:**
 ```{r}
-location_table = location %>% 
+health_center_table = health_center %>% 
   select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
   mutate(
     accept_walk_ins = c(rep("Yes",11))
@@ -55,41 +56,72 @@ location_table = location %>%
     "Accept walk in" = accept_walk_ins
   )
   
-rmarkdown::paged_table(location_table)
+rmarkdown::paged_table(health_center_table)
+```
+
+*More information can be found on [this website.](nyc.gov/health)
+Search for "insurance" after enter the website
+
+<br>
+**Source**: Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
+
+### Insurance agency location mapping
+
+This map shows the locations of major health insurance carriers in NYC.
+
+<img src="images/insurance_agency.jpeg" style="width:70%">
+
+```{r, echo = FALSE}
+insurance_agency = read.csv("data/insurance_agency.csv") %>% 
+  na.omit() %>% 
+  janitor::clean_names() 
 ```
 
 
-## Source
-
-Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved November 19, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
-
-
-
-```{r plotly mapping, echo = FALSE, warning = FALSE, eval = FALSE}
-
-# geo styling
-g <- list(
-  scope = 'usa',
-  projection = list(type = 'albers usa'),
-  showland = TRUE,
-  landcolor = toRGB("gray95"),
-  subunitcolor = toRGB("gray85"),
-  countrycolor = toRGB("gray85"),
-  countrywidth = 0.5,
-  subunitwidth = 0.5
-)
-
-fig <- plot_geo(location, lat = ~latitude, lon = ~longitude)
-
-fig <- fig %>% add_markers(
-    text = ~paste(health_center, street_address, telephone_number, sep = "<br />"),
-    color = ~borough, symbol = I("square"), size = I(8), hoverinfo = "text"
-  )
-fig <- fig %>% colorbar(title = "Borough")
-fig <- fig %>% layout(
-    title = 'Mapping of NYC health center location)', geo = g
-  )
-
-fig
+```{r}
+leaflet(insurance_agency) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
+  addMarkers(lat = ~latitude, 
+             lng = ~longitude, 
+             popup = paste("Insurance agency name:", insurance_agency$insurance_agency, "<br>", "Street address:", insurance_agency$street_address, "<br>", "Telephone number:", insurance_agency$telephone_number, "<br>", "Borough:", insurance_agency$borough),
+             clusterOptions = markerClusterOptions())
 ```
 
+
+<br>
+**Time of operation and walk-in:**
+```{r}
+insurance_agency_table =insurance_agency %>% 
+  select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  
+  relocate(
+    insurance_agency, days_of_operation, hours_of_operation, accept_walk_ins,
+    street_address, telephone_number
+    ) %>% 
+  rename(
+    "Insurance agency name" = insurance_agency,
+    "Street address" = street_address,
+    "Telephone number" = telephone_number,
+    "Days of operation" = days_of_operation,
+    "Hours of operation" = hours_of_operation,
+    "Accept walk in" = accept_walk_ins
+  )
+  
+rmarkdown::paged_table(insurance_agency_table)
+```
+
+
+<br>
+**More information of each carrier can be found on their websites:<br>**
+*[Aetna](http://www.aetna.com/)<br>
+*[United Health Care](https://www.uhc.com/)<br>
+*[Molina HealthCare](http://www.molinahealthcare.com/)<br>
+*[Cigna](http://www.cigna.com/)<br>
+*[Well Care](http://www.wellcare.com/)<br>
+*[Humana](http://www.humana.com/)<br>
+*[Empire BlueCross BlueShield](http://www.empireblue.com/)<br>
+*[Oscar](http://www.hioscar.com/)
+
+
+
+**logo source:** https://www.ehealthinsurance.com/health-insurance-companies

@@ -3,16 +3,20 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "About"
-      href: about.html
+    - text: "Data exploration"
+      href: data-exploration1.html
+    - text: "Model building"
+      href: model-building.html
+    - text: "Analysis and discussion"
+      href: analysis.html
     - text: "Mapping"
       href: mapping.html
-    - text: "Dashboard"
-      href: dashboard.html
+    - text: "Report"
+      href: report.html
     - icon: fa-envelope fa-lg
       href: mailto:<yw3772@cumc.columbia.com>
     - icon: fa-github fa-lg
       href: http://github.com/wyshanw/
 output:
   html_document:
-    theme: flatly
+    theme: united
