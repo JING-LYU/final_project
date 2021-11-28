@@ -44,6 +44,7 @@ Aspects:
 
 -   Community Health Survey Public Use Data -
     <https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page>
+    &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
 
 -   Primary Care Access and Planning - Health Insurance Enrollment -
     <https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h>
@@ -61,7 +62,26 @@ Analyse relationship between access to health resources and smoking;
 Analyse different aspects in relation with whether or not getting
 insurance.
 
-(Analyse confounder/biases that contributes the correlation.)
+=======
+
+-   Primary Care Access and Planning - Health Insurance Enrollment -
+    <https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h>
+
+-   Facts about cigarette -
+    <https://www.medicalnewstoday.com/releases/12481#1> (only facts, not
+    dataset)
+
+### The planned analyses / visualizations / coding challenges
+
+-   Analyses:
+
+Analyse relationship between access to health resources and smoking;
+
+Analyse different aspects in relation with whether or not getting
+insurance.
+
+> > > > > > > d176472f23174d073fb502384c981192b6be3cc4 (Analyse
+> > > > > > > confounder/biases that contributes the correlation.)
 
 -   Visualizations:
 
@@ -74,12 +94,19 @@ Will think of more visualizations during analysis (use plotly)
 -   Coding challenges:
 
 Different survey questions in each years - can not analyse correlation
-when the data are from different years.
+when the data are from different years. &lt;&lt;&lt;&lt;&lt;&lt;&lt;
+HEAD
 
 Difficulty of cleaning dataset and extract desired content from a
 survey;
 
-Unmatched variable names in each year;
+=======
+
+Difficulty of cleaning dataset and extract desired content from a
+survey;
+
+> > > > > > > d176472f23174d073fb502384c981192b6be3cc4 Unmatched
+> > > > > > > variable names in each year;
 
 ### Anticipated Timeline:
 

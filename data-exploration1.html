@@ -9,14 +9,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="LYU JING" />
 
-<meta name="date" content="2021-11-21" />
 
-<title>Data Exploaration1</title>
+<title>Data Exploaration</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -32,6 +30,7 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -219,6 +218,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -282,64 +284,21 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
-<h1 class="title toc-ignore">Data Exploaration1</h1>
-<h4 class="author">LYU JING</h4>
-<h4 class="date">11/21/2021</h4>
+
+<h1 class="title toc-ignore">Data Exploaration</h1>
 
 </div>
 
 
-<div id="sample-code-given-with-the-source-data" class="section level3">
-<h3>Sample code given with the source data</h3>
-<pre><code>rm(list=ls(all=TRUE))
-library(&quot;haven&quot;)
-library(&quot;survey&quot;)
-library(dplyr)
-require(data.table)
-chs17&lt;-read_sas(&quot;data/chs2017_public.sas7bdat&quot;)
-
-#city-wide estimates
-chs&lt;-transform(chs17,strata=as.character(strata),all=as.factor(survey))
-
-#define the survey
-chs.dsgn&lt;-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
-#age adjusted survey
-pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
-chs.stdes&lt;-svystandardize(subset(chs.dsgn,diabetes17&gt;0 ),by=~agegroup,over=~all,population=pop.agecat4,excluding.missing =~ agegroup+ ~all)
-
-#weighted N
-aggregate(chs17$wt18_dual, by=list(Category=chs17$diabetes17), FUN=sum)
-
-#crude prevalance estimates
-svyby(~diabetes17==1,~all,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
-svyby(~diabetes17==2,~all,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
-
-#age adjusted prevalance estimates
-
-svyby(~diabetes17==1,~all,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
-svyby(~diabetes17==2,~all,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
-
-#estimate by sex
-chs&lt;-transform(chs17,strata=as.character(strata),allsex2=as.factor(sex))
-
-#define the survey
-chs.dsgn&lt;-svydesign(ids = ~1,strata = ~strata,weights=~wt18_dual,data = chs,nest = TRUE,na.rm=TRUE )
-#age adjusted survey
-pop.agecat4=c(0.128810, 0.401725, 0.299194, 0.170271)
-chs.stdes&lt;-svystandardize(subset(chs.dsgn,diabetes17&gt;0 ),by=~agegroup,over=~allsex2,population=pop.agecat4,excluding.missing =~ agegroup+ ~allsex2)
-
-#crude prevalance estimates
-svyby(~diabetes17==1,~allsex2,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
-svyby(~diabetes17==2,~allsex2,subset(chs.dsgn,diabetes17&gt;0),svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
-
-
-#age adjusted prevalance estimates
-
-svyby(~diabetes17==1,~allsex2,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))
-svyby(~diabetes17==2,~allsex2,chs.stdes,svyciprop,vartype = &quot;ci&quot;,method=&quot;xlogit&quot;,df=degf(chs.dsgn))</code></pre>
-</div>
 <div id="data-loading-and-crude-cleaning" class="section level2">
 <h2>Data loading and crude cleaning</h2>
 <p>We select year 2014-2016 and variables relating to smoking and insurance.</p>
@@ -610,6 +569,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
