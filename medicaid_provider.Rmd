@@ -1,0 +1,35 @@
+---
+title: "medicaid_provider"
+author: "Yiqun Jin"
+date: "11/28/2021"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(leaflet)
+library(rvest)
+library(httr)
+```
+
+## Medicaid Enrolled Provider Location Mapping
+
+Medicaid provides health coverage to low-income people and is one of the largest payers for health care in the United States.
+
+```{r}
+medicaid_provider = GET("https://health.data.ny.gov/resource/keti-qx5t.csv",
+                        query = list("$limit" = 10000)) %>% 
+  content("parsed") 
+  #select(-file_date, -medically_fragile_children_directory_ind, -provider_email)
+```
+
+
+
+```{r}
+leaflet(medicaid_provider) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
+  addMarkers(lat = ~latitude, 
+             lng = ~longitude, 
+             clusterOptions = markerClusterOptions())
+```
+
