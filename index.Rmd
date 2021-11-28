@@ -12,7 +12,7 @@ output:
 
 <img src="images/smoke_sign.PNG" style="width:80%">
 
-<font size="2"> A shot of non-smoking sign in the Columbia University Irving Medical Center </font> 
+<font size="1"> A shot of non-smoking sign in the Columbia University Irving Medical Center </font> 
 
 <br>
 
@@ -25,7 +25,7 @@ It is known that the health insurance companies stratify smokers and non-smokers
 Image below shows the portrait of the New York medical insurance. We noticed that there are very large amount of New-Yorkers who are not insured. 
 
 <img src="images/nyc_insurance_stat.PNG" style="width:100%">
-<font size="2">Image source: https://www.ehealthinsurance.com/new-york-health-insurance</font> 
+<font size="1">Image source: https://www.ehealthinsurance.com/new-york-health-insurance</font> 
 
 
 Since health insurance is vital for individual's well-being, we are interested in exploring if smokers in NYC tend to get insurance, and what type of insurance they prefer. Mapping of health consulting centers and health insurance carriers locations in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance.

@@ -6,7 +6,7 @@ navbar:
     - text: "Data exploration"
       href: data-exploration1.html
     - text: "Model building"
-      href: model_building.html
+      href: model-building.html
     - text: "Analysis and discussion"
       href: analysis.html
     - text: "Mapping"
