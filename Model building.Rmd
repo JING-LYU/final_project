@@ -14,6 +14,8 @@ library(httr)
 library(haven)
 library(patchwork)
 library(summarytools)
+library(grid)
+library(vcd)
 
 ```
 
@@ -26,6 +28,8 @@ dataset_basic = read_csv("data/dataset_basic.csv")
 
 #### insurance type
 
+##### Plot
+
 ```{r message=FALSE}
 analyse_smoke_insurancetype = 
   dataset_basic %>%
@@ -37,24 +41,25 @@ analyse_smoke_insurancetype =
   summarize(n = n())
   
 analyse_smoke_insurancetype %>% 
-  ggplot(aes(x = insure, y = n, fill = smoker)) + 
+  ggplot(aes(x =smoker , y = n, fill = insure)) + 
   geom_bar(stat = "identity",position = "dodge") +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
     labs(
-      x = 'insure type',
+      x = 'smoking group ',
       y = 'counts',
-      title = 'The distribution of insure in different smoking group ')
+      title = 'The distribution of insurance in different smoking group ')
 ```
 
-Anova between insurance type and smoking
+##### Chi-quare test  between insurance type and smoking
 
-$H_0$ : the variables are independent, there is no relationship between the two categorical variables. Knowing the value of one variable does not help to predict the value of the other variable
+$H_0$ : insurance type and smoking are independent, there is no relationship between the two categorical variables. 
 
-$H_1$ : the variables are dependent, there is a relationship between the two categorical variables. Knowing the value of one variable helps to predict the value of the other variable
+$H_1$ : insurance type and smoking are dependent, there is a relationship between the two categorical variables. 
 
 *Test result:*
+
 ```{r}
 #test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
 #  pivot_wider(
@@ -62,9 +67,6 @@ $H_1$ : the variables are dependent, there is a relationship between the two cat
 #  values_from = "n")
 
 #test_data_smoke_insurancetype %>% knitr::kable()
-```
-
-```{r}
 #chisq.test(test_data_smoke_insurancetype[-1])
 
 dat = 
@@ -90,10 +92,16 @@ dat %$%
   )
 
 
+
+mosaic(~ smoker + insure,
+  direction = c("v", "h"),
+  data = dat,
+  shade = TRUE
+)
 ```
 
 #### healthstatus
-
+##### Plot
 ```{r message=FALSE}
 analyse_generalhealth_insurancetype = 
   dataset_basic %>%
@@ -104,29 +112,63 @@ analyse_generalhealth_insurancetype =
   summarize(n = n())
   
 analyse_generalhealth_insurancetype %>% 
-  ggplot(aes(x = insure, y = n, fill = generalhealth )) + 
+  ggplot(aes(x = generalhealth, y = n, fill = insure  )) + 
   geom_bar(stat = "identity",position = "dodge") +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
     labs(
-      x = 'generalhealth',
+      x = 'health status',
       y = 'counts',
-      title = 'The distribution of generalhealth in different smoking group ')
+      title = 'The distribution of insurance type in groups with differnt general health status')
 ```
+
+##### Chi-quare test  between insurance type and health status
+
+$H_0$ : insurance type and health status are independent, there is no relationship between the two categorical variables. 
+
+$H_1$ : insurance type and health status are dependent, there is a relationship between the two categorical variables. 
+
+*Test result:*
 
 ```{r}
-test_data_generalhealth_insurancetype = analyse_generalhealth_insurancetype %>% 
-  pivot_wider(
-  names_from = "insure", 
-  values_from = "n")
+#test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
+#  pivot_wider(
+#  names_from = "insure", 
+#  values_from = "n")
+
+#test_data_smoke_insurancetype %>% knitr::kable()
+#chisq.test(test_data_smoke_insurancetype[-1])
+
+dat = 
+  dataset_basic %>%
+  drop_na(generalhealth,insure) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured")))%>% 
+  mutate(generalhealth = factor(generalhealth,levels = c(1,2,3,4,5),labels = c("Excellent","Very good","Good", "Fair", "Poor")))
+
+
+
+
+
+# fourth method:
+dat %$%
+  ctable(generalhealth, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
+
+
+
+mosaic(~ generalhealth + insure,
+  direction = c("v", "h"),
+  data = dat,
+  shade = TRUE
+)
 ```
-
-```{r}
-test_generalhealth = chisq.test(test_data_generalhealth_insurancetype[-1])
-
-```
-
 #### place to go when sick?
 
 ```{r message=FALSE}
@@ -139,34 +181,69 @@ analyse_sickadvice_insurancetype =
   summarize(n = n())
   
 analyse_sickadvice_insurancetype %>% 
-  ggplot(aes(x = insure, y = n, fill = sickadvice )) + 
+  ggplot(aes(x = sickadvice, y = n, fill = insure )) + 
   geom_bar(stat = "identity",position = "dodge") +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
     labs(
-      x = 'sickadvice',
+      x = 'place',
       y = 'counts',
-      title = 'The distribution of sickadvice in different smoking group ')
+      title = 'The distribution of insurance type in groups of people went to diffrent places when sick ')
 ```
 
-```{r}
-test_data_sickadvice_insurancetype = analyse_sickadvice_insurancetype %>% 
-  pivot_wider(
-  names_from = "insure", 
-  values_from = "n") %>% 
-  mutate(milit_champus_tricare = replace_na(milit_champus_tricare, 0))
-```
+
+##### Chi-quare test  between insurance type and sick advice place
+
+$H_0$ : insurance type and sick advice place are independent, there is no relationship between the two categorical variables. 
+
+$H_1$ : insurance type and sick advice place are dependent, there is a relationship between the two categorical variables. 
+
+*Test result:*
 
 ```{r}
-test_generalhealth = chisq.test(test_data_sickadvice_insurancetype[-1])
+#test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
+#  pivot_wider(
+#  names_from = "insure", 
+#  values_from = "n")
 
+#test_data_smoke_insurancetype %>% knitr::kable()
+#chisq.test(test_data_smoke_insurancetype[-1])
+
+dat = 
+  dataset_basic %>%
+  drop_na(sickadvice,insure) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid_Family Health", "milit_champus_tricare", "COBRA_Other", "uninsured")))%>% 
+  mutate(sickadvice = factor(sickadvice,levels = c(1,2,3,4,5,6,7,8,9),labels = c("private_doctor","non-retail_clinic","urgent_care_center", "hospital_ed", "retail_clinic", "alternative_health_care_provider","family_friend_self_resources","other","no_usual_place"))) 
+
+
+
+
+
+# fourth method:
+dat %$%
+  ctable(sickadvice, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
+
+
+
+mosaic(~ sickadvice + insure,
+  direction = c("v", "h"),
+  data = dat,
+  shade = TRUE
+)
 ```
 According to above chi-square test result We reject the null hypothesis and conclude that there’s at least one helath stutus group’s proportions of insurance type is different from others at 0.05 significant level.
 
 
 #### medical care accessibility?
-
+##### Plot
 ```{r message=FALSE}
 analyse_didntgetcare_insurancetype = 
   dataset_basic %>%
@@ -185,18 +262,151 @@ analyse_didntgetcare_insurancetype %>%
     labs(
       x = 'didntgetcare',
       y = 'counts',
+      title = 'The distribution of insurance type in different  group of medical care accessibility')
+```
+
+##### Chi-quare test  between insurance type and medical care accessibility
+
+$H_0$ : insurance type and medical care accessibility are independent, there is no relationship between the two categorical variables. 
+
+$H_1$ : insurance type and medical care accessibility are dependent, there is a relationship between the two categorical variables. 
+
+*Test result:*
+
+```{r}
+#test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
+#  pivot_wider(
+#  names_from = "insure", 
+#  values_from = "n")
+
+#test_data_smoke_insurancetype %>% knitr::kable()
+#chisq.test(test_data_smoke_insurancetype[-1])
+
+dat = 
+  dataset_basic %>%
+  drop_na(didntgetcare,insure) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid_Family Health", "milit_champus_tricare", "COBRA_Other", "uninsured")))%>% 
+  mutate(didntgetcare = factor(didntgetcare,levels = c(1,2),labels = c("Yes","No")))
+
+
+
+
+
+# fourth method:
+dat %$%
+  ctable(didntgetcare, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
+
+
+
+mosaic(~ didntgetcare + insure,
+  direction = c("v", "h"),
+  data = dat,
+  shade = TRUE
+)
+```
+
+
+####  Flu
+##### Plot
+```{r}
+analyse_flu_insurancetype = 
+  dataset_basic %>%
+  drop_na(fluvaccineshot,insure) %>% 
+  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c("Yes","No"))) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
+  group_by(fluvaccineshot,insure) %>% 
+  summarize(n = n())
+
+analyse_didntgetcare_insurancetype %>% 
+  ggplot(aes(x = insure, y = n, fill = didntgetcare )) + 
+  geom_bar(stat = "identity",position = "dodge") +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = 'fluvaccineshot',
+      y = 'counts',
       title = 'The distribution of didntgetcare in different smoking group ')
 ```
 
+
+##### Chi-quare test  between insurance type and medical care accessibility
+
+$H_0$ : insurance type and medical care accessibility are independent, there is no relationship between the two categorical variables. 
+
+$H_1$ : insurance type and medical care accessibility are dependent, there is a relationship between the two categorical variables. 
+
+*Test result:*
+
 ```{r}
-test_data_didntgetcare_insurancetype = analyse_didntgetcare_insurancetype %>% 
+#test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
+#  pivot_wider(
+#  names_from = "insure", 
+#  values_from = "n")
+
+#test_data_smoke_insurancetype %>% knitr::kable()
+#chisq.test(test_data_smoke_insurancetype[-1])
+
+dat = 
+  dataset_basic %>%
+  drop_na(didntgetcare,insure) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid_Family Health", "milit_champus_tricare", "COBRA_Other", "uninsured")))%>% 
+  mutate(didntgetcare = factor(didntgetcare,levels = c(1,2),labels = c("Yes","No")))
+
+
+
+
+
+# fourth method:
+dat %$%
+  ctable(didntgetcare, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
+
+
+
+mosaic(~ didntgetcare + insure,
+  direction = c("v", "h"),
+  data = dat,
+  shade = TRUE
+)
+```
+
+####  Poverty
+##### Plot
+
+```{r}
+analyse_poverty_insurancetype = 
+  dataset_basic %>%
+  drop_na(imputed_povertygroup,insure) %>% 
+  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
+  group_by(imputed_povertygroup,insure) %>% 
+  summarize(n = n())
+```
+
+
+```{r}
+test_data_poverty_insurance = analyse_poverty_insurancetype %>% 
   pivot_wider(
   names_from = "insure", 
-  values_from = "n") 
-  #mutate(milit_champus_tricare = replace_na(milit_champus_tricare, 0))
+  values_from = "n")
 ```
 
 ```{r}
-test_generalhealth = chisq.test(test_data_didntgetcare_insurancetype[-1])
+chisq.test(test_data_poverty_insurance[-1])
 
 ```
+
