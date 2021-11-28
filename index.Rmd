@@ -38,7 +38,11 @@ Since health insurance is vital for individual's well-being, we are interested i
 
 Our main dataset is from the [Community Health Survey Public Use Data](https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page). This dataset contains survey questions regarding smoking and health insurance. Detailed information of the chosen variables can be found [here](data_cleaning_notes.html).
 
-We also utilized [Primary Care Access and Planning - Health Insurance Enrollment](https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h) for mapping of health consulting center. In addition, we collected locations of health insurance carriers in NYC manually and created interactive mapping of these carriers.
+The [Medical Cost Personal Dataset](https://www.kaggle.com/mirichoi0218/insurance) is utilized to confirm that the insurance price is higher for smokers. In addition, this datasets shed lights on insurance charges for different personal characteristics, such as age, bmi, region, etc.
+
+[Primary Care Access and Planning - Health Insurance Enrollment](https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h) is used for mapping of health consulting center. 
+
+In addition, locations of health insurance carriers in NYC is collected manually and used to create interactive mapping of these carriers.
 
 <br>
 
