@@ -11,7 +11,7 @@
 
 
 
-<title> Smoking in New York City </title>
+<title> Smoking in NYC </title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -327,10 +327,19 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about.html">About</a>
+  <a href="data-exploration1.html">Data exploration</a>
+</li>
+<li>
+  <a href="model_building.html">Model building</a>
+</li>
+<li>
+  <a href="analysis.html">Analysis and discussion</a>
 </li>
 <li>
   <a href="mapping.html">Mapping</a>
+</li>
+<li>
+  <a href="report.html">Report</a>
 </li>
 <li>
   <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
@@ -361,7 +370,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore"><font size="8"> Smoking in New York City </font></h1>
+<h1 class="title toc-ignore"><font size="8"> Smoking in NYC </font></h1>
 <h3 class="subtitle"><font size="5"> Exploration of smoking and health insurance relationship in New York City from 2014 to 2016 </font></h3>
 
 </div>
@@ -371,32 +380,32 @@ div.tocify {
 <p><img src="images/smoke_sign.png" style="width:80%"></p>
 <p><font size="2"> A shot of non-smoking sign in the Columbia University Irving Medical Center </font></p>
 <p><br></p>
-<div id="background-and-motivation" class="section level2">
-<h2>Background and Motivation</h2>
-<p>It is known that smokers have higher price for health insurance than non-smokers. As such, this project explores if smokers in NYC tend to get insurance, and what type of insurance they prefer.</p>
+<div id="motivation-and-research-question" class="section level2">
+<h2>Motivation and Research question</h2>
+<p>It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.</p>
 <p><img src="images/tweet.jpeg" style="width:100%"></p>
+<p>Image below shows the portrait of the New York medical insurance. We noticed that there are very large amount of New-Yorkers who are not insured.</p>
+<p><img src="images/nyc_insurance_stat.png" style="width:100%"> <font size="2">Image source: <a href="https://www.ehealthinsurance.com/new-york-health-insurance" class="uri">https://www.ehealthinsurance.com/new-york-health-insurance</a></font></p>
+<p>Since health insurance is vital for individual’s well-being, we are interested in exploring if smokers in NYC tend to get insurance, and what type of insurance they prefer. Mapping of health consulting centers and health insurance carriers locations in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance.</p>
 <p><br></p>
 </div>
 <div id="datasets" class="section level2">
 <h2>Datasets</h2>
-<p>For this project, we incorporate datasets from The variable of our interest</p>
-<p><br></p>
-</div>
-<div id="research-question" class="section level2">
-<h2>Research Question</h2>
+<p>Our main dataset is from the <a href="https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page">Community Health Survey Public Use Data</a>. This dataset contains survey questions regarding smoking and health insurance. Detailed information of the chosen variables can be found <a href="data_cleaning_notes.html">here</a>.</p>
+<p>We also utilized <a href="https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h">Primary Care Access and Planning - Health Insurance Enrollment</a> for mapping of health consulting center. In addition, we collected locations of health insurance carriers in NYC manually and created interactive mapping of these carriers.</p>
 <p><br></p>
 </div>
 <div id="website-overview" class="section level2">
 <h2>Website overview</h2>
-<p><br></p>
-</div>
-<div id="additional-information" class="section level2">
-<h2>Additional information</h2>
+<p>In this website, you will find:</p>
 <ul>
-<li><p><a href="https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page">Community Health Survey Public Use Data</a></p></li>
-<li><p><a href="https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h">Primary Care Access and Planning - Health Insurance Enrollment</a></p></li>
+<li><p><a href="data-exploration1.html">Data exploration</a> of our targeted datasets.</p></li>
+<li><p><a href="model_building.html">Model</a> build using cleaned datasets.</p></li>
+<li><p><a href=".html">Analysis and discussion</a> of our finding.</p></li>
+<li><p><a href="mapping.html">Mapping</a> of health consulting centers and health insurance carriers locations in NYC, along with their contact information and operation hours.</p></li>
+<li><p>Final formatted <a href="report.html">Report</a> of our research</p></li>
 </ul>
-<p><img src="images/nyc_insurance_stat.png" style="width:100%"> <font size="2">Image source: <a href="https://www.ehealthinsurance.com/new-york-health-insurance" class="uri">https://www.ehealthinsurance.com/new-york-health-insurance</a></font></p>
+<p>You can also reach to us by clicking the email icon on top right corner of the website. Our github page can also be found be clicking the github icon.</p>
 <p><br></p>
 </div>
 <div id="collaborators" class="section level2">
@@ -408,7 +417,6 @@ div.tocify {
 <li>Yiqun Jin</li>
 </ul>
 <p>We are Biostatistics students from Columbia University Mailman School of Public Health. This is a project for the course P8105 Data Science.</p>
-<p>You can find more information about us <a href="about.html">here</a></p>
 </div>
 
 
