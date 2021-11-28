@@ -1,17 +1,82 @@
 ---
 title: "Medical cost analysis"
-author: "Yushan Wang
-output: github_document
+author: "Yushan Wang"
+output: html_document
 ---
 
 ```{r, echo = FALSE, message=FALSE}
 library(tidyverse)
-
 ```
 
 
-
-```{r}
+```{r, echo = FALSE}
 cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
 ```
+
+
+```{r, echo = FALSE}
+cost_df = cost_df %>% 
+  mutate(
+    smoker = ifelse(smoker == "yes", 1, 0),
+    smoker = as.factor(smoker),
+    children = as.factor(children),
+    age_group = case_when(age < 18 ~ 1, 
+                          age >= 18 & age < 24 ~ 2,
+                          age >= 25 & age < 44 ~ 3,
+                          age >= 45 & age < 64 ~ 4,
+                          age >= 65 ~ 5
+                          ),
+    age_group = as.factor(age_group),
+    
+    bmi_group = case_when(bmi < 20 ~ 1, 
+                          bmi >= 20 & bmi < 30 ~ 2,
+                          bmi >= 30 & bmi < 40 ~ 3,
+                          bmi >= 40 & bmi < 50 ~ 4,
+                          bmi >= 50 ~ 5
+                          ),
+    bmi_group = as.factor(bmi_group)
+     
+    ) %>% 
+    na.omit()
+    
+  
+```
+
+
+```{r, echo = FALSE}
+ggplot(cost_df, aes(x = smoker, y = charges, color = children)) + 
+  geom_boxplot() + 
+  coord_flip()
+
+ggplot(cost_df, aes(x = smoker, y = charges, color = sex)) + 
+  geom_boxplot() + 
+  coord_flip()
+
+ggplot(cost_df, aes(x = smoker, y = charges, color = region)) + 
+  geom_boxplot() + 
+  coord_flip()
+
+ggplot(cost_df, aes(x = smoker, y = charges, color = age_group)) + 
+  geom_boxplot() + 
+  coord_flip()
+```
+
+smoker have significantly higher insurance cost than non smoker. For people in the same category of smoking, there is no significant difference of cost between number of children they have, their sex, and their region. However, there is significant different between different age group: older age group has higher cost.
+
+
+```{r, echo = FALSE}
+ggplot(cost_df, aes(x = bmi, y = charges)) + 
+  geom_smooth() 
+```
+
+higher cost for higher bmi
+
+however:
+```{r, echo = FALSE}
+ggplot(cost_df, aes(x = smoker, y = charges, color = bmi_group)) + 
+  geom_boxplot() + 
+  coord_flip()
+```
+
+after stratify by smoking status, the charges do not show the same pattern for bmi
 
