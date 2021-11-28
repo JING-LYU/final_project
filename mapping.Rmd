@@ -15,6 +15,8 @@ For general public seeking assistance with signing up for health insurance or SN
 ```{r load packages, echo = FALSE, message = FALSE}
 library(tidyverse)
 library(leaflet)
+library(rvest)
+library(httr)
 #options(knitr.duplicate.label = "allow")
 
 ```
@@ -125,3 +127,30 @@ rmarkdown::paged_table(insurance_agency_table)
 
 
 **logo source:** https://www.ehealthinsurance.com/health-insurance-companies
+
+
+### Medicaid location mapping
+```{r, echo = FALSE, message = FALSE}
+medicaid_provider = GET("https://health.data.ny.gov/resource/keti-qx5t.csv",
+                        query = list("$limit" = 10000)) %>% 
+  content("parsed")
+
+medicaid = medicaid_provider %>% 
+  janitor::clean_names() %>% 
+  #drop_na() %>% 
+  filter(state == "NY") %>% 
+  filter(city %in% c("NEW YORK", "FLUSHING", "BRONX", "BROOKLYN", "STATEN ISLAND")) %>% 
+  filter(county %in%  c("NEW YORK", "QUEENS", "BRONX", "BROOKLYN", "STATEN ISLAND")) %>% 
+  subset(!(telephone %in% c(3155365160, 8458875530, 2129871777, 2128971994,2127723111)))
+
+```
+
+
+```{r, , echo = FALSE, warning=FALSE}
+leaflet(medicaid) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
+  addMarkers(lat = ~latitude, 
+             lng = ~longitude, 
+             popup = paste("Provider name:", medicaid$mmis_name, "<br>", "Street address:", medicaid$service_address, "<br>", "Telephone number:", medicaid$telephone),
+             clusterOptions = markerClusterOptions())
+```
