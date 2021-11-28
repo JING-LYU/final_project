@@ -158,7 +158,7 @@ analyse_smoke_insurancetype %>%
 
 
 
-### try {.tabset}
+### Interested variables and smoking {.tabset}
 
 #### insure
 
