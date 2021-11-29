@@ -28,7 +28,7 @@ Image below shows the portrait of the New York medical insurance. We noticed tha
 <font size="1">Image source: https://www.ehealthinsurance.com/new-york-health-insurance</font> 
 
 
-Since health insurance is vital for individual's well-being, we are interested in exploring if smokers in NYC tend to get insurance, and what type of insurance they prefer. Mapping of health consulting centers and health insurance carriers locations in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance.
+Since health insurance is vital for individual's well-being, we are interested in exploring the relationship between smoking and health insurance. To be specific, we would like to investigate if smokers in NYC tend to get insurance, what type of insurance they prefer, and the factors that affect insurance cost. Mapping of health consulting centers, health insurance carriers locations, and medicaid provider nlocation in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
 
 
 
