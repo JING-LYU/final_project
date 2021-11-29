@@ -49,7 +49,9 @@ cost_df = cost_df %>%
   
 ```
 
-## Does smoker get higher charges for insurance than non-smoker?
+## Study of factors that affect charge of insurance {.tabset}
+
+### Smoker
 
 ```{r}
 ggplot(cost_df, aes(x = smoker, y = charges, color = smoker)) + 
@@ -59,7 +61,7 @@ ggplot(cost_df, aes(x = smoker, y = charges, color = smoker)) +
 
 YES! Smoker have significantly higher insurance cost than non smoker.
 
-## Does number of Children affect charges of insurance?
+### Having Children 
 
 ```{r, echo = FALSE}
 ggplot(cost_df, aes(x = children_group, y = charges, color = children_group)) + 
@@ -80,8 +82,7 @@ children_res
 
 At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for having children is higher than not having children.
 
-## Does sex affect charges of insurance?
-
+### sex
 ```{r}
 ggplot(cost_df, aes(x = sex, y = charges, color = sex)) + 
   geom_boxplot() + 
@@ -104,7 +105,7 @@ sex_res
 At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for male and female are different. In fact, male have higher mean cost than female. This is quiet counter-intuitive.
 
 
-## Does age affect charges of insurance?
+### age
 
 
 ```{r}
@@ -115,7 +116,7 @@ ggplot(cost_df, aes(x = age, y = charges)) +
 
 It is clear from the plot that higher age have higher cost of insurance.
 
-## Does bmi affect charges of insurance?
+### bmi 
 
 ```{r, echo = FALSE}
 ggplot(cost_df, aes(x = bmi, y = charges)) + 
@@ -125,11 +126,11 @@ ggplot(cost_df, aes(x = bmi, y = charges)) +
 It is clear from the plot that higher bmi have higher cost of insurance.
 
 
-## conclusion
+### conclusion
 
 Variables that affect charge of insurance: `smoking`, `whether or not having children`, `sex`, `age`, `bmi`.
 
-## collinearity examination
+### collinearity examination
 
 ```{r}
 #model <- glm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)

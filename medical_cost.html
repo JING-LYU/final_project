@@ -247,7 +247,7 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="data-exploration1.html">Data exploration</a>
+  <a href="exploration.html">Data exploration</a>
 </li>
 <li>
   <a href="model-building.html">Model building</a>
@@ -287,16 +287,18 @@ $(document).ready(function () {
 </div>
 
 
-<div id="does-smoker-get-higher-charges-for-insurance-than-non-smoker" class="section level2">
-<h2>Does smoker get higher charges for insurance than non-smoker?</h2>
+<div id="study-of-factors-that-affect-charge-of-insurance" class="section level2 tabset">
+<h2 class="tabset">Study of factors that affect charge of insurance</h2>
+<div id="smoker" class="section level3">
+<h3>Smoker</h3>
 <pre class="r"><code>ggplot(cost_df, aes(x = smoker, y = charges, color = smoker)) + 
   geom_boxplot() + 
   coord_flip()</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>YES! Smoker have significantly higher insurance cost than non smoker.</p>
 </div>
-<div id="does-number-of-children-affect-charges-of-insurance" class="section level2">
-<h2>Does number of Children affect charges of insurance?</h2>
+<div id="having-children" class="section level3">
+<h3>Having Children</h3>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p><span class="math inline">\(H_0\)</span>: mean charges of insurance for having or not having children is the same.</p>
 <p><span class="math inline">\(H_1\)</span>: mean charges of insurance for having children is higher than not having children.</p>
@@ -328,8 +330,8 @@ children_res</code></pre>
 ##        12136.31        13800.96</code></pre>
 <p>At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for having children is higher than not having children.</p>
 </div>
-<div id="does-sex-affect-charges-of-insurance" class="section level2">
-<h2>Does sex affect charges of insurance?</h2>
+<div id="sex" class="section level3">
+<h3>sex</h3>
 <pre class="r"><code>ggplot(cost_df, aes(x = sex, y = charges, color = sex)) + 
   geom_boxplot() + 
   coord_flip()</code></pre>
@@ -377,26 +379,26 @@ sex_res</code></pre>
 ##        13772.76        12408.34</code></pre>
 <p>At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for male and female are different. In fact, male have higher mean cost than female. This is quiet counter-intuitive.</p>
 </div>
-<div id="does-age-affect-charges-of-insurance" class="section level2">
-<h2>Does age affect charges of insurance?</h2>
+<div id="age" class="section level3">
+<h3>age</h3>
 <pre class="r"><code>ggplot(cost_df, aes(x = age, y = charges)) + 
   geom_smooth() </code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>It is clear from the plot that higher age have higher cost of insurance.</p>
 </div>
-<div id="does-bmi-affect-charges-of-insurance" class="section level2">
-<h2>Does bmi affect charges of insurance?</h2>
+<div id="bmi" class="section level3">
+<h3>bmi</h3>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>It is clear from the plot that higher bmi have higher cost of insurance.</p>
 </div>
-<div id="conclusion" class="section level2">
-<h2>conclusion</h2>
+<div id="conclusion" class="section level3">
+<h3>conclusion</h3>
 <p>Variables that affect charge of insurance: <code>smoking</code>, <code>whether or not having children</code>, <code>sex</code>, <code>age</code>, <code>bmi</code>.</p>
 </div>
-<div id="collinearity-examination" class="section level2">
-<h2>collinearity examination</h2>
+<div id="collinearity-examination" class="section level3">
+<h3>collinearity examination</h3>
 <pre class="r"><code>#model &lt;- glm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
 
 cost_df_cor = cost_df %&gt;% 
@@ -409,6 +411,7 @@ model.matrix(~0+., data=cost_df_cor) %&gt;%
   ggcorrplot(show.diag = F, type=&quot;lower&quot;, lab=TRUE, lab_size=2)</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>There is no collinearity between any of the variables.</p>
+</div>
 </div>
 
 
