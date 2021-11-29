@@ -399,9 +399,7 @@ sex_res</code></pre>
 </div>
 <div id="collinearity-examination" class="section level3">
 <h3>collinearity examination</h3>
-<pre class="r"><code>#model &lt;- glm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
-
-cost_df_cor = cost_df %&gt;% 
+<pre class="r"><code>cost_df_cor = cost_df %&gt;% 
   select(age, sex, bmi, smoker, charges, children_group)
 
 
@@ -411,6 +409,74 @@ model.matrix(~0+., data=cost_df_cor) %&gt;%
   ggcorrplot(show.diag = F, type=&quot;lower&quot;, lab=TRUE, lab_size=2)</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>There is no collinearity between any of the variables.</p>
+</div>
+<div id="model-building" class="section level3">
+<h3>Model building</h3>
+<pre class="r"><code>model &lt;- lm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
+summary(model)%&gt;% 
+  broom::tidy() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-12307.8163</td>
+<td align="right">995.84054</td>
+<td align="right">-12.3592240</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">smoker1</td>
+<td align="right">23685.9237</td>
+<td align="right">425.11537</td>
+<td align="right">55.7164601</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">children_group1</td>
+<td align="right">949.4232</td>
+<td align="right">344.79196</td>
+<td align="right">2.7536118</td>
+<td align="right">0.0059792</td>
+</tr>
+<tr class="even">
+<td align="left">sex2</td>
+<td align="right">170.0998</td>
+<td align="right">341.74401</td>
+<td align="right">0.4977403</td>
+<td align="right">0.6187543</td>
+</tr>
+<tr class="odd">
+<td align="left">age</td>
+<td align="right">260.0221</td>
+<td align="right">12.32652</td>
+<td align="right">21.0945321</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">bmi</td>
+<td align="right">321.0280</td>
+<td align="right">27.97673</td>
+<td align="right">11.4748220</td>
+<td align="right">0.0000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="model-diagnostic" class="section level3">
+<h3>Model diagnostic</h3>
+<pre class="r"><code>par(mfrow = c(2,2))
+plot(model)</code></pre>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 </div>
 </div>
 
