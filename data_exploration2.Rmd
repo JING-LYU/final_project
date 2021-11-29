@@ -75,8 +75,7 @@ smoke_df = dataset_basic %>%
          
          )
 
-skimr::skim(smoke_df)
-
+write_csv(smoke_df,"data/dataset_update.csv")
 ```
 
 
@@ -98,6 +97,7 @@ smoke_df %>%
       x = 'Smoking status',
       y = 'Number of smokers',
       title = 'Age distribution among people with different smoking status')
+
 
 ```
 
@@ -125,7 +125,7 @@ smoke_df %>%
     labs(
       x = 'Type of smokers',
       y = 'Health self-evaluation \n(% in each types of smoker)',
-      title = 'Self-evaluation of health conditions among different types of smokers\n(% in each types of smoker)')
+      title = 'Self-evaluation of health conditions among people with different smoking status\n(% in each types of smoker)')
 ```
 
 
