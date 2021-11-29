@@ -4,7 +4,7 @@ navbar:
   title: "Home"
   right:
     - text: "Data exploration"
-      href: data-exploration1.html
+      href: exploration.html
     - text: "Model building"
       href: model-building.html
     - text: "Analysis and discussion"
