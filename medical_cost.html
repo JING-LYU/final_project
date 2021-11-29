@@ -11,7 +11,7 @@
 
 
 
-<title>Medical cost analysis</title>
+<title>Insurance cost analysis</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -282,27 +282,25 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Medical cost analysis</h1>
+<h1 class="title toc-ignore">Insurance cost analysis</h1>
 
 </div>
 
 
+<p><br></p>
 <div id="study-of-factors-that-affect-charge-of-insurance" class="section level2 tabset">
 <h2 class="tabset">Study of factors that affect charge of insurance</h2>
 <div id="smoker" class="section level3">
 <h3>Smoker</h3>
-<pre class="r"><code>ggplot(cost_df, aes(x = smoker, y = charges, color = smoker)) + 
-  geom_boxplot() + 
-  coord_flip()</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>YES! Smoker have significantly higher insurance cost than non smoker.</p>
+<p>YES! Smoker have significantly higher insurance cost than non smoker. This confirm that insurance company assign different price for smokers and non-smokers.</p>
+<p><br></p>
 </div>
 <div id="having-children" class="section level3">
 <h3>Having Children</h3>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p><span class="math inline">\(H_0\)</span>: mean charges of insurance for having or not having children is the same.</p>
 <p><span class="math inline">\(H_1\)</span>: mean charges of insurance for having children is higher than not having children.</p>
-<pre class="r"><code>var.test(charges ~ children_group, data = cost_df)</code></pre>
 <pre><code>## 
 ##  F test to compare two variances
 ## 
@@ -314,9 +312,6 @@ $(document).ready(function () {
 ## sample estimates:
 ## ratio of variances 
 ##          0.9745361</code></pre>
-<pre class="r"><code>#Equal variance
-children_res &lt;- t.test(charges ~ children_group, data = cost_df, var.equal = TRUE, alternative = &quot;less&quot;)
-children_res</code></pre>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -332,13 +327,9 @@ children_res</code></pre>
 </div>
 <div id="sex" class="section level3">
 <h3>sex</h3>
-<pre class="r"><code>ggplot(cost_df, aes(x = sex, y = charges, color = sex)) + 
-  geom_boxplot() + 
-  coord_flip()</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p><span class="math inline">\(H_0\)</span>: mean charges of insurance for male and female is the same.</p>
 <p><span class="math inline">\(H_1\)</span>: mean charges of insurance for male and female is different.</p>
-<pre class="r"><code>var.test(charges ~ sex, data = cost_df)</code></pre>
 <pre><code>## 
 ##  F test to compare two variances
 ## 
@@ -350,9 +341,6 @@ children_res</code></pre>
 ## sample estimates:
 ## ratio of variances 
 ##            1.39723</code></pre>
-<pre class="r"><code>#Equal variance
-sex_res &lt;- t.test(charges ~ sex, data = cost_df, var.equal = FALSE)
-sex_res</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -364,8 +352,6 @@ sex_res</code></pre>
 ## sample estimates:
 ## mean in group 1 mean in group 2 
 ##        13772.76        12408.34</code></pre>
-<pre class="r"><code>sex_res &lt;- t.test(charges ~ sex, data = cost_df, var.equal = FALSE, alternative = &quot;less&quot;)
-sex_res</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -381,8 +367,6 @@ sex_res</code></pre>
 </div>
 <div id="age" class="section level3">
 <h3>age</h3>
-<pre class="r"><code>ggplot(cost_df, aes(x = age, y = charges)) + 
-  geom_smooth() </code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>It is clear from the plot that higher age have higher cost of insurance.</p>
@@ -396,26 +380,75 @@ sex_res</code></pre>
 <div id="conclusion" class="section level3">
 <h3>conclusion</h3>
 <p>Variables that affect charge of insurance: <code>smoking</code>, <code>whether or not having children</code>, <code>sex</code>, <code>age</code>, <code>bmi</code>.</p>
+<p><br></p>
 </div>
+</div>
+<div id="model-building" class="section level2 tabset">
+<h2 class="tabset">Model Building</h2>
 <div id="collinearity-examination" class="section level3">
 <h3>collinearity examination</h3>
-<pre class="r"><code>cost_df_cor = cost_df %&gt;% 
-  select(age, sex, bmi, smoker, charges, children_group)
-
-
-
-model.matrix(~0+., data=cost_df_cor) %&gt;% 
-  cor(use=&quot;pairwise.complete.obs&quot;) %&gt;% 
-  ggcorrplot(show.diag = F, type=&quot;lower&quot;, lab=TRUE, lab_size=2)</code></pre>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>There is no collinearity between any of the variables.</p>
 </div>
-<div id="model-building" class="section level3">
+<div id="model-building-1" class="section level3">
 <h3>Model building</h3>
-<pre class="r"><code>model &lt;- lm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
-summary(model)%&gt;% 
-  broom::tidy() %&gt;% 
-  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-12307.8163</td>
+<td align="right">995.84054</td>
+<td align="right">-12.3592240</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">smoker1</td>
+<td align="right">23685.9237</td>
+<td align="right">425.11537</td>
+<td align="right">55.7164601</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">children_group1</td>
+<td align="right">949.4232</td>
+<td align="right">344.79196</td>
+<td align="right">2.7536118</td>
+<td align="right">0.0059792</td>
+</tr>
+<tr class="even">
+<td align="left">sex2</td>
+<td align="right">170.0998</td>
+<td align="right">341.74401</td>
+<td align="right">0.4977403</td>
+<td align="right">0.6187543</td>
+</tr>
+<tr class="odd">
+<td align="left">age</td>
+<td align="right">260.0221</td>
+<td align="right">12.32652</td>
+<td align="right">21.0945321</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">bmi</td>
+<td align="right">321.0280</td>
+<td align="right">27.97673</td>
+<td align="right">11.4748220</td>
+<td align="right">0.0000000</td>
+</tr>
+</tbody>
+</table>
+<p>Although the t-test for sex shows that the mean charge of insurance is different for male and female, the model building result shows otherwise. Therefore, we remove the sex variable.</p>
+<p>Here is the final model with significant variables:</p>
 <table>
 <thead>
 <tr class="header">
@@ -474,9 +507,8 @@ summary(model)%&gt;%
 </div>
 <div id="model-diagnostic" class="section level3">
 <h3>Model diagnostic</h3>
-<pre class="r"><code>par(mfrow = c(2,2))
-plot(model)</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>The four graph above shows homoscedasticity of residual.</p>
 </div>
 </div>
 

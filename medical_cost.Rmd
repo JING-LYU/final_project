@@ -1,5 +1,5 @@
 ---
-title: "Medical cost analysis"
+title: "Insurance cost analysis"
 output: html_document
 ---
 
@@ -49,17 +49,21 @@ cost_df = cost_df %>%
   
 ```
 
+<br>
+
 ## Study of factors that affect charge of insurance {.tabset}
 
 ### Smoker
 
-```{r}
+```{r, echo = FALSE}
 ggplot(cost_df, aes(x = smoker, y = charges, color = smoker)) + 
   geom_boxplot() + 
   coord_flip()
 ```
 
-YES! Smoker have significantly higher insurance cost than non smoker.
+YES! Smoker have significantly higher insurance cost than non smoker. This confirm that insurance company assign different price for smokers and non-smokers.
+
+<br>
 
 ### Having Children 
 
@@ -73,7 +77,7 @@ $H_0$: mean charges of insurance for having or not having children is the same.
 
 $H_1$: mean charges of insurance for having children is higher than not having children.
 
-```{r}
+```{r, echo = FALSE}
 var.test(charges ~ children_group, data = cost_df)
 #Equal variance
 children_res <- t.test(charges ~ children_group, data = cost_df, var.equal = TRUE, alternative = "less")
@@ -83,7 +87,7 @@ children_res
 At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for having children is higher than not having children.
 
 ### sex
-```{r}
+```{r, echo = FALSE}
 ggplot(cost_df, aes(x = sex, y = charges, color = sex)) + 
   geom_boxplot() + 
   coord_flip()
@@ -93,7 +97,7 @@ $H_0$: mean charges of insurance for male and female is the same.
 
 $H_1$: mean charges of insurance for male and female is different.
 
-```{r}
+```{r, echo = FALSE}
 var.test(charges ~ sex, data = cost_df)
 #Equal variance
 sex_res <- t.test(charges ~ sex, data = cost_df, var.equal = FALSE)
@@ -108,7 +112,7 @@ At 0.05 significant level, we reject the null hypothesis and conclude that mean 
 ### age
 
 
-```{r}
+```{r, echo = FALSE}
 ggplot(cost_df, aes(x = age, y = charges)) + 
   geom_smooth() 
 
@@ -130,9 +134,15 @@ It is clear from the plot that higher bmi have higher cost of insurance.
 
 Variables that affect charge of insurance: `smoking`, `whether or not having children`, `sex`, `age`, `bmi`.
 
+<br>
+
+
+
+## Model Building {.tabset}
+
 ### collinearity examination
 
-```{r}
+```{r, echo = FALSE}
 
 cost_df_cor = cost_df %>% 
   select(age, sex, bmi, smoker, charges, children_group)
@@ -148,17 +158,29 @@ There is no collinearity between any of the variables.
 
 ### Model building
 
-```{r}
+```{r, echo = FALSE}
 model <- lm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
 summary(model)%>% 
   broom::tidy() %>% 
   knitr::kable()
 ```
 
-### Model diagnostic
-```{r}
-par(mfrow = c(2,2))
-plot(model)
+Although the t-test for sex shows that the mean charge of insurance is different for male and female, the model building result shows otherwise. Therefore, we remove the sex variable.
+
+Here is the final model with significant variables:
+
+```{r, echo = FALSE}
+model1 <- lm(charges ~ smoker + children_group + age + bmi, data = cost_df)
+summary(model)%>% 
+  broom::tidy() %>% 
+  knitr::kable()
 ```
 
+### Model diagnostic
+```{r, echo = FALSE}
+par(mfrow = c(2,2))
+plot(model1)
+```
+
+The four graph above shows homoscedasticity of residual.
 
