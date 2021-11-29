@@ -130,6 +130,9 @@ rmarkdown::paged_table(insurance_agency_table)
 
 
 ### Medicaid location mapping
+
+Medicaid provides health coverage to low-income people, including eligible low-income adults, children, pregnant women, elderly adults and people with disabilities. Medicaid is one of the largest payers for health care in the United States and is administered by states, according to federal requirements. The program is funded jointly by states and the federal government.
+
 ```{r, echo = FALSE, message = FALSE}
 medicaid_provider = GET("https://health.data.ny.gov/resource/keti-qx5t.csv",
                         query = list("$limit" = 10000)) %>% 
@@ -146,7 +149,7 @@ medicaid = medicaid_provider %>%
 ```
 
 
-```{r, , echo = FALSE, warning=FALSE}
+```{r, echo = FALSE, warning=FALSE}
 leaflet(medicaid) %>% 
   addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
   addMarkers(lat = ~latitude, 
@@ -154,3 +157,10 @@ leaflet(medicaid) %>%
              popup = paste("Provider name:", medicaid$mmis_name, "<br>", "Street address:", medicaid$service_address, "<br>", "Telephone number:", medicaid$telephone),
              clusterOptions = markerClusterOptions())
 ```
+
+**Source:**
+Data Provided by New York State Department of Health; Updated at November 22, 2021; Health.Data.NY.Gov
+
+[Medicaid Enrolled Provider Listing](https://health.data.ny.gov/Health/Medicaid-Enrolled-Provider-Listing/keti-qx5t)
+
+[Medicaid.gov](https://www.medicaid.gov/medicaid/index.html)

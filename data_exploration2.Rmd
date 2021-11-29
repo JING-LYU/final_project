@@ -23,7 +23,7 @@ We select year 2014-2016 and variables relating to smoking and insurance.
 chs16 = read_sas("data/chs2016_public.sas7bdat")
 
 chs16_filter = chs16 %>% 
-  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot,bmi,child) %>% 
+  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2016) %>% 
   rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
 
@@ -31,7 +31,7 @@ chs16_filter = chs16 %>%
 chs15 = read_sas("data/chs2015_public.sas7bdat")
 
 chs15_filter = chs15 %>% 
-  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot,bmi,child) %>% 
+  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2015) %>% 
   rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
 
@@ -39,7 +39,7 @@ chs15_filter = chs15 %>%
 chs14 = read_sas("data/chs2014_public.sas7bdat")
 
 chs14_filter = chs14 %>% 
-  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot,bmi,child) %>% 
+  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2014) %>% 
   rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
 
@@ -51,15 +51,21 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
 
 ```{r}
 dataset_basic = chs_14_16 %>% 
-  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup,bmi,child) %>% 
-  mutate(numberperdaya = round(numberperdaya,1))
+  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
+  mutate(numberperdaya = round(numberperdaya,1),
+         imputed_povertygroup = factor(imputed_povertygroup),
+         child = factor(child,levels = c(1,2),labels = c(1,0)),
+         sex = factor(sex))
+write_csv(dataset_basic,"data/dataset_update.csv")
 ```
 
+
+## About smoking
 
 ```{r}
 
 smoke_df = dataset_basic %>% 
-  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup,bmi,child) %>% 
+  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
   drop_na(smoker) %>% 
   mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
          everyday = factor(everyday),
@@ -69,19 +75,14 @@ smoke_df = dataset_basic %>%
            (numberperdaya > 10) & (numberperdaya <= 20) ~2,
            numberperdaya > 20 ~ 3),
          smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c("light","normal","heavy")),
-         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c("Poor","Fair","Good","Very good","Excellent")),
-         fluvaccineshot = factor(fluvaccineshot, levels = c(1,2), labels = c("yes","no")),
-         imputed_povertygroup = factor(imputed_povertygroup)
+         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c("Poor","Fair","Good","Very good","Excellent"))
          
          )
-
-skimr::skim(smoke_df)
-
 ```
 
 
 
-* Age distribution among different types of smokers
+* Age distribution among people in different smoking status
 
 ```{r}
 
@@ -97,12 +98,13 @@ smoke_df %>%
     labs(
       x = 'Smoking status',
       y = 'Number of smokers',
-      title = 'Age distribution among people with different smoking status')
+      title = 'Age distribution among people in different smoking status')
+
 
 ```
 
 
-* Self-evaluation of health conditions among people with different smoking status
+* Self-evaluation of health conditions among people in different smoking status
 
 ```{r}
 
@@ -125,7 +127,7 @@ smoke_df %>%
     labs(
       x = 'Type of smokers',
       y = 'Health self-evaluation \n(% in each types of smoker)',
-      title = 'Self-evaluation of health conditions among different types of smokers\n(% in each types of smoker)')
+      title = 'Self-evaluation of health conditions among people in different smoking status\n(% in each types of smoker)')
 ```
 
 
@@ -181,30 +183,6 @@ current_smoker %>%
 
 
 Chi-squared test for `insure` and 
-1. Flu
-
-```{r}
-analyse_flu_insurancetype = 
-  dataset_basic %>%
-  drop_na(fluvaccineshot,insure) %>% 
-  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c("Yes","No"))) %>% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
-  group_by(fluvaccineshot,insure) %>% 
-  summarize(n = n())
-```
-
-
-```{r}
-test_data_flu_insurance = analyse_flu_insurancetype %>% 
-  pivot_wider(
-  names_from = "insure", 
-  values_from = "n")
-```
-
-```{r}
-chisq.test(test_data_flu_insurance[-1])
-
-```
 
 2.
 

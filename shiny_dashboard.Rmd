@@ -1,0 +1,24 @@
+---
+title: "Shiny Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    source_code: embed
+    social: menu
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rvest)
+library(shiny)
+```
+
+## Shiny
+
+```{r}
+
+```
+
+
