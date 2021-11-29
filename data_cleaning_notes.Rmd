@@ -121,14 +121,6 @@ d= Don’t know
 .r= Refused
 ```
 
-* `fluvaccineshot`:  Had a flu shot during the past 12 month?
-
-```
-1=Yes
-2=No
-.d=Don’t know
-.r=Refused
-```
 
 * `imputed_povertygroup`: Household annual income from all sources (FPL: federal poverty level)
 
