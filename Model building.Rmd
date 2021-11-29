@@ -5,6 +5,51 @@ output:
     code_folding: hide
   
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(rvest)
+library(httr)
+library(haven)
+library(patchwork)
+library(summarytools)
+library(grid)
+library(vcd)
+
+```
+
+```{r message=FALSE}
+dataset_basic = read_csv("data/dataset_basic.csv")
+```
+
+
+### Interested variables and smoking {.tabset}
+
+#### insurance type
+
+##### Plot
+
+```{r message=FALSE}
+analyse_smoke_insurancetype = 
+  dataset_basic %>%
+  drop_na(smoker,insure) %>% 
+  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
+         everyday = factor(everyday)) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
+  group_by(smoker,insure) %>% 
+  summarize(n = n())
+  
+analyse_smoke_insurancetype %>% 
+  ggplot(aes(x =smoker , y = n, fill = insure)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = 'smoking group ',
+      y = 'counts',
+      title = 'The distribution of insurance in different smoking group ')
 ```
 
 ##### Chi-quare test  between insurance type and smoking
