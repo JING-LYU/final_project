@@ -9,7 +9,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Yushan Wang" />
 
 
 <title>Medical cost analysis</title>
@@ -284,18 +283,133 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Medical cost analysis</h1>
-<h4 class="author">Yushan Wang</h4>
 
 </div>
 
 
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-4-1.png" width="672" /><img src="medical_cost_files/figure-html/unnamed-chunk-4-2.png" width="672" /><img src="medical_cost_files/figure-html/unnamed-chunk-4-3.png" width="672" /><img src="medical_cost_files/figure-html/unnamed-chunk-4-4.png" width="672" /></p>
-<p>smoker have significantly higher insurance cost than non smoker. For people in the same category of smoking, there is no significant difference of cost between number of children they have, their sex, and their region. However, there is significant different between different age group: older age group has higher cost.</p>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<div id="does-smoker-get-higher-charges-for-insurance-than-non-smoker" class="section level2">
+<h2>Does smoker get higher charges for insurance than non-smoker?</h2>
+<pre class="r"><code>ggplot(cost_df, aes(x = smoker, y = charges, color = smoker)) + 
+  geom_boxplot() + 
+  coord_flip()</code></pre>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>YES! Smoker have significantly higher insurance cost than non smoker.</p>
+</div>
+<div id="does-number-of-children-affect-charges-of-insurance" class="section level2">
+<h2>Does number of Children affect charges of insurance?</h2>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p>higher cost for higher bmi</p>
-<p>however: <img src="medical_cost_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<p>after stratify by smoking status, the charges do not show the same pattern for bmi</p>
+<p><span class="math inline">\(H_0\)</span>: mean charges of insurance for having or not having children is the same.</p>
+<p><span class="math inline">\(H_1\)</span>: mean charges of insurance for having children is higher than not having children.</p>
+<pre class="r"><code>var.test(charges ~ children_group, data = cost_df)</code></pre>
+<pre><code>## 
+##  F test to compare two variances
+## 
+## data:  charges by children_group
+## F = 0.97454, num df = 531, denom df = 728, p-value = 0.7527
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.8326569 1.1428600
+## sample estimates:
+## ratio of variances 
+##          0.9745361</code></pre>
+<pre class="r"><code>#Equal variance
+children_res &lt;- t.test(charges ~ children_group, data = cost_df, var.equal = TRUE, alternative = &quot;less&quot;)
+children_res</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  charges by children_group
+## t = -2.444, df = 1259, p-value = 0.007331
+## alternative hypothesis: true difference in means between group 0 and group 1 is less than 0
+## 95 percent confidence interval:
+##       -Inf -543.4854
+## sample estimates:
+## mean in group 0 mean in group 1 
+##        12136.31        13800.96</code></pre>
+<p>At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for having children is higher than not having children.</p>
+</div>
+<div id="does-sex-affect-charges-of-insurance" class="section level2">
+<h2>Does sex affect charges of insurance?</h2>
+<pre class="r"><code>ggplot(cost_df, aes(x = sex, y = charges, color = sex)) + 
+  geom_boxplot() + 
+  coord_flip()</code></pre>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><span class="math inline">\(H_0\)</span>: mean charges of insurance for male and female is the same.</p>
+<p><span class="math inline">\(H_1\)</span>: mean charges of insurance for male and female is different.</p>
+<pre class="r"><code>var.test(charges ~ sex, data = cost_df)</code></pre>
+<pre><code>## 
+##  F test to compare two variances
+## 
+## data:  charges by sex
+## F = 1.3972, num df = 637, denom df = 622, p-value = 2.897e-05
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  1.194861 1.633633
+## sample estimates:
+## ratio of variances 
+##            1.39723</code></pre>
+<pre class="r"><code>#Equal variance
+sex_res &lt;- t.test(charges ~ sex, data = cost_df, var.equal = FALSE)
+sex_res</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  charges by sex
+## t = 2.0305, df = 1234, p-value = 0.04252
+## alternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0
+## 95 percent confidence interval:
+##    46.09322 2682.75235
+## sample estimates:
+## mean in group 1 mean in group 2 
+##        13772.76        12408.34</code></pre>
+<pre class="r"><code>sex_res &lt;- t.test(charges ~ sex, data = cost_df, var.equal = FALSE, alternative = &quot;less&quot;)
+sex_res</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  charges by sex
+## t = 2.0305, df = 1234, p-value = 0.9787
+## alternative hypothesis: true difference in means between group 1 and group 2 is less than 0
+## 95 percent confidence interval:
+##      -Inf 2470.545
+## sample estimates:
+## mean in group 1 mean in group 2 
+##        13772.76        12408.34</code></pre>
+<p>At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for male and female are different. In fact, male have higher mean cost than female. This is quiet counter-intuitive.</p>
+</div>
+<div id="does-age-affect-charges-of-insurance" class="section level2">
+<h2>Does age affect charges of insurance?</h2>
+<pre class="r"><code>ggplot(cost_df, aes(x = age, y = charges)) + 
+  geom_smooth() </code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>It is clear from the plot that higher age have higher cost of insurance.</p>
+</div>
+<div id="does-bmi-affect-charges-of-insurance" class="section level2">
+<h2>Does bmi affect charges of insurance?</h2>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>It is clear from the plot that higher bmi have higher cost of insurance.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>conclusion</h2>
+<p>Variables that affect charge of insurance: <code>smoking</code>, <code>whether or not having children</code>, <code>sex</code>, <code>age</code>, <code>bmi</code>.</p>
+</div>
+<div id="collinearity-examination" class="section level2">
+<h2>collinearity examination</h2>
+<pre class="r"><code>#model &lt;- glm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
+
+cost_df_cor = cost_df %&gt;% 
+  select(age, sex, bmi, smoker, charges, children_group)
+
+
+
+model.matrix(~0+., data=cost_df_cor) %&gt;% 
+  cor(use=&quot;pairwise.complete.obs&quot;) %&gt;% 
+  ggcorrplot(show.diag = F, type=&quot;lower&quot;, lab=TRUE, lab_size=2)</code></pre>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>There is no collinearity between any of the variables.</p>
+</div>
 
 
 
