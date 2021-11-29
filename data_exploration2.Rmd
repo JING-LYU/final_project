@@ -52,9 +52,15 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
 ```{r}
 dataset_basic = chs_14_16 %>% 
   select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
-  mutate(numberperdaya = round(numberperdaya,1))
+  mutate(numberperdaya = round(numberperdaya,1),
+         imputed_povertygroup = factor(imputed_povertygroup),
+         child = factor(child,levels = c(1,2),labels = c(1,0)),
+         sex = factor(sex))
+write_csv(dataset_basic,"data/dataset_update.csv")
 ```
 
+
+## About smoking
 
 ```{r}
 
@@ -69,18 +75,10 @@ smoke_df = dataset_basic %>%
            (numberperdaya > 10) & (numberperdaya <= 20) ~2,
            numberperdaya > 20 ~ 3),
          smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c("light","normal","heavy")),
-         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c("Poor","Fair","Good","Very good","Excellent")),
-         
-         imputed_povertygroup = factor(imputed_povertygroup),
-         child = factor(child,levels = c(1,2),labels = c(1,0)),
-         sex = factor(sex)
+         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c("Poor","Fair","Good","Very good","Excellent"))
          
          )
-
-write_csv(smoke_df,"data/dataset_update.csv")
 ```
-
-
 
 
 

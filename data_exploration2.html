@@ -249,7 +249,7 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="data-exploration1.html">Data exploration</a>
+  <a href="exploration.html">Data exploration</a>
 </li>
 <li>
   <a href="model-building.html">Model building</a>
@@ -321,7 +321,14 @@ chs14_filter = chs14 %&gt;%
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
 <pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
   select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %&gt;% 
-  mutate(numberperdaya = round(numberperdaya,1))</code></pre>
+  mutate(numberperdaya = round(numberperdaya,1),
+         imputed_povertygroup = factor(imputed_povertygroup),
+         child = factor(child,levels = c(1,2),labels = c(1,0)),
+         sex = factor(sex))
+write_csv(dataset_basic,&quot;data/dataset_update.csv&quot;)</code></pre>
+</div>
+<div id="about-smoking" class="section level2">
+<h2>About smoking</h2>
 <pre class="r"><code>smoke_df = dataset_basic %&gt;% 
   select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %&gt;% 
   drop_na(smoker) %&gt;% 
@@ -333,15 +340,9 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
            (numberperdaya &gt; 10) &amp; (numberperdaya &lt;= 20) ~2,
            numberperdaya &gt; 20 ~ 3),
          smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c(&quot;light&quot;,&quot;normal&quot;,&quot;heavy&quot;)),
-         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c(&quot;Poor&quot;,&quot;Fair&quot;,&quot;Good&quot;,&quot;Very good&quot;,&quot;Excellent&quot;)),
+         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c(&quot;Poor&quot;,&quot;Fair&quot;,&quot;Good&quot;,&quot;Very good&quot;,&quot;Excellent&quot;))
          
-         imputed_povertygroup = factor(imputed_povertygroup),
-         child = factor(child,levels = c(1,2),labels = c(1,0)),
-         sex = factor(sex)
-         
-         )
-
-write_csv(smoke_df,&quot;data/dataset_update.csv&quot;)</code></pre>
+         )</code></pre>
 <ul>
 <li>Age distribution among people in different smoking status</li>
 </ul>
