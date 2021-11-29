@@ -14,7 +14,7 @@ library(httr)
 
 ## Medicaid Enrolled Provider Location Mapping
 
-Medicaid provides health coverage to low-income people and is one of the largest payers for health care in the United States.
+Medicaid provides health coverage to low-income people, including eligible low-income adults, children, pregnant women, elderly adults and people with disabilities. Medicaid is one of the largest payers for health care in the United States and is administered by states, according to federal requirements. The program is funded jointly by states and the federal government.
 
 ```{r}
 medicaid_provider = GET("https://health.data.ny.gov/resource/keti-qx5t.csv",
@@ -33,3 +33,7 @@ leaflet(medicaid_provider) %>%
              clusterOptions = markerClusterOptions())
 ```
 
+source:
+
+https://health.data.ny.gov/Health/Medicaid-Enrolled-Provider-Listing/keti-qx5t
+https://www.medicaid.gov/medicaid/index.html
