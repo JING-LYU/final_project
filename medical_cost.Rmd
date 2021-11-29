@@ -51,7 +51,7 @@ cost_df = cost_df %>%
 
 <br>
 
-## Study of factors that affect charge of insurance {.tabset}
+## Factors that affect charge of insurance {.tabset}
 
 ### Smoker
 
@@ -80,13 +80,20 @@ $H_1$: mean charges of insurance for having children is higher than not having c
 ```{r, echo = FALSE}
 var.test(charges ~ children_group, data = cost_df)
 #Equal variance
+```
+
+Use equal variance test
+
+```{r, echo = FALSE}
 children_res <- t.test(charges ~ children_group, data = cost_df, var.equal = TRUE, alternative = "less")
 children_res
 ```
 
 At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for having children is higher than not having children.
 
-### sex
+<br>
+
+### Sex
 ```{r, echo = FALSE}
 ggplot(cost_df, aes(x = sex, y = charges, color = sex)) + 
   geom_boxplot() + 
@@ -99,7 +106,11 @@ $H_1$: mean charges of insurance for male and female is different.
 
 ```{r, echo = FALSE}
 var.test(charges ~ sex, data = cost_df)
-#Equal variance
+```
+
+Use unequal variance test
+
+```{r, echo = FALSE}
 sex_res <- t.test(charges ~ sex, data = cost_df, var.equal = FALSE)
 sex_res
 sex_res <- t.test(charges ~ sex, data = cost_df, var.equal = FALSE, alternative = "less")
@@ -108,11 +119,11 @@ sex_res
 
 At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for male and female are different. In fact, male have higher mean cost than female. This is quiet counter-intuitive.
 
+<br>
 
-### age
+### Age
 
-
-```{r, echo = FALSE}
+```{r, echo = FALSE,  messgae = FALSE, warning = FALSE}
 ggplot(cost_df, aes(x = age, y = charges)) + 
   geom_smooth() 
 
@@ -120,17 +131,20 @@ ggplot(cost_df, aes(x = age, y = charges)) +
 
 It is clear from the plot that higher age have higher cost of insurance.
 
-### bmi 
+<br>
 
-```{r, echo = FALSE}
+### Bmi 
+
+```{r, echo = FALSE, messgae = FALSE, warning = FALSE}
 ggplot(cost_df, aes(x = bmi, y = charges)) + 
   geom_smooth() 
 ```
 
 It is clear from the plot that higher bmi have higher cost of insurance.
 
+<br>
 
-### conclusion
+### Conclusion
 
 Variables that affect charge of insurance: `smoking`, `whether or not having children`, `sex`, `age`, `bmi`.
 
@@ -140,7 +154,7 @@ Variables that affect charge of insurance: `smoking`, `whether or not having chi
 
 ## Model Building {.tabset}
 
-### collinearity examination
+### Collinearity examination
 
 ```{r, echo = FALSE}
 
@@ -154,7 +168,7 @@ model.matrix(~0+., data=cost_df_cor) %>%
   ggcorrplot(show.diag = F, type="lower", lab=TRUE, lab_size=2)
 ```
 
-There is no collinearity between any of the variables.
+There is no collinearity between any of the variables. Therefore, no need to adjust variable for model building
 
 ### Model building
 
@@ -167,7 +181,7 @@ summary(model)%>%
 
 Although the t-test for sex shows that the mean charge of insurance is different for male and female, the model building result shows otherwise. Therefore, we remove the sex variable.
 
-Here is the final model with significant variables:
+**Here is the final model with significant variables:**
 
 ```{r, echo = FALSE}
 model1 <- lm(charges ~ smoker + children_group + age + bmi, data = cost_df)
