@@ -171,7 +171,7 @@ Here is the final model with significant variables:
 
 ```{r, echo = FALSE}
 model1 <- lm(charges ~ smoker + children_group + age + bmi, data = cost_df)
-summary(model)%>% 
+summary(model1)%>% 
   broom::tidy() %>% 
   knitr::kable()
 ```
@@ -182,5 +182,5 @@ par(mfrow = c(2,2))
 plot(model1)
 ```
 
-The four graph above shows homoscedasticity of residual.
+The four graph above shows homoscedasticity of residual. The model fits nicely!
 
