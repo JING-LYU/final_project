@@ -144,8 +144,8 @@ d= Don’t know
 * `sex`
 
 ```
-1= Male
-2= Female
+1= male
+2= female
 
 ```
 
@@ -159,8 +159,8 @@ d= Don’t know
 * `child`
 
 ```
-1= Yes
-0= No
+1= yes
+0= no
 ```
 
 

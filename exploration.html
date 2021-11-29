@@ -251,7 +251,7 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="data-exploration1.html">Data exploration</a>
+  <a href="exploration.html">Data exploration</a>
 </li>
 <li>
   <a href="model-building.html">Model building</a>
@@ -299,19 +299,17 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_basic.csv&quot;)</code></pre>
-<div id="interested-variables-and-smoking" class="section level3 tabset">
-<h3 class="tabset">Interested variables and smoking</h3>
-<div id="insurance-type" class="section level4">
-<h4>insurance type</h4>
+<pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_update.csv&quot;) %&gt;% 
+  select(insure,agegroup,smoker,bmi,child,sex)</code></pre>
+<div id="variables-and-insurance" class="section level3 tabset">
+<h3 class="tabset">Variables and insurance</h3>
+<div id="smoking" class="section level4">
+<h4>Smoking</h4>
 <div id="plot" class="section level5">
 <h5>Plot</h5>
 <pre class="r"><code>analyse_smoke_insurancetype = 
   dataset_basic %&gt;%
   drop_na(smoker,insure) %&gt;% 
-  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
-         everyday = factor(everyday)) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
   group_by(smoker,insure) %&gt;% 
   summarize(n = n())
   
@@ -342,16 +340,8 @@ analyse_smoke_insurancetype %&gt;%
 
 dat = 
   dataset_basic %&gt;%
-  drop_na(smoker,insure) %&gt;% 
-  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
-         everyday = factor(everyday)) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;)))
+  drop_na(smoker,insure) 
 
-
-
-
-
-# fourth method:
 dat %$%
   ctable(smoker, insure,
     prop = &quot;r&quot;, chisq = TRUE, headings = FALSE
@@ -373,20 +363,20 @@ dat %$%
 <td align="center">
 <strong>smoker</strong>
 </td>
-<th colspan="4" align="center">Employer</th>
-<th colspan="4" align="center">Self-<br/>purchase</th>
-<th colspan="4" align="center">Medicare</th>
-<th colspan="4" align="center">Medicaid/<br/>Family <br/>Health+</th>
-<th colspan="4" align="center">Milit/<br/>CHAMPUS/<br/>Tricare</th>
-<th colspan="4" align="center">COBRA/Other</th>
-<th colspan="4" align="center">Uninsured</th>
+<th colspan="4" align="center"> 1</th>
+<th colspan="4" align="center"> 2</th>
+<th colspan="4" align="center"> 3</th>
+<th colspan="4" align="center"> 4</th>
+<th colspan="4" align="center"> 5</th>
+<th colspan="4" align="center"> 6</th>
+<th colspan="4" align="center"> 7</th>
 <th colspan="4" align="center">Total</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>
-<strong align="center">never</strong>
+<strong align="center"> 1</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">7158</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -423,7 +413,7 @@ dat %$%
 </tr>
 <tr>
 <td>
-<strong align="center">current</strong>
+<strong align="center"> 2</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1135</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -460,7 +450,7 @@ dat %$%
 </tr>
 <tr>
 <td>
-<strong align="center">former</strong>
+<strong align="center"> 3</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2425</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -540,42 +530,42 @@ dat %$%
 </tfoot>
 </table>
 </div>
-<pre class="r"><code>mosaic(~ smoker + insure,
-  direction = c(&quot;v&quot;, &quot;h&quot;),
+<pre class="r"><code># plot
+ggbarstats(
   data = dat,
-  shade = TRUE
-)</code></pre>
+  x = smoker,
+  y = insure
+) +
+  labs(caption = NULL) # remove caption</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 </div>
 </div>
-<div id="healthstatus" class="section level4">
-<h4>healthstatus</h4>
+<div id="age" class="section level4">
+<h4>Age</h4>
 <div id="plot-1" class="section level5">
 <h5>Plot</h5>
-<pre class="r"><code>analyse_generalhealth_insurancetype = 
+<pre class="r"><code>analyse_agegroup_insurancetype = 
   dataset_basic %&gt;%
-  drop_na(generalhealth,insure) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;)))%&gt;% 
-  mutate(generalhealth = factor(generalhealth,levels = c(1,2,3,4,5),labels = c(&quot;Excellent&quot;,&quot;Very good&quot;,&quot;Good&quot;, &quot;Fair&quot;, &quot;Poor&quot;))) %&gt;% 
-  group_by(insure,generalhealth) %&gt;% 
+  drop_na(agegroup,insure) %&gt;% 
+  group_by(insure,agegroup) %&gt;% 
   summarize(n = n())
   
-analyse_generalhealth_insurancetype %&gt;% 
-  ggplot(aes(x = generalhealth, y = n, fill = insure  )) + 
+analyse_agegroup_insurancetype %&gt;% 
+  ggplot(aes(x = agegroup, y = n, fill = insure  )) + 
   geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
     labs(
-      x = &#39;health status&#39;,
+      x = &#39;agegroup&#39;,
       y = &#39;counts&#39;,
-      title = &#39;The distribution of insurance type in groups with differnt general health status&#39;)</code></pre>
+      title = &#39;The distribution of insurance type in differnt agegroup&#39;)</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
-<div id="chi-quare-test-between-insurance-type-and-health-status" class="section level5">
-<h5>Chi-quare test between insurance type and health status</h5>
-<p><span class="math inline">\(H_0\)</span> : insurance type and health status are independent, there is no relationship between the two categorical variables.</p>
-<p><span class="math inline">\(H_1\)</span> : insurance type and health status are dependent, there is a relationship between the two categorical variables.</p>
+<div id="chi-quare-test-between-insurance-type-and-age" class="section level5">
+<h5>Chi-quare test between insurance type and age</h5>
+<p><span class="math inline">\(H_0\)</span> : insurance type and age are independent, there is no relationship between the two categorical variables.</p>
+<p><span class="math inline">\(H_1\)</span> : insurance type and age are dependent, there is a relationship between the two categorical variables.</p>
 <p><em>Test result:</em></p>
 <pre class="r"><code>#test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
 #  pivot_wider(
@@ -587,17 +577,10 @@ analyse_generalhealth_insurancetype %&gt;%
 
 dat = 
   dataset_basic %&gt;%
-  drop_na(generalhealth,insure) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;)))%&gt;% 
-  mutate(generalhealth = factor(generalhealth,levels = c(1,2,3,4,5),labels = c(&quot;Excellent&quot;,&quot;Very good&quot;,&quot;Good&quot;, &quot;Fair&quot;, &quot;Poor&quot;)))
+  drop_na(agegroup,insure) 
 
-
-
-
-
-# fourth method:
 dat %$%
-  ctable(generalhealth, insure,
+  ctable(agegroup, insure,
     prop = &quot;r&quot;, chisq = TRUE, headings = FALSE
   ) %&gt;%
   print(
@@ -615,1402 +598,163 @@ dat %$%
 </tr>
 <tr>
 <td align="center">
-<strong>generalhealth</strong>
+<strong>agegroup</strong>
 </td>
-<th colspan="4" align="center">Employer</th>
-<th colspan="4" align="center">Self-<br/>purchase</th>
-<th colspan="4" align="center">Medicare</th>
-<th colspan="4" align="center">Medicaid/<br/>Family <br/>Health+</th>
-<th colspan="4" align="center">Milit/<br/>CHAMPUS/<br/>Tricare</th>
-<th colspan="4" align="center">COBRA/Other</th>
-<th colspan="4" align="center">Uninsured</th>
+<th colspan="4" align="center"> 1</th>
+<th colspan="4" align="center"> 2</th>
+<th colspan="4" align="center"> 3</th>
+<th colspan="4" align="center"> 4</th>
+<th colspan="4" align="center"> 5</th>
+<th colspan="4" align="center"> 6</th>
+<th colspan="4" align="center"> 7</th>
 <th colspan="4" align="center">Total</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>
-<strong align="center">Excellent</strong>
+<strong align="center"> 1</strong>
 </td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2422</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">647</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">53.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">332</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">550</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">12.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">784</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">17.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">30</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">82</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">373</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">8.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4573</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">Very good</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3833</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">51.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">553</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1090</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">14.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1222</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">16.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">35</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">118</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">571</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">7422</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">Good</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3203</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">35.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">508</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1771</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2270</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">24.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">50</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">178</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1119</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">12.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">9099</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">Fair</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1063</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">21.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">214</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">4.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1418</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">28.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1664</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">33.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">37</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">105</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">463</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4964</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">Poor</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">225</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">11.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">52</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">756</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">38.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">716</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">36.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">37</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">155</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1951</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">Total</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10746</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">38.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1659</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5585</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6656</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">162</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">520</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2681</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">28009</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-</tbody>
-<tfoot>
-<tr>
-<td colspan="100"><em><strong>&nbsp;&#935;<sup>2</sup></strong> = 2952.5334&nbsp;&nbsp;&nbsp;<strong>df</strong> = 24&nbsp;&nbsp;&nbsp;<strong>p</strong> = .0000</em><br/></td>
-</tr>
-</tfoot>
-</table>
-</div>
-<pre class="r"><code>mosaic(~ generalhealth + insure,
-  direction = c(&quot;v&quot;, &quot;h&quot;),
-  data = dat,
-  shade = TRUE
-)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-</div>
-</div>
-<div id="place-to-go-when-sick" class="section level4">
-<h4>place to go when sick?</h4>
-<div id="plot-2" class="section level5">
-<h5>Plot</h5>
-<pre class="r"><code>analyse_sickadvice_insurancetype = 
-  dataset_basic %&gt;%
-  drop_na(sickadvice,insure) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid_Family Health&quot;, &quot;milit_champus_tricare&quot;, &quot;COBRA_Other&quot;, &quot;uninsured&quot;)))%&gt;% 
-  mutate(sickadvice = factor(sickadvice,levels = c(1,2,3,4,5,6,7,8,9),labels = c(&quot;private_doctor&quot;,&quot;non-retail_clinic&quot;,&quot;urgent_care_center&quot;, &quot;hospital_ed&quot;, &quot;retail_clinic&quot;, &quot;alternative_health_care_provider&quot;,&quot;family_friend_self_resources&quot;,&quot;other&quot;,&quot;no_usual_place&quot;))) %&gt;% 
-  group_by(insure,sickadvice) %&gt;% 
-  summarize(n = n())
-  
-analyse_sickadvice_insurancetype %&gt;% 
-  ggplot(aes(x = sickadvice, y = n, fill = insure )) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
-    labs(
-      x = &#39;place&#39;,
-      y = &#39;counts&#39;,
-      title = &#39;The distribution of insurance type in groups of people went to diffrent places when sick &#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-</div>
-<div id="chi-quare-test-between-insurance-type-and-sick-advice-place" class="section level5">
-<h5>Chi-quare test between insurance type and sick advice place</h5>
-<p><span class="math inline">\(H_0\)</span> : insurance type and sick advice place are independent, there is no relationship between the two categorical variables.</p>
-<p><span class="math inline">\(H_1\)</span> : insurance type and sick advice place are dependent, there is a relationship between the two categorical variables.</p>
-<p><em>Test result:</em></p>
-<pre class="r"><code>#test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
-#  pivot_wider(
-#  names_from = &quot;insure&quot;, 
-#  values_from = &quot;n&quot;)
-
-#test_data_smoke_insurancetype %&gt;% knitr::kable()
-#chisq.test(test_data_smoke_insurancetype[-1])
-
-dat = 
-  dataset_basic %&gt;%
-  drop_na(sickadvice,insure) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid_Family Health&quot;, &quot;milit_champus_tricare&quot;, &quot;COBRA_Other&quot;, &quot;uninsured&quot;)))%&gt;% 
-  mutate(sickadvice = factor(sickadvice,levels = c(1,2,3,4,5,6,7,8,9),labels = c(&quot;private_doctor&quot;,&quot;non-retail_clinic&quot;,&quot;urgent_care_center&quot;, &quot;hospital_ed&quot;, &quot;retail_clinic&quot;, &quot;alternative_health_care_provider&quot;,&quot;family_friend_self_resources&quot;,&quot;other&quot;,&quot;no_usual_place&quot;))) 
-
-
-
-
-
-# fourth method:
-dat %$%
-  ctable(sickadvice, insure,
-    prop = &quot;r&quot;, chisq = TRUE, headings = FALSE
-  ) %&gt;%
-  print(
-    method = &quot;render&quot;,
-    style = &quot;rmarkdown&quot;,
-    footnote = NA
-  )</code></pre>
-<pre><code>## Warning in chisq.test(freq_table_min): Chi-squared approximation may be
-## incorrect</code></pre>
-<div class="container st-container">
-<table class="table table-bordered st-table st-table-bordered st-cross-table ">
-<thead>
-<tr>
-<th></th>
-<th colspan="28" align="center" class="st-protect-top-border">insure</th>
-<th colspan="4"></th>
-</tr>
-<tr>
-<td align="center">
-<strong>sickadvice</strong>
-</td>
-<th colspan="4" align="center">Employer</th>
-<th colspan="4" align="center">Self-<br/>purchase</th>
-<th colspan="4" align="center">Medicare</th>
-<th colspan="4" align="center">Medicaid_<br/>Family <br/>Health</th>
-<th colspan="4" align="center">milit_<br/>champus_<br/>tricare</th>
-<th colspan="4" align="center">COBRA_Other</th>
-<th colspan="4" align="center">uninsured</th>
-<th colspan="4" align="center">Total</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<strong align="center">private_doctor</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">8771</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">45.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1224</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4186</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">21.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3796</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">54</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">305</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">937</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">4.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">19273</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">non-retail_clinic</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">732</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">189</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">4.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">780</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">20.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1510</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">39.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">41</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">99</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">486</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">12.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3837</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">urgent_care_center</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">590</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">32.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">82</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">4.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">262</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">14.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">578</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">31.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">20</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">43</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">269</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">14.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1844</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">hospital_ed</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">298</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">16.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">69</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">3.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">248</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">13.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">553</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">30.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">15</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">40</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">607</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">33.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1830</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">retail_clinic</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">54</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">26.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">15</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">23</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">11.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">48</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">7</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">3.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">55</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">27.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">204</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">alternative_health_care_provider</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">62</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">45.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">17</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">12.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">13</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">13</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">3.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">25</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">18.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">136</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">family_friend_self_resources</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">53</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">32.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">9</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">22</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">13.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">32</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">8</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">4.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">3.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">35</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">21.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">164</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">other</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">77</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">21.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">25</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">52</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">14.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">66</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">18.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">20</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">113</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">31.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">363</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">no_usual_place</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">97</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">24.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">24</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">46</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">11.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">64</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">15.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">0</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">166</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">41.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">403</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">Total</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10734</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">38.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1654</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5632</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">20.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6660</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.7%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">33.1%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">161</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">8.2%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">130</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.6%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">649</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">33.2%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">12</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.6%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">520</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">59</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">3.0%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2693</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">28054</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-</tbody>
-<tfoot>
-<tr>
-<td colspan="100"><em><strong>&nbsp;&#935;<sup>2</sup></strong> = 4340.5412&nbsp;&nbsp;&nbsp;<strong>df</strong> = 48&nbsp;&nbsp;&nbsp;<strong>p</strong> = .0000</em><br/></td>
-</tr>
-</tfoot>
-</table>
-</div>
-<pre class="r"><code>mosaic(~ sickadvice + insure,
-  direction = c(&quot;v&quot;, &quot;h&quot;),
-  data = dat,
-  shade = TRUE
-)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="672" /> According to above chi-square test result We reject the null hypothesis and conclude that there’s at least one helath stutus group’s proportions of insurance type is different from others at 0.05 significant level.</p>
-</div>
-</div>
-<div id="medical-care-accessibility" class="section level4">
-<h4>medical care accessibility?</h4>
-<div id="plot-3" class="section level5">
-<h5>Plot</h5>
-<pre class="r"><code>analyse_didntgetcare_insurancetype = 
-  dataset_basic %&gt;%
-  drop_na(didntgetcare,insure) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid_Family Health&quot;, &quot;milit_champus_tricare&quot;, &quot;COBRA_Other&quot;, &quot;uninsured&quot;)))%&gt;% 
-  mutate(didntgetcare = factor(didntgetcare,levels = c(1,2),labels = c(&quot;Yes&quot;,&quot;No&quot;))) %&gt;% 
-  group_by(insure,didntgetcare) %&gt;% 
-  summarize(n = n())
-  
-analyse_didntgetcare_insurancetype %&gt;% 
-  ggplot(aes(x = didntgetcare, y = n, fill = insure  )) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
-    labs(
-      x = &#39;medical care accessibility&#39;,
-      y = &#39;counts&#39;,
-      title = &#39;The distribution of insurance type in different  group of medical care accessibility&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-</div>
-<div id="chi-quare-test-between-insurance-type-and-medical-care-accessibility" class="section level5">
-<h5>Chi-quare test between insurance type and medical care accessibility</h5>
-<p><span class="math inline">\(H_0\)</span> : insurance type and medical care accessibility are independent, there is no relationship between the two categorical variables.</p>
-<p><span class="math inline">\(H_1\)</span> : insurance type and medical care accessibility are dependent, there is a relationship between the two categorical variables.</p>
-<p><em>Test result:</em></p>
-<pre class="r"><code>#test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
-#  pivot_wider(
-#  names_from = &quot;insure&quot;, 
-#  values_from = &quot;n&quot;)
-
-#test_data_smoke_insurancetype %&gt;% knitr::kable()
-#chisq.test(test_data_smoke_insurancetype[-1])
-
-dat = 
-  dataset_basic %&gt;%
-  drop_na(didntgetcare,insure) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid_Family Health&quot;, &quot;milit_champus_tricare&quot;, &quot;COBRA_Other&quot;, &quot;uninsured&quot;)))%&gt;% 
-  mutate(didntgetcare = factor(didntgetcare,levels = c(1,2),labels = c(&quot;Yes&quot;,&quot;No&quot;)))
-
-
-
-
-
-# fourth method:
-dat %$%
-  ctable(didntgetcare, insure,
-    prop = &quot;r&quot;, chisq = TRUE, headings = FALSE
-  ) %&gt;%
-  print(
-    method = &quot;render&quot;,
-    style = &quot;rmarkdown&quot;,
-    footnote = NA
-  )</code></pre>
-<div class="container st-container">
-<table class="table table-bordered st-table st-table-bordered st-cross-table ">
-<thead>
-<tr>
-<th></th>
-<th colspan="28" align="center" class="st-protect-top-border">insure</th>
-<th colspan="4"></th>
-</tr>
-<tr>
-<td align="center">
-<strong>didntgetcare</strong>
-</td>
-<th colspan="4" align="center">Employer</th>
-<th colspan="4" align="center">Self-<br/>purchase</th>
-<th colspan="4" align="center">Medicare</th>
-<th colspan="4" align="center">Medicaid_<br/>Family <br/>Health</th>
-<th colspan="4" align="center">milit_<br/>champus_<br/>tricare</th>
-<th colspan="4" align="center">COBRA_Other</th>
-<th colspan="4" align="center">uninsured</th>
-<th colspan="4" align="center">Total</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<strong align="center">Yes</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">750</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">27.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">174</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">412</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">298</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">15.2%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">769</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">28.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">11</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">62</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">526</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2704</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1956</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
 </tr>
 <tr>
 <td>
-<strong align="center">No</strong>
+<strong align="center"> 2</strong>
 </td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">9997</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3930</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">39.4%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">44.3%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1486</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5210</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">20.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5897</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">151</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">461</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2175</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">8.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">25377</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">Total</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10747</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">38.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1660</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5622</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">20.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6666</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">162</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">523</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2701</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">28081</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-</tbody>
-<tfoot>
-<tr>
-<td colspan="100"><em><strong>&nbsp;&#935;<sup>2</sup></strong> = 455.5262&nbsp;&nbsp;&nbsp;<strong>df</strong> = 6&nbsp;&nbsp;&nbsp;<strong>p</strong> = .0000</em><br/></td>
-</tr>
-</tfoot>
-</table>
-</div>
-<pre class="r"><code>mosaic(~ didntgetcare + insure,
-  direction = c(&quot;v&quot;, &quot;h&quot;),
-  data = dat,
-  shade = TRUE
-)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-</div>
-</div>
-<div id="flu" class="section level4">
-<h4>Flu</h4>
-<div id="plot-4" class="section level5">
-<h5>Plot</h5>
-<pre class="r"><code>analyse_flu_insurancetype = 
-  dataset_basic %&gt;%
-  drop_na(fluvaccineshot,insure) %&gt;% 
-  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c(&quot;Yes&quot;,&quot;No&quot;))) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
-  group_by(fluvaccineshot,insure) %&gt;% 
-  summarize(n = n())
-
-analyse_flu_insurancetype %&gt;% 
-  ggplot(aes(x = fluvaccineshot, y = n, fill = insure  )) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
-    labs(
-      x = &#39;get flu vaccination shot&#39;,
-      y = &#39;counts&#39;,
-      title = &#39;The distribution of insurance type in different group of people whether had flu vaccination shot in last 12 months&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-</div>
-<div id="chi-quare-test-between-insurance-type-and-get-flu-vaccination-shot" class="section level5">
-<h5>Chi-quare test between insurance type and get flu vaccination shot</h5>
-<p><span class="math inline">\(H_0\)</span> : insurance type and get flu vaccination shot are independent, there is no relationship between the two categorical variables.</p>
-<p><span class="math inline">\(H_1\)</span> : insurance type and get flu vaccination shot are dependent, there is a relationship between the two categorical variables.</p>
-<p><em>Test result:</em></p>
-<pre class="r"><code>#test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
-#  pivot_wider(
-#  names_from = &quot;insure&quot;, 
-#  values_from = &quot;n&quot;)
-
-#test_data_smoke_insurancetype %&gt;% knitr::kable()
-#chisq.test(test_data_smoke_insurancetype[-1])
-
-dat = 
-  dataset_basic %&gt;%
-  drop_na(fluvaccineshot,insure) %&gt;% 
-  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c(&quot;Yes&quot;,&quot;No&quot;))) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) 
-
-
-
-
-
-# fourth method:
-dat %$%
-  ctable(fluvaccineshot, insure,
-    prop = &quot;r&quot;, chisq = TRUE, headings = FALSE
-  ) %&gt;%
-  print(
-    method = &quot;render&quot;,
-    style = &quot;rmarkdown&quot;,
-    footnote = NA
-  )</code></pre>
-<div class="container st-container">
-<table class="table table-bordered st-table st-table-bordered st-cross-table ">
-<thead>
-<tr>
-<th></th>
-<th colspan="28" align="center" class="st-protect-top-border">insure</th>
-<th colspan="4"></th>
-</tr>
-<tr>
-<td align="center">
-<strong>fluvaccineshot</strong>
-</td>
-<th colspan="4" align="center">Employer</th>
-<th colspan="4" align="center">Self-<br/>purchase</th>
-<th colspan="4" align="center">Medicare</th>
-<th colspan="4" align="center">Medicaid/<br/>Family <br/>Health+</th>
-<th colspan="4" align="center">Milit/<br/>CHAMPUS/<br/>Tricare</th>
-<th colspan="4" align="center">COBRA/Other</th>
-<th colspan="4" align="center">Uninsured</th>
-<th colspan="4" align="center">Total</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<strong align="center">Yes</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4930</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">36.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">713</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3585</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">26.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3180</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">98</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">243</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">671</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">13420</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">No</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5796</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">39.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">944</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2058</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">14.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3483</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">64</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">275</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2030</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">13.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">14650</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">Total</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10726</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">38.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1657</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5643</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">20.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6663</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">162</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">518</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2701</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">28070</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-</tbody>
-<tfoot>
-<tr>
-<td colspan="100"><em><strong>&nbsp;&#935;<sup>2</sup></strong> = 1170.3483&nbsp;&nbsp;&nbsp;<strong>df</strong> = 6&nbsp;&nbsp;&nbsp;<strong>p</strong> = .0000</em><br/></td>
-</tr>
-</tfoot>
-</table>
-</div>
-<pre class="r"><code>mosaic(~ fluvaccineshot + insure,
-  direction = c(&quot;v&quot;, &quot;h&quot;),
-  data = dat,
-  shade = TRUE
-)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-</div>
-</div>
-<div id="household-annual-incomefpl-federal-poverty-level" class="section level4">
-<h4>Household annual income(FPL: federal poverty level)</h4>
-<div id="plot-5" class="section level5">
-<h5>Plot</h5>
-<pre class="r"><code>analyse_poverty_insurancetype = 
-  dataset_basic %&gt;%
-  drop_na(imputed_povertygroup,insure) %&gt;% 
-  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5),,labels = c(&quot;&lt;100% FPL&quot;,&quot;100 - &lt;200% FPL&quot;,&quot;200 - &lt;400% FPL&quot;,&quot;400 - &lt;600% FPL&quot;,&quot;&gt;600% FPL&quot;))) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
-  group_by(imputed_povertygroup,insure) %&gt;% 
-  summarize(n = n())
-
-
-
-analyse_poverty_insurancetype %&gt;% 
-  ggplot(aes(x = imputed_povertygroup, y = n, fill = insure  )) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
-    labs(
-      x = &#39;Household annual income(FPL: federal poverty level)&#39;,
-      y = &#39;counts&#39;,
-      title = &#39;The distribution of insurance type in different Household annual income&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-</div>
-<div id="chi-quare-test-between-insurance-type-and-get-flu-vaccination-shot-1" class="section level5">
-<h5>Chi-quare test between insurance type and get flu vaccination shot</h5>
-<p><span class="math inline">\(H_0\)</span> : insurance type and get flu vaccination shot are independent, there is no relationship between the two categorical variables.</p>
-<p><span class="math inline">\(H_1\)</span> : insurance type and get flu vaccination shot are dependent, there is a relationship between the two categorical variables.</p>
-<p><em>Test result:</em></p>
-<pre class="r"><code>#test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
-#  pivot_wider(
-#  names_from = &quot;insure&quot;, 
-#  values_from = &quot;n&quot;)
-
-#test_data_smoke_insurancetype %&gt;% knitr::kable()
-#chisq.test(test_data_smoke_insurancetype[-1])
-
-dat = 
-  dataset_basic %&gt;%
-  drop_na(imputed_povertygroup,insure) %&gt;% 
-  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5),,labels = c(&quot;&lt;100% FPL&quot;,&quot;100 - &lt;200% FPL&quot;,&quot;200 - &lt;400% FPL&quot;,&quot;400 - &lt;600% FPL&quot;,&quot;&gt;600% FPL&quot;))) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;)))
-
-
-
-
-
-# fourth method:
-dat %$%
-  ctable(imputed_povertygroup, insure,
-    prop = &quot;r&quot;, chisq = TRUE, headings = FALSE
-  ) %&gt;%
-  print(
-    method = &quot;render&quot;,
-    style = &quot;rmarkdown&quot;,
-    footnote = NA
-  )</code></pre>
-<div class="container st-container">
-<table class="table table-bordered st-table st-table-bordered st-cross-table ">
-<thead>
-<tr>
-<th></th>
-<th colspan="28" align="center" class="st-protect-top-border">insure</th>
-<th colspan="4"></th>
-</tr>
-<tr>
-<td align="center">
-<strong>imputed_povertygroup</strong>
-</td>
-<th colspan="4" align="center">Employer</th>
-<th colspan="4" align="center">Self-<br/>purchase</th>
-<th colspan="4" align="center">Medicare</th>
-<th colspan="4" align="center">Medicaid/<br/>Family <br/>Health+</th>
-<th colspan="4" align="center">Milit/<br/>CHAMPUS/<br/>Tricare</th>
-<th colspan="4" align="center">COBRA/Other</th>
-<th colspan="4" align="center">Uninsured</th>
-<th colspan="4" align="center">Total</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<strong align="center">&lt;100% FPL</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">554</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">240</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">3.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1757</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3649</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">48.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">24</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.3%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">179</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1149</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">15.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">7552</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">100 - &lt;200% FPL</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1306</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">21.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">401</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1357</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">22.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2029</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">33.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">43</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">122</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">765</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">12.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6023</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">200 - &lt;400% FPL</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2317</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">46.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">382</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1010</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">20.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">690</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">13.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">49</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">95</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">448</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4991</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center">400 - &lt;600% FPL</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2888</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">61.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">336</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">851</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">18.2%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">251</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">476</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.4%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">301</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">3.4%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2514</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">28.3%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">36</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.8%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.4%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">69</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">173</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.5%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">250</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1444</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.3%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">16.3%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4681</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">8874</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
 </tr>
 <tr>
 <td>
-<strong align="center">&gt;600% FPL</strong>
+<strong align="center"> 3</strong>
 </td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3712</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5005</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">74.6%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">48.2%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">308</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">754</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.2%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.3%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">691</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">919</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">13.9%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">8.8%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">90</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2613</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.8%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">25.1%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">11</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">47</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.2%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.5%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">61</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">202</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.2%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">104</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">854</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">2.1%</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">8.2%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4977</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10394</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+</tr>
+<tr>
+<td>
+<strong align="center"> 4</strong>
+</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1173</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">16.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">270</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">3.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4301</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">61.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">926</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">13.3%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">68</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.0%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">92</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.3%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">117</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.7%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6947</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
@@ -2019,19 +763,19 @@ dat %$%
 <td>
 <strong align="center">Total</strong>
 </td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10777</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10755</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">38.2%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1667</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1661</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.9%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5666</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5651</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">20.1%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6709</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6702</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.8%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
@@ -2043,11 +787,11 @@ dat %$%
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2716</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2713</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.6%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">28224</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">28171</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
@@ -2055,17 +799,249 @@ dat %$%
 </tbody>
 <tfoot>
 <tr>
-<td colspan="100"><em><strong>&nbsp;&#935;<sup>2</sup></strong> = 9907.9134&nbsp;&nbsp;&nbsp;<strong>df</strong> = 24&nbsp;&nbsp;&nbsp;<strong>p</strong> = .0000</em><br/></td>
+<td colspan="100"><em><strong>&nbsp;&#935;<sup>2</sup></strong> = 10897.3394&nbsp;&nbsp;&nbsp;<strong>df</strong> = 18&nbsp;&nbsp;&nbsp;<strong>p</strong> = .0000</em><br/></td>
 </tr>
 </tfoot>
 </table>
 </div>
-<pre class="r"><code>mosaic(~ imputed_povertygroup + insure,
-  direction = c(&quot;v&quot;, &quot;h&quot;),
+<pre class="r"><code>ggbarstats(
   data = dat,
-  shade = TRUE
-)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+  x = smoker,
+  y = insure
+) +
+  labs(caption = NULL) # remove caption</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+</div>
+<div id="have-children-or-not" class="section level4">
+<h4>Have children or not</h4>
+<div id="plot-2" class="section level5">
+<h5>Plot</h5>
+<pre class="r"><code>analyse_children_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(child,insure)  %&gt;% 
+  group_by(insure,child) %&gt;% 
+  summarize(n = n())
+  
+analyse_children_insurancetype %&gt;% 
+  ggplot(aes(x = child, y = n, fill = insure )) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = &#39;child&#39;,
+      y = &#39;counts&#39;,
+      title = &#39;The distribution of insurance type in groups of people with or without children&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="chi-quare-test-between-insurance-type-and-children" class="section level5">
+<h5>Chi-quare test between insurance type and children</h5>
+<p><span class="math inline">\(H_0\)</span> : insurance type and have children or not are independent, there is no relationship between the two categorical variables.</p>
+<p><span class="math inline">\(H_1\)</span> : insurance type and have children or not are dependent, there is a relationship between the two categorical variables.</p>
+<p><em>Test result:</em></p>
+<pre class="r"><code>#test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
+#  pivot_wider(
+#  names_from = &quot;insure&quot;, 
+#  values_from = &quot;n&quot;)
+
+#test_data_smoke_insurancetype %&gt;% knitr::kable()
+#chisq.test(test_data_smoke_insurancetype[-1])
+
+dat = 
+  dataset_basic %&gt;%
+  drop_na(child,insure)
+
+# fourth method:
+dat %$%
+  ctable(child, insure,
+    prop = &quot;r&quot;, chisq = TRUE, headings = FALSE
+  ) %&gt;%
+  print(
+    method = &quot;render&quot;,
+    style = &quot;rmarkdown&quot;,
+    footnote = NA
+  )</code></pre>
+<div class="container st-container">
+<table class="table table-bordered st-table st-table-bordered st-cross-table ">
+<thead>
+<tr>
+<th></th>
+<th colspan="28" align="center" class="st-protect-top-border">insure</th>
+<th colspan="4"></th>
+</tr>
+<tr>
+<td align="center">
+<strong>child</strong>
+</td>
+<th colspan="4" align="center"> 1</th>
+<th colspan="4" align="center"> 2</th>
+<th colspan="4" align="center"> 3</th>
+<th colspan="4" align="center"> 4</th>
+<th colspan="4" align="center"> 5</th>
+<th colspan="4" align="center"> 6</th>
+<th colspan="4" align="center"> 7</th>
+<th colspan="4" align="center">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<strong align="center"> 0</strong>
+</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6610</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">36.6%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1169</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.5%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4940</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">27.4%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3457</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.1%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">127</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.7%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">342</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1416</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.8%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">18061</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+</tr>
+<tr>
+<td>
+<strong align="center"> 1</strong>
+</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4119</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">40.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">494</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">4.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">716</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.1%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3234</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">32.1%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">35</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.3%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">182</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.8%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1287</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">12.8%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10067</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+</tr>
+<tr>
+<td>
+<strong align="center">Total</strong>
+</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10729</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">38.1%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1663</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">5.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5656</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">20.1%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6691</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">23.8%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">162</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.6%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">524</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2703</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">9.6%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">28128</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td colspan="100"><em><strong>&nbsp;&#935;<sup>2</sup></strong> = 2012.1964&nbsp;&nbsp;&nbsp;<strong>df</strong> = 6&nbsp;&nbsp;&nbsp;<strong>p</strong> = .0000</em><br/></td>
+</tr>
+</tfoot>
+</table>
+</div>
+<pre class="r"><code>ggbarstats(
+  data = dat,
+  x = child,
+  y = insure
+) +
+  labs(caption = NULL) # remove caption</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>According to above chi-square test result We reject the null hypothesis and conclude that there’s at least one helath stutus group’s proportions of insurance type is different from others at 0.05 significant level.</p>
+</div>
+</div>
+<div id="bmi" class="section level4">
+<h4>BMI</h4>
+<div id="plot-3" class="section level5">
+<h5>Plot</h5>
+<pre class="r"><code>analyse_bmi_insurancetype = 
+  dataset_basic %&gt;%
+  drop_na(bmi,insure) 
+  
+  
+  
+analyse_bmi_insurancetype %&gt;% 
+  ggplot(aes(x = insure, y = bmi)) + 
+  geom_boxplot() +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = &#39;insurance&#39;,
+      y = &#39;bmi&#39;,
+      title = &#39;The distribution of bmi in groups having different insurance type&#39;)</code></pre>
+<pre><code>## Warning: Continuous x aesthetic -- did you forget aes(group=...)?</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="anova-test-between-insurance-type-and-medical-care-accessibility" class="section level5">
+<h5>ANOVA test between insurance type and medical care accessibility</h5>
+<p><span class="math inline">\(H_0\)</span> : insurance type and bmi are independent, there is no relationship between the two categorical variables.</p>
+<p><span class="math inline">\(H_1\)</span> : insurance type and medical care accessibility are dependent, there is a relationship between the two categorical variables.</p>
+<p><em>Test result:</em></p>
 </div>
 </div>
 </div>

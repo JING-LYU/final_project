@@ -16,12 +16,14 @@ library(patchwork)
 library(summarytools)
 library(grid)
 library(vcd)
+library(ggstatsplot)
+library(ggplot2)
 
 ```
 
 ```{r message=FALSE}
 dataset_basic = read_csv("data/dataset_update.csv") %>% 
-  select(agegroup,smoker,bmi,child,sex)
+  select(insure,agegroup,smoker,bmi,child,sex)
 ```
 
 
@@ -50,7 +52,7 @@ analyse_smoke_insurancetype %>%
       title = 'The distribution of insurance in different smoking group ')
 ```
 
-##### Chi-quare test  between insurance type and smoking
+##### Chi-quare test between insurance type and smoking
 
 $H_0$ : insurance type and smoking are independent, there is no relationship between the two categorical variables. 
 
@@ -71,6 +73,17 @@ dat =
   dataset_basic %>%
   drop_na(smoker,insure) 
 
+dat %$%
+  ctable(smoker, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
+
+
 # plot
 ggbarstats(
   data = dat,
@@ -80,11 +93,6 @@ ggbarstats(
   labs(caption = NULL) # remove caption
 
 
-mosaic(~ smoker + insure,
-  direction = c("v", "h"),
-  data = dat,
-  shade = TRUE
-)
 ```
 
 
@@ -93,7 +101,7 @@ mosaic(~ smoker + insure,
 ##### Plot
 
 ```{r message=FALSE}
-analyse_gagegroup_insurancetype = 
+analyse_agegroup_insurancetype = 
   dataset_basic %>%
   drop_na(agegroup,insure) %>% 
   group_by(insure,agegroup) %>% 
@@ -111,11 +119,11 @@ analyse_agegroup_insurancetype %>%
       title = 'The distribution of insurance type in differnt agegroup')
 ```
 
-##### Chi-quare test  between insurance type and health status
+##### Chi-quare test  between insurance type and age
 
-$H_0$ : insurance type and agegroup are independent, there is no relationship between the two categorical variables. 
+$H_0$ : insurance type and age are independent, there is no relationship between the two categorical variables. 
 
-$H_1$ : insurance type and agegroup are dependent, there is a relationship between the two categorical variables. 
+$H_1$ : insurance type and age are dependent, there is a relationship between the two categorical variables. 
 
 *Test result:*
 
@@ -131,13 +139,7 @@ $H_1$ : insurance type and agegroup are dependent, there is a relationship betwe
 dat = 
   dataset_basic %>%
   drop_na(agegroup,insure) 
-  
 
-
-
-
-
-# fourth method:
 dat %$%
   ctable(agegroup, insure,
     prop = "r", chisq = TRUE, headings = FALSE
@@ -149,12 +151,13 @@ dat %$%
   )
 
 
-
-mosaic(~ agegroup + insure,
-  direction = c("v", "h"),
+ggbarstats(
   data = dat,
-  shade = TRUE
-)
+  x = smoker,
+  y = insure
+) +
+  labs(caption = NULL) # remove caption
+
 ```
 
 #### Have children or not
@@ -162,24 +165,24 @@ mosaic(~ agegroup + insure,
 ```{r message=FALSE}
 analyse_children_insurancetype = 
   dataset_basic %>%
-  drop_na(children,insure)  %>% 
-  group_by(insure,children) %>% 
+  drop_na(child,insure)  %>% 
+  group_by(insure,child) %>% 
   summarize(n = n())
   
 analyse_children_insurancetype %>% 
-  ggplot(aes(x = children, y = n, fill = insure )) + 
+  ggplot(aes(x = child, y = n, fill = insure )) + 
   geom_bar(stat = "identity",position = "dodge") +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
     labs(
-      x = 'children',
+      x = 'child',
       y = 'counts',
       title = 'The distribution of insurance type in groups of people with or without children')
 ```
 
 
-##### Chi-quare test  between insurance type and sick advice place
+##### Chi-quare test  between insurance type and children
 
 $H_0$ : insurance type and have children or not are independent, there is no relationship between the two categorical variables. 
 
@@ -198,15 +201,11 @@ $H_1$ : insurance type and have children or not are dependent, there is a relati
 
 dat = 
   dataset_basic %>%
-  drop_na(children,insure)
-
-
-
-
+  drop_na(child,insure)
 
 # fourth method:
 dat %$%
-  ctable(children, insure,
+  ctable(child, insure,
     prop = "r", chisq = TRUE, headings = FALSE
   ) %>%
   print(
@@ -215,13 +214,13 @@ dat %$%
     footnote = NA
   )
 
-
-
-mosaic(~ children + insure,
-  direction = c("v", "h"),
+ggbarstats(
   data = dat,
-  shade = TRUE
-)
+  x = child,
+  y = insure
+) +
+  labs(caption = NULL) # remove caption
+
 ```
 
 According to above chi-square test result We reject the null hypothesis and conclude that there’s at least one helath stutus group’s proportions of insurance type is different from others at 0.05 significant level.
@@ -233,19 +232,20 @@ According to above chi-square test result We reject the null hypothesis and conc
 ```{r message=FALSE}
 analyse_bmi_insurancetype = 
   dataset_basic %>%
-  drop_na(bmi,insure) %>% 
+  drop_na(bmi,insure) 
+  
   
   
 analyse_bmi_insurancetype %>% 
-  ggplot(aes(x = bmi, y = n, fill = insure  )) + 
-  geom_bar(stat = "identity",position = "dodge") +
+  ggplot(aes(x = insure, y = bmi)) + 
+  geom_boxplot() +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
     labs(
-      x = 'medical care accessibility',
-      y = 'counts',
-      title = 'The distribution of insurance type in different  group of medical care accessibility')
+      x = 'insurance',
+      y = 'bmi',
+      title = 'The distribution of bmi in groups having different insurance type')
 ```
 
 ##### ANOVA test  between insurance type and medical care accessibility
