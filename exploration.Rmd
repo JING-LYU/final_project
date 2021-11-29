@@ -20,7 +20,8 @@ library(vcd)
 ```
 
 ```{r message=FALSE}
-dataset_basic = read_csv("data/dataset_basic.csv")
+dataset_basic = read_csv("data/dataset_update.csv") %>% 
+  select(agegroup,smoker,bmi,child,sex)
 ```
 
 
@@ -34,9 +35,6 @@ dataset_basic = read_csv("data/dataset_basic.csv")
 analyse_smoke_insurancetype = 
   dataset_basic %>%
   drop_na(smoker,insure) %>% 
-  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
-         everyday = factor(everyday)) %>% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
   group_by(smoker,insure) %>% 
   summarize(n = n())
   
@@ -80,17 +78,14 @@ dat =
 
 
 
-# fourth method:
-dat %$%
-  ctable(smoker, insure,
-    prop = "r", chisq = TRUE, headings = FALSE
-  ) %>%
-  print(
-    method = "render",
-    style = "rmarkdown",
-    footnote = NA
-  )
 
+# plot
+ggbarstats(
+  data = dat,
+  x = smoker,
+  y = insure
+) +
+  labs(caption = NULL) # remove caption
 
 
 mosaic(~ smoker + insure,
