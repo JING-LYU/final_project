@@ -139,13 +139,29 @@ d= Don’t know
 4=400 - <600% FPL
 5= >600% FPL
 ```
+### New Factors
+
+* `sex`
+
+```
+1= Male
+2= Female
+
+```
+
+* `bmi`
+
+```
+15-55
+```
 
 
+* `child`
 
-
-
-
-
+```
+1= Yes
+0= No
+```
 
 
 
