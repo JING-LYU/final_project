@@ -297,7 +297,7 @@ $(document).ready(function () {
 <pre class="r"><code>chs16 = read_sas(&quot;data/chs2016_public.sas7bdat&quot;)
 
 chs16_filter = chs16 %&gt;% 
-  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot,bmi,child) %&gt;% 
+  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %&gt;% 
   mutate(year = 2016) %&gt;% 
   rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
 
@@ -305,7 +305,7 @@ chs16_filter = chs16 %&gt;%
 chs15 = read_sas(&quot;data/chs2015_public.sas7bdat&quot;)
 
 chs15_filter = chs15 %&gt;% 
-  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot,bmi,child) %&gt;% 
+  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %&gt;% 
   mutate(year = 2015) %&gt;% 
   rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
 
@@ -313,17 +313,17 @@ chs15_filter = chs15 %&gt;%
 chs14 = read_sas(&quot;data/chs2014_public.sas7bdat&quot;)
 
 chs14_filter = chs14 %&gt;% 
-  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup,fluvaccineshot,bmi,child) %&gt;% 
+  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %&gt;% 
   mutate(year = 2014) %&gt;% 
   rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
 
 
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
 <pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
-  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup,bmi,child) %&gt;% 
+  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %&gt;% 
   mutate(numberperdaya = round(numberperdaya,1))</code></pre>
 <pre class="r"><code>smoke_df = dataset_basic %&gt;% 
-  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup,bmi,child) %&gt;% 
+  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %&gt;% 
   drop_na(smoker) %&gt;% 
   mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
          everyday = factor(everyday),
@@ -334,14 +334,16 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
            numberperdaya &gt; 20 ~ 3),
          smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c(&quot;light&quot;,&quot;normal&quot;,&quot;heavy&quot;)),
          generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c(&quot;Poor&quot;,&quot;Fair&quot;,&quot;Good&quot;,&quot;Very good&quot;,&quot;Excellent&quot;)),
-         fluvaccineshot = factor(fluvaccineshot, levels = c(1,2), labels = c(&quot;yes&quot;,&quot;no&quot;)),
-         imputed_povertygroup = factor(imputed_povertygroup)
+         
+         imputed_povertygroup = factor(imputed_povertygroup),
+         child = factor(child,levels = c(1,2),labels = c(1,0)),
+         sex = factor(sex)
          
          )
 
 write_csv(smoke_df,&quot;data/dataset_update.csv&quot;)</code></pre>
 <ul>
-<li>Age distribution among different types of smokers</li>
+<li>Age distribution among people in different smoking status</li>
 </ul>
 <pre class="r"><code>smoke_df %&gt;% 
   drop_na(agegroup) %&gt;% 
@@ -355,11 +357,11 @@ write_csv(smoke_df,&quot;data/dataset_update.csv&quot;)</code></pre>
     labs(
       x = &#39;Smoking status&#39;,
       y = &#39;Number of smokers&#39;,
-      title = &#39;Age distribution among people with different smoking status&#39;)</code></pre>
+      title = &#39;Age distribution among people in different smoking status&#39;)</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;agegroup&#39;. You can override using the `.groups` argument.</code></pre>
 <p><img src="data_exploration2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <ul>
-<li>Self-evaluation of health conditions among people with different smoking status</li>
+<li>Self-evaluation of health conditions among people in different smoking status</li>
 </ul>
 <pre class="r"><code>smokegroup_count = smoke_df %&gt;% 
   drop_na(smoker) %&gt;% 
@@ -380,7 +382,7 @@ smoke_df %&gt;%
     labs(
       x = &#39;Type of smokers&#39;,
       y = &#39;Health self-evaluation \n(% in each types of smoker)&#39;,
-      title = &#39;Self-evaluation of health conditions among people with different smoking status\n(% in each types of smoker)&#39;)</code></pre>
+      title = &#39;Self-evaluation of health conditions among people in different smoking status\n(% in each types of smoker)&#39;)</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;generalhealth&#39;. You can override using the `.groups` argument.</code></pre>
 <p><img src="data_exploration2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code>smoke_df %&gt;% 
@@ -426,25 +428,7 @@ current_smoker %&gt;%
       title = &#39;Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday&#39;)</code></pre>
 <pre><code>## Warning: Removed 600 rows containing missing values (geom_point).</code></pre>
 <p><img src="data_exploration2_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
-<p>Chi-squared test for <code>insure</code> and 1. Flu</p>
-<pre class="r"><code>analyse_flu_insurancetype = 
-  dataset_basic %&gt;%
-  drop_na(fluvaccineshot,insure) %&gt;% 
-  mutate(fluvaccineshot = factor(fluvaccineshot,levels = c(1,2),labels = c(&quot;Yes&quot;,&quot;No&quot;))) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
-  group_by(fluvaccineshot,insure) %&gt;% 
-  summarize(n = n())</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;fluvaccineshot&#39;. You can override using the `.groups` argument.</code></pre>
-<pre class="r"><code>test_data_flu_insurance = analyse_flu_insurancetype %&gt;% 
-  pivot_wider(
-  names_from = &quot;insure&quot;, 
-  values_from = &quot;n&quot;)</code></pre>
-<pre class="r"><code>chisq.test(test_data_flu_insurance[-1])</code></pre>
-<pre><code>## 
-##  Pearson&#39;s Chi-squared test
-## 
-## data:  test_data_flu_insurance[-1]
-## X-squared = 1170.3, df = 6, p-value &lt; 2.2e-16</code></pre>
+<p>Chi-squared test for <code>insure</code> and</p>
 <ol start="2" style="list-style-type: decimal">
 <li></li>
 </ol>
