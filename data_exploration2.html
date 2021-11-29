@@ -320,11 +320,18 @@ chs14_filter = chs14 %&gt;%
 
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
 <pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
-  select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %&gt;% 
+  select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %&gt;% 
   mutate(numberperdaya = round(numberperdaya,1),
          imputed_povertygroup = factor(imputed_povertygroup),
-         child = factor(child,levels = c(1,2),labels = c(1,0)),
-         sex = factor(sex))
+         child = factor(child,levels = c(1,2),labels = c(&quot;yes&quot;,&quot;no&quot;)),
+         sex = factor(sex,labels = c(&quot;male&quot;,&quot;female&quot;)),
+         insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;)),
+         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c(&quot;Poor&quot;,&quot;Fair&quot;,&quot;Good&quot;,&quot;Very good&quot;,&quot;Excellent&quot;)),
+         smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
+         everyday = factor(everyday),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c(&quot;18-24yrs&quot;,&quot;25-44yrs&quot;, &quot;45-64yrs&quot;, &quot;65+yrs&quot;)),
+         imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5),labels = c(&quot;&lt;100% FPL&quot;,&quot;100 - &lt;200% FPL&quot;,&quot;200 - &lt;400% FPL&quot;,&quot;400 - &lt;600% FPL&quot;,&quot;&gt;600% FPL&quot;))
+         )
 write_csv(dataset_basic,&quot;data/dataset_update.csv&quot;)</code></pre>
 </div>
 <div id="about-smoking" class="section level2">
@@ -332,17 +339,12 @@ write_csv(dataset_basic,&quot;data/dataset_update.csv&quot;)</code></pre>
 <pre class="r"><code>smoke_df = dataset_basic %&gt;% 
   select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %&gt;% 
   drop_na(smoker) %&gt;% 
-  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
-         everyday = factor(everyday),
-         agegroup = factor(agegroup,ordered = TRUE,labels = c(&quot;18-24yrs&quot;,&quot;25-44yrs&quot;, &quot;45-64yrs&quot;, &quot;65+yrs&quot;)),
+  mutate(
          smoker_cat = case_when(
            numberperdaya &lt;= 10 ~ 1,
            (numberperdaya &gt; 10) &amp; (numberperdaya &lt;= 20) ~2,
            numberperdaya &gt; 20 ~ 3),
-         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c(&quot;light&quot;,&quot;normal&quot;,&quot;heavy&quot;)),
-         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c(&quot;Poor&quot;,&quot;Fair&quot;,&quot;Good&quot;,&quot;Very good&quot;,&quot;Excellent&quot;))
-         
-         )</code></pre>
+         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c(&quot;light&quot;,&quot;normal&quot;,&quot;heavy&quot;)))</code></pre>
 <ul>
 <li>Age distribution among people in different smoking status</li>
 </ul>
@@ -429,28 +431,6 @@ current_smoker %&gt;%
       title = &#39;Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday&#39;)</code></pre>
 <pre><code>## Warning: Removed 600 rows containing missing values (geom_point).</code></pre>
 <p><img src="data_exploration2_files/figure-html/unnamed-chunk-7-2.png" width="672" /></p>
-<p>Chi-squared test for <code>insure</code> and</p>
-<ol start="2" style="list-style-type: decimal">
-<li></li>
-</ol>
-<pre class="r"><code>analyse_poverty_insurancetype = 
-  dataset_basic %&gt;%
-  drop_na(imputed_povertygroup,insure) %&gt;% 
-  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
-  group_by(imputed_povertygroup,insure) %&gt;% 
-  summarize(n = n())</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;imputed_povertygroup&#39;. You can override using the `.groups` argument.</code></pre>
-<pre class="r"><code>test_data_poverty_insurance = analyse_poverty_insurancetype %&gt;% 
-  pivot_wider(
-  names_from = &quot;insure&quot;, 
-  values_from = &quot;n&quot;)</code></pre>
-<pre class="r"><code>chisq.test(test_data_poverty_insurance[-1])</code></pre>
-<pre><code>## 
-##  Pearson&#39;s Chi-squared test
-## 
-## data:  test_data_poverty_insurance[-1]
-## X-squared = 9907.9, df = 24, p-value &lt; 2.2e-16</code></pre>
 </div>
 
 
