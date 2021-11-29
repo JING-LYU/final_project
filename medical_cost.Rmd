@@ -133,7 +133,6 @@ Variables that affect charge of insurance: `smoking`, `whether or not having chi
 ### collinearity examination
 
 ```{r}
-#model <- glm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
 
 cost_df_cor = cost_df %>% 
   select(age, sex, bmi, smoker, charges, children_group)
@@ -147,5 +146,19 @@ model.matrix(~0+., data=cost_df_cor) %>%
 
 There is no collinearity between any of the variables.
 
+### Model building
+
+```{r}
+model <- lm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
+summary(model)%>% 
+  broom::tidy() %>% 
+  knitr::kable()
+```
+
+### Model diagnostic
+```{r}
+par(mfrow = c(2,2))
+plot(model)
+```
 
 
