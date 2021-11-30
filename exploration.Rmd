@@ -239,9 +239,9 @@ analyse_bmi_insurancetype =
   
 analyse_bmi_insurancetype %>% 
   ggplot(aes(x = insure, y = bmi,fill = insure)) + 
-  geom_boxplot(alpha=0.3) +
-    theme(legend.position="none") +
-    scale_fill_brewer(palette="BuPu") +
+  geom_boxplot(alpha = 0.3) +
+    theme(legend.position = "none") +
+    scale_fill_brewer(palette = "BuPu") +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
@@ -251,14 +251,15 @@ analyse_bmi_insurancetype %>%
       title = 'The distribution of bmi in groups having different insurance type')
 ```
 
-##### ANOVA test  between insurance type and medical care accessibility
-
-$H_0$ : insurance type and bmi are independent, there is no relationship between the two categorical variables. 
-
-$H_1$ : insurance type and medical care accessibility are dependent, there is a relationship between the two categorical variables. 
+##### ANOVA test  between insurance type and BMI
 
 *Test result:*
 ```{r}
-
+anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
+summary(anova)
+Tukey_comp = TukeyHSD(anova)
+Tukey_comp 
+  
+plot(Tukey_comp)
 ```
 
