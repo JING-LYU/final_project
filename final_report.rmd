@@ -7,7 +7,7 @@ output:
 
 ## Motivation: 
 
-It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.
+ It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.
 
 Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, our research topic can be divided into three research questions. We would like to investigate if smokers in NYC tend to get insurance, what type of insurance they prefer, and the factors that affect insurance cost. 
 
