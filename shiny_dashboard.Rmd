@@ -88,19 +88,17 @@ sliderInput(
   max = max_bmi,
   value = c(20)
 )
-
 radioButtons(
   "smoke_or_not",
   label = h3("Smoke or not"),
-  choice = c("Yes", "No"),
+  choices = c("Yes", "No"),
   selected = "Yes"
 )
-
 radioButtons(
   "have_kids_or_not",
   label = h3("Have kids or not"),
-  choice = c("Yes", "No"),
-  selected = "Yes"
+  choices = c("Y", "N"),
+  selected = "Y"
 )
 ```
 Column {data-width=650}
@@ -109,10 +107,18 @@ Column {data-width=650}
 ### Chart A
 
 ```{r}
-smoker_plot = 
-  ggplot(cost_df, aes(x = smoker, y = charges, fill = smoker)) + 
-  geom_violin() + 
-  labs(title = "Smoker and charges") 
+renderPlotly({
+  
+  predict_data = tibble(smoker = "1",
+                      children_group = "1",
+                      age = input[["age_choice"]],
+                      bmi = input[["bmi_choice"]]
+                      ) %>% 
+  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes",smoker, "0"),
+         children_group = if_else(input[["have_kids_or_not"]] == "Yes", children_group, "0")) %>% 
+    plot_ly(x = age, y = bmi, type = "histogram", color = ~age, alpha = .5)
+  
+})
 ```
 
 Column {data-width=350}
@@ -121,8 +127,36 @@ Column {data-width=350}
 ### Chart B
 
 ```{r}
-children_plot = 
-  ggplot(cost_df, aes(x = children_group, y = charges, fill = children_group)) + 
-  geom_violin() + 
-  labs(title = "Having children and charges")
+renderPlotly({
+cost_df_out = cost_df[-c(544,578, 1301),]
+cost_df_log = cost_df_out %>% 
+  mutate(
+    Lncharges = log(charges)
+  ) 
+model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_log) 
+
+predict_data = tibble(smoker = "1",
+                      children_group = "1",
+                      age = input[["age_choice"]],
+                      bmi = input[["bmi_choice"]]
+                      ) %>% 
+  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes",smoker, "0"),
+         children_group = if_else(input[["have_kids_or_not"]] == "Yes", children_group, "0"))
+
+result = predict(model_log,predict_data,interval = "confidence") %>% 
+  as_tibble() %>% 
+  mutate(
+    fit = exp(fit),
+    lwr = exp(lwr),
+    upr = exp(upr)
+  ) %>% 
+  mutate(x = "1") %>%
+  ggplot(aes(x, fit)) + 
+  ylim(10000,60000) +
+  geom_point(shape = 21, size = 3, fill = "white") +
+  geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
+  geom_vline(xintercept = "1", color = "black", size = 1.2) +
+  coord_flip() 
+ggplotly(result)
+})
 ```
