@@ -329,8 +329,20 @@ div.tocify {
         <li>
   <a href="exploration.html">Data exploration</a>
 </li>
-<li>
-  <a href="model-building.html">Model building</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Model building
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="model-building.html">? model building</a>
+    </li>
+    <li>
+      <a href="medical_cost.html">Insurance cost model building</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="analysis.html">Analysis and discussion</a>
@@ -603,7 +615,7 @@ div.tocify {
 <div id="diagnostic-for-transformed-model" class="section level3">
 <h3>Diagnostic for transformed model</h3>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<p>Lamda is near 1 now, and the residual distribution improved from untransformed data. We conclude this model is suitable.</p>
+<p>Lamda is near 1 now, and the residual distribution improved from un-transformed data. We conclude this model is acceptable.</p>
 <p><br></p>
 </div>
 </div>

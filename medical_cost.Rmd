@@ -176,8 +176,8 @@ summary(model1) %>%
 
 ## Model diagnostic
 ```{r}
-par(mfrow = c(1,1))
-plot(model1, which = 1)
+par(mfrow = c(2,2))
+plot(model1)
 ```
 
 The graph above did not show homoscedasticity of residual. Therefore, we need to transform the model.
@@ -230,10 +230,11 @@ boxcox(model_log)
 ### Diagnostic for transformed model
 
 ```{r}
-plot(model_log, which = 1)
+par(mfrow = c(2,2))
+plot(model_log)
 ```
 
-Lamda is near 1 now, and the residual distribution improved from untransformed data. We conclude this model is suitable.
+Lamda is near 1 now, and the residual distribution improved from un-transformed data. We conclude this model is acceptable.
 
 <br>
 
