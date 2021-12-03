@@ -257,7 +257,7 @@ Holding all other variable constant, smokers will have 1.55 times of insurance c
 ### Prediction
 
 ```{r}
-predict_data = tibble(smoker = "1",
+predict_data = tibble(smoker = "0",
                       children_group = "1",
                       age = 32,
                       bmi = 27.7
@@ -273,7 +273,7 @@ result = predict(model_log,predict_data,interval = "confidence") %>%
   ) %>% 
   mutate(x = 1) %>%
   ggplot(aes(x, fit)) + 
-  ylim(10000,60000)+
+  ylim(0,60000)+
   geom_point(shape=21, size=3, fill="white") +
   geom_errorbar(aes(ymin = lwr, ymax = upr), width=0.2) +
   labs(
@@ -290,83 +290,27 @@ ggplotly(result)
 
 ```
 
-
 ```{r}
+result = predict(model_log,predict_data,interval = "confidence") %>% 
+  as_tibble() %>% 
+  mutate(
+    fit = exp(fit),
+    lwr = exp(lwr),
+    upr = exp(upr)
+  ) %>% 
+  mutate(x = "1") %>%
+  ggplot(aes(fit,x)) + 
+  geom_point(shape = 21, size = 3, fill = "white") +
+  geom_errorbarh(aes(xmin = lwr, xmax = upr)) +
+  xlim(0,60000) +
+  geom_hline(yintercept = "1", size = 1.2) +
+  labs(
+    title = "Your recommended insurance charge $",
+    x = " ",
+    y = "amount of charge $",
+    caption = "Data from the rnoaa package") 
 
 
-  layout(shapes = list(hline(1)))
-hline <- function(y = 0, color = "black") {
-  list(
-    type = "line",
-    x0 = 0,
-    x1 = 1,
-    xref = "paper",
-    y0 = y,
-    y1 = y,
-    line = list(color = color)
-  )
-}
-
-hline <- function(y = 0, color = "black") {
-  list(
-    type = "line",
-    x0 = 0,
-    x1 = 1,
-    xref = "paper",
-    y0 = y,
-    y1 = y,
-    line = list(color = color)
-  )
-}
-
-hline <- function(y, color = "black") {
-  list(
-    type = "line",
-    x0 = 0,
-    x1 = 1,
-    xref = "paper",
-    y0 = y,
-    y1 = y,
-    line = list(color = color)
-  )
-}
-
-data("iris")
-
-hline <- function(y = 0, color = "black") {
-  list(
-    type = "line",
-    x0 = 0,
-    x1 = 1,
-    xref = "paper",
-    y0 = y,
-    y1 = y,
-    line = list(color = color)
-  )
-}
-
-fig <- plot_ly(data = iris, x = ~Petal.Length, y = ~Petal.Width,
-               type = 'scatter', mode = 'markers') %>%
-  layout(shapes = list(hline(0.9)))
-fig
-```
-
-```{r}
-
-
-data_mean <- ddply(ToothGrowth, c("supp", "dose"), summarise, length = mean(len))
-data_sd <- ddply(ToothGrowth, c("supp", "dose"), summarise, length = sd(len))
-data <- data.frame(data_mean, data_sd$length)
-data <- rename(data, c("data_sd.length" = "sd"))
-data$dose <- as.factor(data$dose)
-
-fig <- plot_ly(data = data[which(data$supp == 'OJ'),], x = ~dose, y = ~length, type = 'scatter', mode = 'markers',
-        name = 'OJ',
-        error_y = ~list(array = sd,
-                        color = '#000000'))
-fig <- fig %>% add_trace(data = data[which(data$supp == 'VC'),], name = 'VC')
-
-fig
-
+ggplotly(result)
 ```
 
