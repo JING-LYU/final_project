@@ -1,6 +1,10 @@
 ---
-title: "Insurance cost analysis"
-output: html_document
+title: "Insurance cost model building"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
 ---
 
 ```{r, echo = FALSE, message=FALSE}
@@ -50,13 +54,13 @@ cost_df = cost_df %>%
 
 <br>
 
-## Model Building 
+<font size="3">In order to understand the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children, regression model need to be build and analysed.</font> 
 
 <br>
 
-### Model selection
+## Model selection
 
-**Correlation plot and information about each variable**
+**Correlation plot and information about each variable:**
 
 ```{r}
 
@@ -111,7 +115,7 @@ The stepwise regression process confirm that sex is not significant variable.
 
 <br>
 
-**Here is the final model with significant variables:**
+**Final model with significant variables:**
 
 ```{r}
 model1 <- lm(charges ~ smoker + children_group + age + bmi, data = cost_df)
@@ -122,7 +126,7 @@ summary(model1) %>%
 
 <br>
 
-### Model diagnostic
+## Model diagnostic
 ```{r}
 par(mfrow = c(1,1))
 plot(model1, which = 1)
@@ -132,7 +136,7 @@ The graph above did not show homoscedasticity of residual. Therefore, we need to
 
 <br>
 
-### Model transformation##
+## Model transformation
 
 **Box-Cox Transformation**
 
@@ -183,7 +187,7 @@ Lamda is near 1 now, and the residual distribution improved from untransformed d
 
 <br>
 
-###The final model**
+## Final model
 
 ```{r}
 summary(model_log) %>% 
@@ -191,5 +195,7 @@ summary(model_log) %>%
   knitr::kable()
 ```
 
+### Decode the model estimates
 
+Holding all other variable constant, smokers will have 1.55 times of insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges,
 
