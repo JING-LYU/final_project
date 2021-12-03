@@ -4,19 +4,19 @@ output: html_document
 ---
 
 ```{r, echo = FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
 library(tidyverse)
 library(ggcorrplot)
 library(olsrr)
+library(MASS) # boxcox
 
 ```
 
 
-```{r, echo = FALSE}
+```{r}
 cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
-```
 
-
-```{r, echo = FALSE}
 cost_df = cost_df %>% 
   mutate(
     smoker = ifelse(smoker == "yes", 1, 0),
@@ -45,156 +45,151 @@ cost_df = cost_df %>%
      
     ) %>% 
     na.omit()
-    
-  
+
 ```
 
 <br>
 
-## Factors that affect charge of insurance {.tabset}
-
-### Smoker
-
-```{r, echo = FALSE}
-ggplot(cost_df, aes(x = smoker, y = charges, color = smoker)) + 
-  geom_boxplot() + 
-  coord_flip()
-```
-
-YES! Smoker have significantly higher insurance cost than non smoker. This confirm that insurance company assign different price for smokers and non-smokers.
+## Model Building 
 
 <br>
 
-### Having Children 
+### Model selection
 
-```{r, echo = FALSE}
-ggplot(cost_df, aes(x = children_group, y = charges, color = children_group)) + 
-  geom_boxplot() + 
-  coord_flip()
-```
+**Correlation plot and information about each variable**
 
-$H_0$: mean charges of insurance for having or not having children is the same.
-
-$H_1$: mean charges of insurance for having children is higher than not having children.
-
-```{r, echo = FALSE}
-var.test(charges ~ children_group, data = cost_df)
-#Equal variance
-```
-
-Use equal variance test
-
-```{r, echo = FALSE}
-children_res <- t.test(charges ~ children_group, data = cost_df, var.equal = TRUE, alternative = "less")
-children_res
-```
-
-At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for having children is higher than not having children.
-
-<br>
-
-### Sex
-```{r, echo = FALSE}
-ggplot(cost_df, aes(x = sex, y = charges, color = sex)) + 
-  geom_boxplot() + 
-  coord_flip()
-```
-
-$H_0$: mean charges of insurance for male and female is the same.
-
-$H_1$: mean charges of insurance for male and female is different.
-
-```{r, echo = FALSE}
-var.test(charges ~ sex, data = cost_df)
-```
-
-Use unequal variance test
-
-```{r, echo = FALSE}
-sex_res <- t.test(charges ~ sex, data = cost_df, var.equal = FALSE)
-sex_res
-sex_res <- t.test(charges ~ sex, data = cost_df, var.equal = FALSE, alternative = "less")
-sex_res
-```
-
-At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for male and female are different. In fact, male have higher mean cost than female. This is quiet counter-intuitive.
-
-<br>
-
-### Age
-
-```{r, echo = FALSE,  messgae = FALSE, warning = FALSE}
-ggplot(cost_df, aes(x = age, y = charges)) + 
-  geom_smooth() 
-
-```
-
-It is clear from the plot that higher age have higher cost of insurance.
-
-<br>
-
-### Bmi 
-
-```{r, echo = FALSE, messgae = FALSE, warning = FALSE}
-ggplot(cost_df, aes(x = bmi, y = charges)) + 
-  geom_smooth() 
-```
-
-It is clear from the plot that higher bmi have higher cost of insurance.
-
-<br>
-
-### Conclusion
-
-Variables that affect charge of insurance: `smoking`, `whether or not having children`, `sex`, `age`, `bmi`.
-
-<br>
-
-
-
-## Model Building {.tabset}
-
-### Collinearity examination
-
-```{r, echo = FALSE}
+```{r}
 
 cost_df_cor = cost_df %>% 
-  select(age, sex, bmi, smoker, charges, children_group)
+  dplyr::select(age, sex, bmi, smoker, charges, children_group)
 
-
-
-model.matrix(~0+., data=cost_df_cor) %>% 
+model.matrix(~0+., data = cost_df_cor) %>% 
   cor(use="pairwise.complete.obs") %>% 
   ggcorrplot(show.diag = F, type="lower", lab=TRUE, lab_size=2)
+
 ```
 
-There is no collinearity between any of the variables. Therefore, no need to adjust variable for model building
 
-### Model building
+```{r}
+var <- c("smoker", "children_group", "sex", "age", "bmi", "charges")
 
-```{r, echo = FALSE}
+var_meaning <- c("0 = non-smoker, 1 = smoker", "0 = No children, 1 = Have at least 1 child", "1 = male, 2 = female", "Age range from 18 to 63", "Body mass index range from 15.96 to 53.13", "Cost of health insurance")
+
+var_info <- data.frame(var, var_meaning) %>% 
+  rename(
+    "Variable name" = var,
+    "Variable information" = var_meaning
+  )
+knitr::kable(var_info)
+```
+
+There is no collinearity between any of the variables. Therefore, no need to adjust variable for model building. In addition, smoking seems to be the highest correlated variable to charges among other variables.
+
+<br>
+
+**Fit regression using all predictors**
+
+```{r}
 model <- lm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
 summary(model)%>% 
   broom::tidy() %>% 
   knitr::kable()
 ```
 
-Although the t-test for sex shows that the mean charge of insurance is different for male and female, the model building result shows otherwise. Therefore, we remove the sex variable.
+The model building result shows that sex is not a significant variable with p-valur > 0.05. Therefore, when we do the stepwise regression, we would likely to remove the variable of sex.
+
+<br>
+
+**Stepwise regression**
+
+```{r}
+step(model, direction='both')
+
+```
+
+The stepwise regression process confirm that sex is not significant variable.
+
+<br>
 
 **Here is the final model with significant variables:**
 
-```{r, echo = FALSE}
+```{r}
 model1 <- lm(charges ~ smoker + children_group + age + bmi, data = cost_df)
-summary(model1)%>% 
+summary(model1) %>% 
   broom::tidy() %>% 
   knitr::kable()
 ```
 
+<br>
+
 ### Model diagnostic
-```{r, echo = FALSE}
-par(mfrow = c(2,2))
-plot(model1)
+```{r}
+par(mfrow = c(1,1))
+plot(model1, which = 1)
 ```
 
-The four graph above shows homoscedasticity of residual. The model fits nicely!
+The graph above did not show homoscedasticity of residual. Therefore, we need to transform the model.
+
+<br>
+
+### Model transformation##
+
+**Box-Cox Transformation**
+
+```{r}
+boxcox(model1, lambda = seq(-3, 3, by = 0.25)) 
+```
+
+Since lamda = 0, try natural log transformation.
+
+<br>
+
+**Before transformation, remove outliers first**
+
+```{r}
+plot(model1, which = 4) # remove 544, 578, 1301
+
+cost_df_out = cost_df[-c(544,578, 1301),]
+
+```
+
+The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.
+
+<br>
+**Transform charges to ln(charges)**
+
+```{r}
+cost_df_log = cost_df_out %>% 
+  mutate(
+    Lncharges = log(charges)
+  ) 
+
+# fit multivariate model with log transform
+model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_log) 
+
+# check diagnostics
+boxcox(model_log)
+
+```
+
+<br>
+**Diagnostic for natural log transformed model**
+
+```{r}
+plot(model_log, which = 1)
+```
+
+Lamda is near 1 now, and the residual distribution improved from untransformed data. We conclude this model is suitable.
+
+<br>
+
+###The final model**
+
+```{r}
+summary(model_log) %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+```
+
+
 

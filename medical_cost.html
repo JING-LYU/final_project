@@ -288,116 +288,50 @@ $(document).ready(function () {
 
 
 <p><br></p>
-<div id="factors-that-affect-charge-of-insurance" class="section level2 tabset">
-<h2 class="tabset">Factors that affect charge of insurance</h2>
-<div id="smoker" class="section level3">
-<h3>Smoker</h3>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>YES! Smoker have significantly higher insurance cost than non smoker. This confirm that insurance company assign different price for smokers and non-smokers.</p>
+<div id="model-building" class="section level2">
+<h2>Model Building</h2>
 <p><br></p>
-</div>
-<div id="having-children" class="section level3">
-<h3>Having Children</h3>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p><span class="math inline">\(H_0\)</span>: mean charges of insurance for having or not having children is the same.</p>
-<p><span class="math inline">\(H_1\)</span>: mean charges of insurance for having children is higher than not having children.</p>
-<pre><code>## 
-##  F test to compare two variances
-## 
-## data:  charges by children_group
-## F = 0.97454, num df = 531, denom df = 728, p-value = 0.7527
-## alternative hypothesis: true ratio of variances is not equal to 1
-## 95 percent confidence interval:
-##  0.8326569 1.1428600
-## sample estimates:
-## ratio of variances 
-##          0.9745361</code></pre>
-<p>Use equal variance test</p>
-<pre><code>## 
-##  Two Sample t-test
-## 
-## data:  charges by children_group
-## t = -2.444, df = 1259, p-value = 0.007331
-## alternative hypothesis: true difference in means between group 0 and group 1 is less than 0
-## 95 percent confidence interval:
-##       -Inf -543.4854
-## sample estimates:
-## mean in group 0 mean in group 1 
-##        12136.31        13800.96</code></pre>
-<p>At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for having children is higher than not having children.</p>
+<div id="model-selection" class="section level3">
+<h3>Model selection</h3>
+<p><strong>Correlation plot and information about each variable</strong></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable name</th>
+<th align="left">Variable information</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">smoker</td>
+<td align="left">0 = non-smoker, 1 = smoker</td>
+</tr>
+<tr class="even">
+<td align="left">children_group</td>
+<td align="left">0 = No children, 1 = Have at least 1 child</td>
+</tr>
+<tr class="odd">
+<td align="left">sex</td>
+<td align="left">1 = male, 2 = female</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="left">Age range from 18 to 63</td>
+</tr>
+<tr class="odd">
+<td align="left">bmi</td>
+<td align="left">Body mass index range from 15.96 to 53.13</td>
+</tr>
+<tr class="even">
+<td align="left">charges</td>
+<td align="left">Cost of health insurance</td>
+</tr>
+</tbody>
+</table>
+<p>There is no collinearity between any of the variables. Therefore, no need to adjust variable for model building. In addition, smoking seems to be the highest correlated variable to charges among other variables.</p>
 <p><br></p>
-</div>
-<div id="sex" class="section level3">
-<h3>Sex</h3>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<p><span class="math inline">\(H_0\)</span>: mean charges of insurance for male and female is the same.</p>
-<p><span class="math inline">\(H_1\)</span>: mean charges of insurance for male and female is different.</p>
-<pre><code>## 
-##  F test to compare two variances
-## 
-## data:  charges by sex
-## F = 1.3972, num df = 637, denom df = 622, p-value = 2.897e-05
-## alternative hypothesis: true ratio of variances is not equal to 1
-## 95 percent confidence interval:
-##  1.194861 1.633633
-## sample estimates:
-## ratio of variances 
-##            1.39723</code></pre>
-<p>Use unequal variance test</p>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  charges by sex
-## t = 2.0305, df = 1234, p-value = 0.04252
-## alternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0
-## 95 percent confidence interval:
-##    46.09322 2682.75235
-## sample estimates:
-## mean in group 1 mean in group 2 
-##        13772.76        12408.34</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  charges by sex
-## t = 2.0305, df = 1234, p-value = 0.9787
-## alternative hypothesis: true difference in means between group 1 and group 2 is less than 0
-## 95 percent confidence interval:
-##      -Inf 2470.545
-## sample estimates:
-## mean in group 1 mean in group 2 
-##        13772.76        12408.34</code></pre>
-<p>At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for male and female are different. In fact, male have higher mean cost than female. This is quiet counter-intuitive.</p>
-<p><br></p>
-</div>
-<div id="age" class="section level3">
-<h3>Age</h3>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<p>It is clear from the plot that higher age have higher cost of insurance.</p>
-<p><br></p>
-</div>
-<div id="bmi" class="section level3">
-<h3>Bmi</h3>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p>It is clear from the plot that higher bmi have higher cost of insurance.</p>
-<p><br></p>
-</div>
-<div id="conclusion" class="section level3">
-<h3>Conclusion</h3>
-<p>Variables that affect charge of insurance: <code>smoking</code>, <code>whether or not having children</code>, <code>sex</code>, <code>age</code>, <code>bmi</code>.</p>
-<p><br></p>
-</div>
-</div>
-<div id="model-building" class="section level2 tabset">
-<h2 class="tabset">Model Building</h2>
-<div id="collinearity-examination" class="section level3">
-<h3>Collinearity examination</h3>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<p>There is no collinearity between any of the variables. Therefore, no need to adjust variable for model building</p>
-</div>
-<div id="model-building-1" class="section level3">
-<h3>Model building</h3>
+<p><strong>Fit regression using all predictors</strong></p>
 <table>
 <thead>
 <tr class="header">
@@ -453,7 +387,41 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
-<p>Although the t-test for sex shows that the mean charge of insurance is different for male and female, the model building result shows otherwise. Therefore, we remove the sex variable.</p>
+<p>The model building result shows that sex is not a significant variable with p-valur &gt; 0.05. Therefore, when we do the stepwise regression, we would likely to remove the variable of sex.</p>
+<p><br></p>
+<p><strong>Stepwise regression</strong></p>
+<pre><code>## Start:  AIC=21962.9
+## charges ~ smoker + children_group + sex + age + bmi
+## 
+##                  Df  Sum of Sq        RSS   AIC
+## - sex             1 9.0380e+06 4.5793e+10 21961
+## &lt;none&gt;                         4.5784e+10 21963
+## - children_group  1 2.7661e+08 4.6060e+10 21968
+## - bmi             1 4.8035e+09 5.0587e+10 22087
+## - age             1 1.6233e+10 6.2017e+10 22344
+## - smoker          1 1.1325e+11 1.5903e+11 23531
+## 
+## Step:  AIC=21961.15
+## charges ~ smoker + children_group + age + bmi
+## 
+##                  Df  Sum of Sq        RSS   AIC
+## &lt;none&gt;                         4.5793e+10 21961
+## + sex             1 9.0380e+06 4.5784e+10 21963
+## - children_group  1 2.7576e+08 4.6068e+10 21967
+## - bmi             1 4.7946e+09 5.0587e+10 22085
+## - age             1 1.6261e+10 6.2054e+10 22342
+## - smoker          1 1.1378e+11 1.5957e+11 23533</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = charges ~ smoker + children_group + age + bmi, data = cost_df)
+## 
+## Coefficients:
+##     (Intercept)          smoker1  children_group1              age  
+##        -12204.7          23669.4            947.9            260.2  
+##             bmi  
+##           320.4</code></pre>
+<p>The stepwise regression process confirm that sex is not significant variable.</p>
+<p><br></p>
 <p><strong>Here is the final model with significant variables:</strong></p>
 <table>
 <thead>
@@ -503,11 +471,78 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
+<p><br></p>
 </div>
 <div id="model-diagnostic" class="section level3">
 <h3>Model diagnostic</h3>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-<p>The four graph above shows homoscedasticity of residual. The model fits nicely!</p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The graph above did not show homoscedasticity of residual. Therefore, we need to transform the model.</p>
+<p><br></p>
+</div>
+<div id="model-transformation" class="section level3">
+<h3>Model transformation</h3>
+<p><strong>Box-Cox Transformation</strong></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Since lamda = 0, try natural log transformation.</p>
+<p><br></p>
+<p><strong>Before transformation, remove outliers first</strong></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.</p>
+<p><br> <strong>Transform charges to ln(charges)</strong></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><br> <strong>Diagnostic for natural log transformed model</strong></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Lamda is near 1 now, and the residual distribution improved from untransformed data. We conclude this model is suitable.</p>
+<p><br></p>
+<p>###The final model**</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">6.9338823</td>
+<td align="right">0.0721953</td>
+<td align="right">96.043415</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">smoker1</td>
+<td align="right">1.5501799</td>
+<td align="right">0.0313774</td>
+<td align="right">49.404289</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">children_group1</td>
+<td align="right">0.2260899</td>
+<td align="right">0.0255357</td>
+<td align="right">8.853886</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">0.0355121</td>
+<td align="right">0.0009124</td>
+<td align="right">38.919881</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">bmi</td>
+<td align="right">0.0105884</td>
+<td align="right">0.0020714</td>
+<td align="right">5.111788</td>
+<td align="right">4e-07</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
