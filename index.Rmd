@@ -10,7 +10,7 @@ output:
 
 <br>
 
-<img src="images/smoke_sign.PNG" style="width:80%">
+<img src="images/smoke_sign.PNG" style="width:65%">
 
 <font size="1"> A shot of non-smoking sign in the Columbia University Irving Medical Center </font> 
 
