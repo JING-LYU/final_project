@@ -18,7 +18,7 @@ navbar:
     - text: "Report"
       href: report.html
     - text: "Dashboard"
-      href: shiny_dashboard.html
+      href: https://yiqunjin.shinyapps.io/shiny_dashboard/
     - icon: fa-envelope fa-lg
       href: mailto:<yw3772@cumc.columbia.com>
     - icon: fa-github fa-lg
