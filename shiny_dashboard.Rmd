@@ -97,8 +97,8 @@ radioButtons(
 radioButtons(
   "have_kids_or_not",
   label = h3("Have kids or not"),
-  choices = c("Yes", "No"),
-  selected = "Yes"
+  choices = c("Y", "N"),
+  selected = "Y"
 )
 ```
 Column {data-width=650}
@@ -108,6 +108,27 @@ Column {data-width=650}
 
 ```{r}
 renderPlotly({
+  
+  predict_data = tibble(smoker = "1",
+                      children_group = "1",
+                      age = input[["age_choice"]],
+                      bmi = input[["bmi_choice"]]
+                      ) %>% 
+  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes",smoker, "0"),
+         children_group = if_else(input[["have_kids_or_not"]] == "Yes", children_group, "0")) %>% 
+    plot_ly(x = age, y = bmi, type = "histogram", alpha = .5)
+  
+})
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+renderPlotly({
+  
 cost_df_out = cost_df[-c(544,578, 1301),]
 cost_df_log = cost_df_out %>% 
   mutate(
@@ -118,12 +139,12 @@ model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_l
 predict_data = tibble(smoker = "1",
                       children_group = "1",
                       age = input[["age_choice"]],
-                      bmi = input[["BMI_choice"]]
+                      bmi = input[["bmi_choice"]]
                       ) %>% 
-  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes",smoker, "0"),
-         children_group = if_else(input[["have_kids_or_not"]] == "Yes", children_group, "0"))
+  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes","1", "0"),
+         children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"))
 
-result = predict(model_log,predict_data,interval = "confidence") %>% 
+ggplotly(predict(model_log,predict_data,interval = "confidence") %>% 
   as_tibble() %>% 
   mutate(
     fit = exp(fit),
@@ -137,6 +158,6 @@ result = predict(model_log,predict_data,interval = "confidence") %>%
   geom_errorbar(aes(ymin = lwr, ymax = upr), width = 0.2) +
   geom_vline(xintercept = "1", color = "black", size = 1.2) +
   coord_flip() 
-ggplotly(result)
+)
 })
 ```
