@@ -8,8 +8,8 @@ runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
+library(flexdashboard)
 library(tidyverse)
-library(rvest)
 library(plotly)
 library(viridis)
 library(shiny)
@@ -97,34 +97,14 @@ radioButtons(
 radioButtons(
   "have_kids_or_not",
   label = h3("Have kids or not"),
-  choices = c("Y", "N"),
-  selected = "Y"
+  choices = c("Yes", "No"),
+  selected = "Yes"
 )
 ```
 Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Chart A
-
-```{r}
-renderPlotly({
-  
-  predict_data = tibble(smoker = "1",
-                      children_group = "1",
-                      age = input[["age_choice"]],
-                      bmi = input[["bmi_choice"]]
-                      ) %>% 
-  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes",smoker, "0"),
-         children_group = if_else(input[["have_kids_or_not"]] == "Yes", children_group, "0")) %>% 
-    plot_ly(x = age, y = bmi, type = "histogram", color = ~age, alpha = .5)
-  
-})
-```
-
-Column {data-width=350}
------------------------------------------------------------------------
-
-### Chart B
 
 ```{r}
 renderPlotly({
@@ -138,7 +118,7 @@ model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_l
 predict_data = tibble(smoker = "1",
                       children_group = "1",
                       age = input[["age_choice"]],
-                      bmi = input[["bmi_choice"]]
+                      bmi = input[["BMI_choice"]]
                       ) %>% 
   mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes",smoker, "0"),
          children_group = if_else(input[["have_kids_or_not"]] == "Yes", children_group, "0"))
