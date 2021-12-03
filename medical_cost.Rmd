@@ -54,7 +54,7 @@ cost_df = cost_df %>%
 
 <br>
 
-<font size="3">In order to understand the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children, regression model need to be build and analysed.</font> 
+<font size="3.5">In order to understand the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children, regression model need to be build and analysed.</font> 
 
 <br>
 
@@ -194,6 +194,8 @@ summary(model_log) %>%
   broom::tidy() %>% 
   knitr::kable()
 ```
+
+<br>
 
 ### Decode the model estimates
 
