@@ -13,8 +13,8 @@
 
 <title>Data Exploaration</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -251,10 +251,22 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="data-exploration1.html">Data exploration</a>
+  <a href="exploration.html">Data exploration</a>
 </li>
-<li>
-  <a href="model-building.html">Model building</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Model building
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="model-building.html">? model building</a>
+    </li>
+    <li>
+      <a href="medical_cost.html">Insurance cost model building</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="analysis.html">Analysis and discussion</a>
@@ -329,7 +341,9 @@ chs14_filter = chs14 %&gt;%
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
 <pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
   select(agegroup,insuredgateway,insure,sickadvice,sickadvice,didntgetcare,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,fluvaccineshot,imputed_povertygroup) %&gt;% 
-  mutate(numberperdaya = round(numberperdaya,1))</code></pre>
+  mutate(numberperdaya = round(numberperdaya,1))
+
+write_csv(dataset_basic,&quot;data/dataset_basic.csv&quot;)</code></pre>
 <pre class="r"><code>insurance_data = dataset_basic %&gt;% 
   select(insuredgateway,insure,sickadvice,didntgetcare)
 
@@ -360,60 +374,8 @@ plot1 + plot2 + plot3 + plot4</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <pre><code>## Warning: Removed 158 rows containing non-finite values (stat_bin).</code></pre>
 <p><img src="data-exploration1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-</div>
-<div id="relation-between-smoke-and-insurance-type" class="section level1">
-<h1>relation between smoke and insurance type</h1>
-<pre class="r"><code>analyse_smoke_insurancetype = 
-  dataset_basic %&gt;%
-  drop_na(smoker,insure) %&gt;% 
-  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
-         everyday = factor(everyday)) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
-  group_by(smoker,insure) %&gt;% 
-  summarize(n = n())</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;smoker&#39;. You can override using the `.groups` argument.</code></pre>
-<pre class="r"><code>analyse_smoke_insurancetype %&gt;% 
-  ggplot(aes(x = insure, y = n, fill = smoker)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
-    labs(
-      x = &#39;insure type&#39;,
-      y = &#39;counts&#39;,
-      title = &#39;The distribution of insure in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<pre class="r"><code>test_data_smoke_insurance = analyse_smoke_insurancetype %&gt;% 
-  pivot_wider(
-  names_from = &quot;insure&quot;, 
-  values_from = &quot;n&quot;)</code></pre>
-<pre class="r"><code>test = chisq.test(test_data_smoke_insurance[-1])</code></pre>
-<p>smoke is significantly associated with insurance type</p>
-</div>
-<div id="relation-between-general-health-status-and-insurance-type" class="section level1">
-<h1>relation between general health status and insurance type</h1>
-<pre class="r"><code>analyse_smoke_insurancetype = 
-  dataset_basic %&gt;%
-  drop_na(smoker,insure) %&gt;% 
-  mutate(smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
-         everyday = factor(everyday)) %&gt;% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;))) %&gt;% 
-  group_by(smoker,insure) %&gt;% 
-  summarize(n = n())</code></pre>
-<pre><code>## `summarise()` has grouped output by &#39;smoker&#39;. You can override using the `.groups` argument.</code></pre>
-<pre class="r"><code>analyse_smoke_insurancetype %&gt;% 
-  ggplot(aes(x = insure, y = n, fill = smoker)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
-    labs(
-      x = &#39;insure type&#39;,
-      y = &#39;counts&#39;,
-      title = &#39;The distribution of insure in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div id="try" class="section level3 tabset">
-<h3 class="tabset">try</h3>
+<div id="interested-variables-and-smoking" class="section level3 tabset">
+<h3 class="tabset">Interested variables and smoking</h3>
 <div id="insure" class="section level4">
 <h4>insure</h4>
 <pre class="r"><code>analyse_smoke_insurancetype = 
@@ -435,7 +397,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
       x = &#39;insure type&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insure in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <pre class="r"><code>test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
   pivot_wider(
   names_from = &quot;insure&quot;, 
@@ -467,7 +429,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
       x = &#39;generalhealth&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of generalhealth in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <pre class="r"><code>test_data_generalhealth_insurancetype = analyse_generalhealth_insurancetype %&gt;% 
   pivot_wider(
   names_from = &quot;insure&quot;, 
@@ -494,7 +456,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
       x = &#39;sickadvice&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of sickadvice in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>test_data_sickadvice_insurancetype = analyse_sickadvice_insurancetype %&gt;% 
   pivot_wider(
   names_from = &quot;insure&quot;, 
@@ -525,7 +487,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
       x = &#39;didntgetcare&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of didntgetcare in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="data-exploration1_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <pre class="r"><code>test_data_didntgetcare_insurancetype = analyse_didntgetcare_insurancetype %&gt;% 
   pivot_wider(
   names_from = &quot;insure&quot;, 

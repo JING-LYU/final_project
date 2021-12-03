@@ -113,15 +113,6 @@ Note for data cleaning
     .d=Don’t know,  
     .r= Refused
 
--   `fluvaccineshot`: Had a flu shot during the past 12 month?
-
-<!-- -->
-
-    1=Yes
-    2=No
-    .d=Don’t know
-    .r=Refused
-
 -   `imputed_povertygroup`: Household annual income from all sources
     (FPL: federal poverty level)
 
@@ -132,3 +123,25 @@ Note for data cleaning
     3=200 - <400% FPL
     4=400 - <600% FPL
     5= >600% FPL
+
+### New Factors
+
+-   `sex`
+
+<!-- -->
+
+    1= male
+    2= female
+
+-   `bmi`
+
+<!-- -->
+
+    15-55
+
+-   `child`
+
+<!-- -->
+
+    1= yes
+    0= no

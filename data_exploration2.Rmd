@@ -194,7 +194,7 @@ current_smoker %>%
 current_smoker %>% 
   ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = smoker_cat))+
   geom_point(alpha = .5,size = 3) +
-  facet_grid(.~smoker_cat,scales = "free") +
+  #facet_grid(.~smoker_cat,scales = "free") +
     labs(
       x = 'Number of cigrattes consumed everyday',
       y = 'Cost of every 20 (one pack) cigrattes',

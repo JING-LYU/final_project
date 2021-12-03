@@ -6,7 +6,11 @@ navbar:
     - text: "Data exploration"
       href: exploration.html
     - text: "Model building"
-      href: model-building.html
+      menu:
+      - text: "? model building"
+        href: model-building.html
+      - text: "Insurance cost model building"
+        href: medical_cost.html
     - text: "Analysis and discussion"
       href: analysis.html
     - text: "Mapping"
