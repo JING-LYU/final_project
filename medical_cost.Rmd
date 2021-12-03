@@ -219,10 +219,7 @@ cost_df_log = cost_df_out %>%
 
 # fit multivariate model with log transform
 model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_log) 
-
-# check diagnostics
-boxcox(model_log)
-
+model_log
 ```
 
 <br>
@@ -230,6 +227,8 @@ boxcox(model_log)
 ### Diagnostic for transformed model
 
 ```{r}
+boxcox(model_log)
+
 par(mfrow = c(2,2))
 plot(model_log)
 ```

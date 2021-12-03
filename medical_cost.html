@@ -609,12 +609,21 @@ div.tocify {
 <p>The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.</p>
 <p><br></p>
 <p><strong>Transform charges to ln(charges)</strong></p>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre><code>## 
+## Call:
+## lm(formula = Lncharges ~ smoker + children_group + age + bmi, 
+##     data = cost_df_log)
+## 
+## Coefficients:
+##     (Intercept)          smoker1  children_group1              age  
+##         6.93388          1.55018          0.22609          0.03551  
+##             bmi  
+##         0.01059</code></pre>
 <p><br></p>
 </div>
 <div id="diagnostic-for-transformed-model" class="section level3">
 <h3>Diagnostic for transformed model</h3>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /><img src="medical_cost_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
 <p>Lamda is near 1 now, and the residual distribution improved from un-transformed data. We conclude this model is acceptable.</p>
 <p><br></p>
 </div>
