@@ -11,6 +11,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 library(tidyverse)
+library(ggpubr)
 library(ggcorrplot)
 library(olsrr)
 library(MASS) # boxcox
@@ -54,26 +55,13 @@ cost_df = cost_df %>%
 
 <br>
 
-<font size="3.5">In order to understand the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children, regression model need to be build and analysed.</font> 
+<font size="3.5">In order to understand the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children, regression model need to be build and analysed. The model would also be useful to predict insurance price.</font> 
 
 <br>
 
-## Model selection
+## A snapshot of the vairables
 
-**Correlation plot and information about each variable:**
-
-```{r}
-
-cost_df_cor = cost_df %>% 
-  dplyr::select(age, sex, bmi, smoker, charges, children_group)
-
-model.matrix(~0+., data = cost_df_cor) %>% 
-  cor(use="pairwise.complete.obs") %>% 
-  ggcorrplot(show.diag = F, type="lower", lab=TRUE, lab_size=2)
-
-```
-
-
+### Variable meanings
 ```{r}
 var <- c("smoker", "children_group", "sex", "age", "bmi", "charges")
 
@@ -87,9 +75,69 @@ var_info <- data.frame(var, var_meaning) %>%
 knitr::kable(var_info)
 ```
 
+<br>
+
+### Relationship between each variables and charge of insurance
+
+```{r, fig.width=12,fig.height=15}
+
+smoker_plot = 
+  ggplot(cost_df, aes(x = smoker, y = charges, fill = smoker)) + 
+  geom_violin() + 
+  labs(title = "Smoker and charges") 
+
+children_plot = 
+  ggplot(cost_df, aes(x = children_group, y = charges, fill = children_group)) + 
+  geom_violin() + 
+  labs(title = "Having children and charges")
+
+sex_plot = 
+  ggplot(cost_df, aes(x = sex, y = charges, fill = sex)) + 
+  geom_violin() + 
+  labs(title = "Gender and charges")
+
+age_plot = 
+  ggplot(cost_df, aes(x = age, y = charges)) + 
+  geom_point(color = "blue", alpha = 0.4) + 
+  geom_smooth() + 
+  labs(title = "Age and charges")
+
+bmi_plot = 
+  ggplot(cost_df, aes(x = bmi, y = charges)) + 
+  geom_point(color = "blue", alpha = 0.4) + 
+  geom_smooth() +
+  labs(title = "BMI and charges") 
+  
+
+ggarrange(smoker_plot, children_plot, sex_plot, age_plot, bmi_plot + rremove("x.text"),
+          #labels = c("smoker", "children_group", "sex","age","bmi"),
+          ncol = 2, nrow = 3)
+
+```
+
+At first glance, we can tell that smoking, age, and bmi significantly affect charge of insurance. The relationship between sex, having children and charge is unclear.
+
+<br>
+
+## Model selection
+
+### Correlation plot
+
+```{r}
+
+cost_df_cor = cost_df %>% 
+  dplyr::select(age, sex, bmi, smoker, charges, children_group)
+
+model.matrix(~0+., data = cost_df_cor) %>% 
+  cor(use="pairwise.complete.obs") %>% 
+  ggcorrplot(show.diag = F, type="lower", lab=TRUE, lab_size=2)
+
+```
+
 There is no collinearity between any of the variables. Therefore, no need to adjust variable for model building. In addition, smoking seems to be the highest correlated variable to charges among other variables.
 
 <br>
+
 
 **Fit regression using all predictors**
 
@@ -104,7 +152,7 @@ The model building result shows that sex is not a significant variable with p-va
 
 <br>
 
-**Stepwise regression**
+### Stepwise regression
 
 ```{r}
 step(model, direction='both')
@@ -115,7 +163,7 @@ The stepwise regression process confirm that sex is not significant variable.
 
 <br>
 
-**Final model with significant variables:**
+### Final model with significant variables
 
 ```{r}
 model1 <- lm(charges ~ smoker + children_group + age + bmi, data = cost_df)
@@ -138,7 +186,7 @@ The graph above did not show homoscedasticity of residual. Therefore, we need to
 
 ## Model transformation
 
-**Box-Cox Transformation**
+### Box-Cox Transformation
 
 ```{r}
 boxcox(model1, lambda = seq(-3, 3, by = 0.25)) 
@@ -160,6 +208,7 @@ cost_df_out = cost_df[-c(544,578, 1301),]
 The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.
 
 <br>
+
 **Transform charges to ln(charges)**
 
 ```{r}
@@ -177,7 +226,8 @@ boxcox(model_log)
 ```
 
 <br>
-**Diagnostic for natural log transformed model**
+
+### Diagnostic for transformed model
 
 ```{r}
 plot(model_log, which = 1)
