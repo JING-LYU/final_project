@@ -3,8 +3,6 @@ title: "Shiny Dashboard"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
-    source_code: embed
-    social: menu
     vertical_layout: fill
 runtime: shiny
 ---
@@ -12,13 +10,119 @@ runtime: shiny
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(rvest)
+library(plotly)
+library(viridis)
 library(shiny)
 ```
 
-## Shiny
+```{r data import}
+cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
 
-```{r}
+cost_df = cost_df %>% 
+  mutate(
+    smoker = ifelse(smoker == "yes", 1, 0),
+    smoker = as.factor(smoker),
+    sex = ifelse(sex == "male", 1, 2),
+    sex = as.factor(sex),
+    children = as.factor(children),
+    age_group = case_when(age < 18 ~ 1, 
+                          age >= 18 & age < 24 ~ 2,
+                          age >= 25 & age < 44 ~ 3,
+                          age >= 45 & age < 64 ~ 4,
+                          age >= 65 ~ 5
+                          ),
+    age_group = as.factor(age_group),
+    
+    bmi_group = case_when(bmi < 20 ~ 1, 
+                          bmi >= 20 & bmi < 30 ~ 2,
+                          bmi >= 30 & bmi < 40 ~ 3,
+                          bmi >= 40 & bmi < 50 ~ 4,
+                          bmi >= 50 ~ 5
+                          ),
+    bmi_group = as.factor(bmi_group),
+    
+    children_group = ifelse(children == 0, 0, 1),
+    children_group = as.factor(children_group)
+     
+    ) %>% 
+    na.omit()
 
 ```
 
+Column {.sidebar}
+-----------------------------------------------------------------------
 
+```{r}
+min_age = 
+  cost_df %>% 
+  distinct(age) %>% 
+  min()
+
+max_age = 
+  cost_df %>% 
+  distinct(age) %>% 
+  max()
+  
+sliderInput(
+  "age_choice",
+  label = h3("Age"),
+  min = min_age,
+  max = 100,
+  value = c(30)
+)
+
+min_bmi = 
+  cost_df %>% 
+  distinct(bmi) %>% 
+  min()
+
+max_bmi = 
+  cost_df %>% 
+  distinct(bmi) %>% 
+  max()
+
+sliderInput(
+  "BMI_choice",
+  label = h3("BMI"),
+  min = min_bmi,
+  max = max_bmi,
+  value = c(20)
+)
+
+radioButtons(
+  "smoke_or_not",
+  label = h3("Smoke or not"),
+  choice = c("Yes", "No"),
+  selected = "Yes"
+)
+
+radioButtons(
+  "have_kids_or_not",
+  label = h3("Have kids or not"),
+  choice = c("Yes", "No"),
+  selected = "Yes"
+)
+```
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+smoker_plot = 
+  ggplot(cost_df, aes(x = smoker, y = charges, fill = smoker)) + 
+  geom_violin() + 
+  labs(title = "Smoker and charges") 
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+children_plot = 
+  ggplot(cost_df, aes(x = children_group, y = charges, fill = children_group)) + 
+  geom_violin() + 
+  labs(title = "Having children and charges")
+```
