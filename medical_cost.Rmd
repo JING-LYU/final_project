@@ -252,7 +252,7 @@ summary(model_log) %>%
 
 ### Decode the model estimates
 
-Holding all other variable constant, smokers will have 1.55 times of insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges,
+Holding all other variable fixed, smoking is associated with a 1.55% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges,
 
 ### Prediction
 
