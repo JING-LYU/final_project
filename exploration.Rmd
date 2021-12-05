@@ -1,5 +1,5 @@
 ---
-title: "data exploration"
+title: "Data exploration"
 output: 
   html_document:
     code_folding: hide
@@ -71,8 +71,9 @@ smoke_df = read_csv("data/dataset_basic.csv") %>%
 current_smoker = smoke_df %>% filter(smoker == "current")
 ```
 
+## Explore relationship between `insurance` and target variables
 
-### Distributions and statistical tests of `target variables` and `insurance` {.tabset}
+### Distributions {.tabset}
 
 #### Smoking
 
@@ -94,6 +95,77 @@ analyse_smoke_insurancetype %>%
       title = 'The distribution of insurance in different smoking group ')
 ```
 
+#### Age
+##### **Distribution**
+
+```{r message=FALSE}
+analyse_agegroup_insurancetype = 
+  dataset_basic %>%
+  drop_na(agegroup,insure) %>% 
+  group_by(insure,agegroup) %>% 
+  summarize(n = n())
+  
+analyse_agegroup_insurancetype %>% 
+  ggplot(aes(x = agegroup, y = n, fill = insure  )) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'agegroup',
+      y = 'counts',
+      title = 'The distribution of insurance type in differnt agegroup')
+```
+
+
+#### Have children or not
+##### **Distribution**
+
+```{r message=FALSE}
+analyse_children_insurancetype = 
+  dataset_basic %>%
+  drop_na(child,insure)  %>% 
+  group_by(insure,child) %>% 
+  summarize(n = n())
+  
+analyse_children_insurancetype %>% 
+  ggplot(aes(x = child, y = n, fill = insure )) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'child',
+      y = 'counts',
+      title = 'The distribution of insurance type in groups of people with or without children')
+```
+
+
+#### BMI
+##### **Distribution**
+
+```{r message=FALSE}
+analyse_bmi_insurancetype = 
+  dataset_basic %>%
+  drop_na(bmi,insure) 
+  
+  
+  
+analyse_bmi_insurancetype %>% 
+  ggplot(aes(x = insure, y = bmi,fill = insure)) + 
+  geom_boxplot(alpha=0.6) +
+    theme(legend.position="none") +
+    scale_fill_brewer(palette="Dark2")+
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = 'insurance',
+      y = 'bmi',
+      title = 'The distribution of bmi in groups having different insurance type') +
+  coord_flip()
+```
+
+
+
+
+### Statistical test {.tabset}
+
+#### Smoking
 ##### **Chi-quare test between insurance type and smoking**
 
 $H_0$ : insurance type and smoking are independent, there is no relationship between the two categorical variables. 
@@ -139,25 +211,8 @@ ggbarstats(
 
 
 
+
 #### Age
-##### **Distribution**
-
-```{r message=FALSE}
-analyse_agegroup_insurancetype = 
-  dataset_basic %>%
-  drop_na(agegroup,insure) %>% 
-  group_by(insure,agegroup) %>% 
-  summarize(n = n())
-  
-analyse_agegroup_insurancetype %>% 
-  ggplot(aes(x = agegroup, y = n, fill = insure  )) + 
-  geom_bar(stat = "identity",position = "dodge") +
-    labs(
-      x = 'agegroup',
-      y = 'counts',
-      title = 'The distribution of insurance type in differnt agegroup')
-```
-
 ##### Chi-quare test  between insurance type and age
 
 $H_0$ : insurance type and age are independent, there is no relationship between the two categorical variables. 
@@ -199,26 +254,8 @@ ggbarstats(
 
 ```
 
+
 #### Have children or not
-##### **Distribution**
-
-```{r message=FALSE}
-analyse_children_insurancetype = 
-  dataset_basic %>%
-  drop_na(child,insure)  %>% 
-  group_by(insure,child) %>% 
-  summarize(n = n())
-  
-analyse_children_insurancetype %>% 
-  ggplot(aes(x = child, y = n, fill = insure )) + 
-  geom_bar(stat = "identity",position = "dodge") +
-    labs(
-      x = 'child',
-      y = 'counts',
-      title = 'The distribution of insurance type in groups of people with or without children')
-```
-
-
 ##### Chi-quare test  between insurance type and children
 
 $H_0$ : insurance type and have children or not are independent, there is no relationship between the two categorical variables. 
@@ -260,30 +297,8 @@ ggbarstats(
 
 ```
 
+
 #### BMI
-##### **Distribution**
-
-```{r message=FALSE}
-analyse_bmi_insurancetype = 
-  dataset_basic %>%
-  drop_na(bmi,insure) 
-  
-  
-  
-analyse_bmi_insurancetype %>% 
-  ggplot(aes(x = insure, y = bmi,fill = insure)) + 
-  geom_boxplot(alpha=0.6) +
-    theme(legend.position="none") +
-    scale_fill_brewer(palette="Dark2")+
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
-    labs(
-      x = 'insurance',
-      y = 'bmi',
-      title = 'The distribution of bmi in groups having different insurance type')
-```
-
 ##### ANOVA test  between insurance type and BMI
 
 *Test result:*
@@ -296,7 +311,7 @@ plot(Tukey_comp)
 ```
 
 
-### Exploration on smoking status {.tabset}
+### Statistical tests of `target variables` and `insurance` {.tabset}
 
 #### Age distribution
 
@@ -320,6 +335,8 @@ smoke_df %>%
 
 
 ```
+
+
 
 
 #### Health self-evaluation

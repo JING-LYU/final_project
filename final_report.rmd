@@ -2,15 +2,18 @@
 title: "Final Report"
 authors: "Jing Lyu, Mengfan Luo, Yushan Wang, Yiqun Jin"
 output: 
-  html_document
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
 ---
 ```{r, echo = FALSE, message=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+#knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(ggpubr)
 library(ggcorrplot)
 library(olsrr)
-library(MASS) # boxcox
+library(MASS)
 library(plotly)
 library(plyr)
 library(leaflet)
@@ -20,7 +23,7 @@ library(haven)
 
 ```
 
-## Motivation: 
+## Motivation
 
 It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.
 
@@ -29,7 +32,7 @@ Since health insurance is vital for people’s well-being, and the cost is the m
 Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
 
 
-## Related work: 
+## Related work 
 
 The [Health Market website](https://www.healthmarkets.com/content/smoking-and-health-insurance) introduced the idea of **tobacco rating**. Tobacco rating is the practice of charging tobacco users more for health insurance. In fact, the charge for smokers can be up to 50% more than non-smokers, which lead us to consider if smokers would be frustrated to purchase insurance. 
 
@@ -37,13 +40,13 @@ In addition, there are many tweets on twitter that discuss the relationship betw
 
 These facts inspired us to look deep into the relationship between smoking and health insurance.
 
-## Initial questions:
+## Initial questions
 
 The initial questions we were trying to answer was if smokers in NYC tend to get insurance, what type of insurance they prefer. Over the course of the project, we added a new research question relating to the topic, which was the investigation of factors that affect insurance cost. 
 
 This new question assists our main research topic, because we can use the factors (age, bmi, smoker, etc) to not only explain what kind of personal characteristics would affect insurance cost, but also build a prediction model for health insurance charges. By doing such, we would gain better insights to the underlying relationship between health insurance and smoking, along with other important variables that contributes to the cost variation of insurance.
 
-## Data: 
+## Data
 Source, scraping method, cleaning, etc.
 
 ### Data source
@@ -166,22 +169,6 @@ cost_df = cost_df %>%
     sex = ifelse(sex == "male", 1, 2),
     sex = as.factor(sex),
     children = as.factor(children),
-    age_group = case_when(age < 18 ~ 1, 
-                          age >= 18 & age < 24 ~ 2,
-                          age >= 25 & age < 44 ~ 3,
-                          age >= 45 & age < 64 ~ 4,
-                          age >= 65 ~ 5
-                          ),
-    age_group = as.factor(age_group),
-    
-    bmi_group = case_when(bmi < 20 ~ 1, 
-                          bmi >= 20 & bmi < 30 ~ 2,
-                          bmi >= 30 & bmi < 40 ~ 3,
-                          bmi >= 40 & bmi < 50 ~ 4,
-                          bmi >= 50 ~ 5
-                          ),
-    bmi_group = as.factor(bmi_group),
-    
     children_group = ifelse(children == 0, 0, 1),
     children_group = as.factor(children_group)
      
@@ -190,13 +177,23 @@ cost_df = cost_df %>%
 
 ```
 
+**This dataset includes the following variables**
+
+* `age`: Age
+* `sex`: Sex (male = 1, female = 2)
+* `bmi`: Body Mass Index
+* `children`: number of children the person has
+* `smoker`: smoking status (non-smoker = 0, smoker = 1)
+* `region`: region in th US
+* `charges`: Insurance charges
+* `children_group`: whether or not the person has children (No children = 0, At least one child = 1)
 
 
-## Exploratory analysis: 
+## Exploratory analysis
 Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
 
 
-## Additional analysis: 
+## Additional analysis
 If you undertake formal statistical analyses, describe these in detail
 
 In order to assists our main research topic, the relationship between smoking and health insurance, we would like to investigate the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children. A **prediction model** is build to analyse this question.
@@ -204,7 +201,7 @@ In order to assists our main research topic, the relationship between smoking an
 
 ### A snapshot of the vairables
 
-#### Variable meanings
+We selected the following variable for modeling. Detailed information are in the table below:
 ```{r}
 var <- c("smoker", "children_group", "sex", "age", "bmi", "charges")
 
