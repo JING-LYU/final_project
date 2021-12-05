@@ -77,7 +77,7 @@ dataset_basic = dataset_basic %>%
 
 ##### **Distribution**
 
-```{r message=FALSE}
+```{r message=FALSE} 
 analyse_smoke_insurancetype = 
   dataset_basic %>%
   drop_na(smoker,insure) %>% 
