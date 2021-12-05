@@ -70,7 +70,7 @@ If you undertake formal statistical analyses, describe these in detail
 
 In order to assists our main research topic, the relationship between smoking and health insurance, we would like to investigate the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children. A prediction model is build to analyse this question.
 
-```{r, load data}
+```{r, load insurance cost data}
 cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
 
 cost_df = cost_df %>% 
