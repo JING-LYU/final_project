@@ -354,6 +354,9 @@ div.tocify {
   <a href="report.html">Report</a>
 </li>
 <li>
+  <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Dashboard</a>
+</li>
+<li>
   <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
     <span class="fa fa-envelope fa-lg"></span>
      
@@ -609,6 +612,20 @@ div.tocify {
 <p>The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.</p>
 <p><br></p>
 <p><strong>Transform charges to ln(charges)</strong></p>
+<pre><code>##       age     sex          bmi        children smoker      region         
+##  Min.   :18   1:637   Min.   :15.96   0:532    0:1004   Length:1259       
+##  1st Qu.:27   2:622   1st Qu.:26.30   1:309    1: 255   Class :character  
+##  Median :39           Median :30.40   2:225             Mode  :character  
+##  Mean   :39           Mean   :30.66   3:151                               
+##  3rd Qu.:51           3rd Qu.:34.69   4: 24                               
+##  Max.   :63           Max.   :53.13   5: 18                               
+##     charges      age_group bmi_group children_group
+##  Min.   : 1122   2:250     1: 40     0:532         
+##  1st Qu.: 4720   3:503     2:554     1:727         
+##  Median : 9361   4:506     3:577                   
+##  Mean   :13106             4: 85                   
+##  3rd Qu.:16436             5:  3                   
+##  Max.   :63770</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Lncharges ~ smoker + children_group + age + bmi, 
@@ -681,7 +698,7 @@ div.tocify {
 <p><br></p>
 <div id="decode-the-model-estimates" class="section level3">
 <h3>Decode the model estimates</h3>
-<p>Holding all other variable constant, smokers will have 1.55 times of insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges,</p>
+<p>Holding all other variable constant, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.</p>
 </div>
 </div>
 

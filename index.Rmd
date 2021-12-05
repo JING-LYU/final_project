@@ -16,7 +16,7 @@ output:
 
 <br>
 
-## Motivation and Research question
+## Motivation and Research Question
 
 It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance. 
 
@@ -28,7 +28,9 @@ Image below shows the portrait of the New York medical insurance. We noticed tha
 <font size="1">Image source: https://www.ehealthinsurance.com/new-york-health-insurance</font> 
 
 
-Since health insurance is vital for individual's well-being, we are interested in exploring the relationship between smoking and health insurance. To be specific, we would like to investigate if smokers in NYC tend to get insurance, what type of insurance they prefer, and the factors that affect insurance cost. Mapping of health consulting centers, health insurance carriers locations, and medicaid provider nlocation in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
+Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, **our research topic can be divided into three research questions. We would like to investigate if smokers in NYC tend to get insurance, what type of insurance they prefer, and the factors that affect insurance cost.**
+
+Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
 
 
 
@@ -63,6 +65,8 @@ In this website, you will find:
 * [Analysis and discussion](.html) of our finding.
 
 * [Mapping](mapping.html) of health consulting centers and health insurance carriers locations in NYC, along with their contact information and operation hours.
+
+* [Shiny](https://yiqunjin.shinyapps.io/shiny_dashboard/) dashboard for prediction of insurance price. User may enter their age, bmi, whether or not smoking and having children, and the interactive page will give a predicted health insurance price and price range for user.
 
 * Final formatted [Report](report.html) of our research
 
