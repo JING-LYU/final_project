@@ -158,9 +158,12 @@ leaflet(medicaid) %>%
              clusterOptions = markerClusterOptions())
 ```
 
-**Source:**
-Data Provided by New York State Department of Health; Updated at November 22, 2021; Health.Data.NY.Gov
+**Related information**
 
 [Medicaid Enrolled Provider Listing](https://health.data.ny.gov/Health/Medicaid-Enrolled-Provider-Listing/keti-qx5t)
 
 [Medicaid.gov](https://www.medicaid.gov/medicaid/index.html)
+
+**Source:**
+
+Data Provided by New York State Department of Health; Updated at November 22, 2021; Health.Data.NY.Gov
