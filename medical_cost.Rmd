@@ -252,6 +252,7 @@ summary(model_log) %>%
 
 ### Decode the model estimates
 
+<<<<<<< HEAD
 Holding all other variable constant, smokers will have 1.55 times of insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges,
 
 ### Prediction
@@ -313,3 +314,6 @@ result = predict(model_log,predict_data,interval = "confidence") %>%
 ggplotly(result)
 ```
 
+=======
+Holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges
+>>>>>>> 0d82435458d31df2f8802bd5d63763735b456a78

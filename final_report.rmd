@@ -4,6 +4,16 @@ authors: "Jing Lyu, Mengfan Luo, Yushan Wang, Yiqun Jin"
 output: 
   html_document
 ---
+```{r, echo = FALSE, message=FALSE}
+
+library(tidyverse)
+library(ggpubr)
+library(ggcorrplot)
+library(olsrr)
+library(MASS) # boxcox
+library(plotly)
+library(plyr)
+```
 
 ## Motivation: 
 
@@ -50,12 +60,239 @@ Source, scraping method, cleaning, etc.
 ### Data cleaning
 
 
+
 ## Exploratory analysis: 
 Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
 
 
 ## Additional analysis: 
 If you undertake formal statistical analyses, describe these in detail
+
+In order to assists our main research topic, the relationship between smoking and health insurance, we would like to investigate the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children. A prediction model is build to analyse this question.
+
+```{r, load insurance cost data}
+cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
+
+cost_df = cost_df %>% 
+  mutate(
+    smoker = ifelse(smoker == "yes", 1, 0),
+    smoker = as.factor(smoker),
+    sex = ifelse(sex == "male", 1, 2),
+    sex = as.factor(sex),
+    children = as.factor(children),
+    age_group = case_when(age < 18 ~ 1, 
+                          age >= 18 & age < 24 ~ 2,
+                          age >= 25 & age < 44 ~ 3,
+                          age >= 45 & age < 64 ~ 4,
+                          age >= 65 ~ 5
+                          ),
+    age_group = as.factor(age_group),
+    
+    bmi_group = case_when(bmi < 20 ~ 1, 
+                          bmi >= 20 & bmi < 30 ~ 2,
+                          bmi >= 30 & bmi < 40 ~ 3,
+                          bmi >= 40 & bmi < 50 ~ 4,
+                          bmi >= 50 ~ 5
+                          ),
+    bmi_group = as.factor(bmi_group),
+    
+    children_group = ifelse(children == 0, 0, 1),
+    children_group = as.factor(children_group)
+     
+    ) %>% 
+    na.omit()
+
+```
+
+
+### A snapshot of the vairables
+
+#### Variable meanings
+```{r}
+var <- c("smoker", "children_group", "sex", "age", "bmi", "charges")
+
+var_meaning <- c("0 = non-smoker, 1 = smoker", "0 = No children, 1 = Have at least 1 child", "1 = male, 2 = female", "Age range from 18 to 63", "Body mass index range from 15.96 to 53.13", "Cost of health insurance")
+
+var_info <- data.frame(var, var_meaning) %>% 
+  rename(
+    "Variable name" = var,
+    "Variable information" = var_meaning
+  )
+knitr::kable(var_info)
+```
+
+
+#### Relationship between each variables and charge of insurance
+
+```{r, fig.width=12,fig.height=15}
+
+smoker_plot = 
+  ggplot(cost_df, aes(x = smoker, y = charges, fill = smoker)) + 
+  geom_violin() + 
+  labs(title = "Smoker and charges") 
+
+children_plot = 
+  ggplot(cost_df, aes(x = children_group, y = charges, fill = children_group)) + 
+  geom_violin() + 
+  labs(title = "Having children and charges")
+
+sex_plot = 
+  ggplot(cost_df, aes(x = sex, y = charges, fill = sex)) + 
+  geom_violin() + 
+  labs(title = "Gender and charges")
+
+age_plot = 
+  ggplot(cost_df, aes(x = age, y = charges)) + 
+  geom_point(color = "blue", alpha = 0.4) + 
+  geom_smooth() + 
+  labs(title = "Age and charges")
+
+bmi_plot = 
+  ggplot(cost_df, aes(x = bmi, y = charges)) + 
+  geom_point(color = "blue", alpha = 0.4) + 
+  geom_smooth() +
+  labs(title = "BMI and charges") 
+  
+
+ggarrange(smoker_plot, children_plot, sex_plot, age_plot, bmi_plot + rremove("x.text"),
+          #labels = c("smoker", "children_group", "sex","age","bmi"),
+          ncol = 2, nrow = 3)
+
+```
+
+At first glance, we can tell that smoking, age, and bmi significantly affect charge of insurance. The relationship between sex, having children and charge is unclear.
+
+
+### Model selection
+
+#### Correlation plot
+
+```{r}
+
+cost_df_cor = cost_df %>% 
+  dplyr::select(age, sex, bmi, smoker, charges, children_group)
+
+model.matrix(~0+., data = cost_df_cor) %>% 
+  cor(use="pairwise.complete.obs") %>% 
+  ggcorrplot(show.diag = F, type="lower", lab=TRUE, lab_size=2)
+
+```
+
+There is no collinearity between any of the variables. Therefore, no need to adjust variable for model building. In addition, smoking seems to be the highest correlated variable to charges among other variables.
+
+
+
+**Fit regression using all predictors**
+
+```{r}
+model <- lm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
+summary(model)%>% 
+  broom::tidy() %>% 
+  knitr::kable()
+```
+
+The model building result shows that sex is not a significant variable with p-valur > 0.05. Therefore, when we do the stepwise regression, we would likely to remove the variable of sex.
+
+
+#### Stepwise regression
+
+```{r}
+step(model, direction='both')
+
+```
+
+The stepwise regression process confirm that sex is not significant variable.
+
+
+#### Final model with significant variables
+
+```{r}
+model1 <- lm(charges ~ smoker + children_group + age + bmi, data = cost_df)
+summary(model1) %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+```
+
+
+
+### Model diagnostic
+```{r}
+par(mfrow = c(2,2))
+plot(model1)
+```
+
+The graph above did not show homoscedasticity of residual. Therefore, we need to transform the model.
+
+
+
+### Model transformation
+
+#### Box-Cox Transformation
+
+```{r}
+boxcox(model1, lambda = seq(-3, 3, by = 0.25)) 
+```
+
+Since lamda = 0, try natural log transformation.
+
+
+
+**Before transformation, remove outliers first**
+
+```{r}
+plot(model1, which = 4) # remove 544, 578, 1301
+
+cost_df_out = cost_df[-c(544,578, 1301),]
+
+```
+
+The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.
+
+
+
+**Transform charges to ln(charges)**
+
+```{r}
+
+summary(cost_df_out)
+cost_df_log = cost_df_out %>% 
+  mutate(
+    Lncharges = log(charges)
+  ) 
+
+# fit multivariate model with log transform
+model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_log) 
+model_log
+```
+
+
+
+#### Diagnostic for transformed model
+
+```{r}
+boxcox(model_log)
+
+par(mfrow = c(2,2))
+plot(model_log)
+```
+
+Lamda is near 1 now, and the residual distribution improved from un-transformed data. We conclude this model is acceptable.
+
+
+
+### Final model
+
+```{r}
+summary(model_log) %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+```
+
+
+
+#### Decode the model estimates
+
+Holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
 
 
 ## Discussion: 
