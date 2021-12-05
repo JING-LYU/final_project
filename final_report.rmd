@@ -67,7 +67,7 @@ Source, scraping method, cleaning, etc.
 
 ### Data cleaning
 
-For **Community Health Survey Public Use Data**, we select year 2014-2016 and variables relating to smoking, insurance, and basic health and economic status. The resulting dataset, available **here**, consists of roughly 28000 participants and includes the following 12 variables:
+For **Community Health Survey Public Use Data**, we select year 2014-2016 and variables relating to smoking, insurance, and basic health and economic status. The resulting dataset, consists of roughly 28000 participants and includes the following 12 variables:
 
 **Insurance related**
 
@@ -152,7 +152,7 @@ dataset_basic = chs_14_16 %>%
          agegroup = factor(agegroup,ordered = TRUE),
          imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))
          )
-#write_csv(dataset_basic,"data/dataset_basic.csv")
+write_csv(dataset_basic,"data/dataset_basic.csv")
 ```
 
 
@@ -527,4 +527,17 @@ leaflet(medicaid) %>%
 What were your findings? Are they what you expect? What insights into the data can you make?
 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. This finding confirmed the fact that smokers are charged for higher insurance. In addition, being older, higher body mass index, and having at least 1 children also increase insurance costs. 
+
+## Citation
+
+What you need to know about smoking and health insurance. HealthMarkets. (n.d.). Retrieved December 5, 2021, from https://www.healthmarkets.com/content/smoking-and-health-insurance. 
+
+What's Medicare? Medicare. (n.d.). Retrieved December 5, 2021, from https://www.medicare.gov/what-medicare-covers/your-medicare-coverage-choices/whats-medicare. 
+
+Members. Medical Mutual. (n.d.). Retrieved December 5, 2021, from https://www.medmutual.com/for-individuals-and-families/health-insurance-education/health-insurance-basics/employer-vs-individual-health-insurance.aspx. 
+
+Wikimedia Foundation. (2021, August 14). Consolidated omnibus budget reconciliation act of 1985. Wikipedia. Retrieved December 5, 2021, from https://en.wikipedia.org/wiki/Consolidated_Omnibus_Budget_Reconciliation_Act_of_1985. 
+
+
+
 
