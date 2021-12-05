@@ -11,7 +11,7 @@
 
 
 
-<title>Medical cost analysis</title>
+<title>Insurance cost model building</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -217,7 +221,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -227,6 +297,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -249,8 +329,20 @@ $(document).ready(function () {
         <li>
   <a href="exploration.html">Data exploration</a>
 </li>
-<li>
-  <a href="model-building.html">Model building</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Model building
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="model-building.html">? model building</a>
+    </li>
+    <li>
+      <a href="medical_cost.html">Insurance cost model building</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="analysis.html">Analysis and discussion</a>
@@ -280,142 +372,79 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
-<h1 class="title toc-ignore">Medical cost analysis</h1>
+
+<h1 class="title toc-ignore">Insurance cost model building</h1>
 
 </div>
 
 
-<div id="study-of-factors-that-affect-charge-of-insurance" class="section level2 tabset">
-<h2 class="tabset">Study of factors that affect charge of insurance</h2>
-<div id="smoker" class="section level3">
-<h3>Smoker</h3>
-<pre class="r"><code>ggplot(cost_df, aes(x = smoker, y = charges, color = smoker)) + 
-  geom_boxplot() + 
-  coord_flip()</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<p>YES! Smoker have significantly higher insurance cost than non smoker.</p>
+<p><br></p>
+<p><font size="3.5">In order to understand the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children, regression model need to be build and analysed. The model would also be useful to predict insurance price.</font></p>
+<p><br></p>
+<div id="a-snapshot-of-the-vairables" class="section level2">
+<h2>A snapshot of the vairables</h2>
+<div id="variable-meanings" class="section level3">
+<h3>Variable meanings</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable name</th>
+<th align="left">Variable information</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">smoker</td>
+<td align="left">0 = non-smoker, 1 = smoker</td>
+</tr>
+<tr class="even">
+<td align="left">children_group</td>
+<td align="left">0 = No children, 1 = Have at least 1 child</td>
+</tr>
+<tr class="odd">
+<td align="left">sex</td>
+<td align="left">1 = male, 2 = female</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="left">Age range from 18 to 63</td>
+</tr>
+<tr class="odd">
+<td align="left">bmi</td>
+<td align="left">Body mass index range from 15.96 to 53.13</td>
+</tr>
+<tr class="even">
+<td align="left">charges</td>
+<td align="left">Cost of health insurance</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
 </div>
-<div id="having-children" class="section level3">
-<h3>Having Children</h3>
+<div id="relationship-between-each-variables-and-charge-of-insurance" class="section level3">
+<h3>Relationship between each variables and charge of insurance</h3>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-4-1.png" width="1152" /></p>
+<p>At first glance, we can tell that smoking, age, and bmi significantly affect charge of insurance. The relationship between sex, having children and charge is unclear.</p>
+<p><br></p>
+</div>
+</div>
+<div id="model-selection" class="section level2">
+<h2>Model selection</h2>
+<div id="correlation-plot" class="section level3">
+<h3>Correlation plot</h3>
 <p><img src="medical_cost_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p><span class="math inline">\(H_0\)</span>: mean charges of insurance for having or not having children is the same.</p>
-<p><span class="math inline">\(H_1\)</span>: mean charges of insurance for having children is higher than not having children.</p>
-<pre class="r"><code>var.test(charges ~ children_group, data = cost_df)</code></pre>
-<pre><code>## 
-##  F test to compare two variances
-## 
-## data:  charges by children_group
-## F = 0.97454, num df = 531, denom df = 728, p-value = 0.7527
-## alternative hypothesis: true ratio of variances is not equal to 1
-## 95 percent confidence interval:
-##  0.8326569 1.1428600
-## sample estimates:
-## ratio of variances 
-##          0.9745361</code></pre>
-<pre class="r"><code>#Equal variance
-children_res &lt;- t.test(charges ~ children_group, data = cost_df, var.equal = TRUE, alternative = &quot;less&quot;)
-children_res</code></pre>
-<pre><code>## 
-##  Two Sample t-test
-## 
-## data:  charges by children_group
-## t = -2.444, df = 1259, p-value = 0.007331
-## alternative hypothesis: true difference in means between group 0 and group 1 is less than 0
-## 95 percent confidence interval:
-##       -Inf -543.4854
-## sample estimates:
-## mean in group 0 mean in group 1 
-##        12136.31        13800.96</code></pre>
-<p>At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for having children is higher than not having children.</p>
-</div>
-<div id="sex" class="section level3">
-<h3>sex</h3>
-<pre class="r"><code>ggplot(cost_df, aes(x = sex, y = charges, color = sex)) + 
-  geom_boxplot() + 
-  coord_flip()</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p><span class="math inline">\(H_0\)</span>: mean charges of insurance for male and female is the same.</p>
-<p><span class="math inline">\(H_1\)</span>: mean charges of insurance for male and female is different.</p>
-<pre class="r"><code>var.test(charges ~ sex, data = cost_df)</code></pre>
-<pre><code>## 
-##  F test to compare two variances
-## 
-## data:  charges by sex
-## F = 1.3972, num df = 637, denom df = 622, p-value = 2.897e-05
-## alternative hypothesis: true ratio of variances is not equal to 1
-## 95 percent confidence interval:
-##  1.194861 1.633633
-## sample estimates:
-## ratio of variances 
-##            1.39723</code></pre>
-<pre class="r"><code>#Equal variance
-sex_res &lt;- t.test(charges ~ sex, data = cost_df, var.equal = FALSE)
-sex_res</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  charges by sex
-## t = 2.0305, df = 1234, p-value = 0.04252
-## alternative hypothesis: true difference in means between group 1 and group 2 is not equal to 0
-## 95 percent confidence interval:
-##    46.09322 2682.75235
-## sample estimates:
-## mean in group 1 mean in group 2 
-##        13772.76        12408.34</code></pre>
-<pre class="r"><code>sex_res &lt;- t.test(charges ~ sex, data = cost_df, var.equal = FALSE, alternative = &quot;less&quot;)
-sex_res</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
-## 
-## data:  charges by sex
-## t = 2.0305, df = 1234, p-value = 0.9787
-## alternative hypothesis: true difference in means between group 1 and group 2 is less than 0
-## 95 percent confidence interval:
-##      -Inf 2470.545
-## sample estimates:
-## mean in group 1 mean in group 2 
-##        13772.76        12408.34</code></pre>
-<p>At 0.05 significant level, we reject the null hypothesis and conclude that mean charges of insurance for male and female are different. In fact, male have higher mean cost than female. This is quiet counter-intuitive.</p>
-</div>
-<div id="age" class="section level3">
-<h3>age</h3>
-<pre class="r"><code>ggplot(cost_df, aes(x = age, y = charges)) + 
-  geom_smooth() </code></pre>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<p>It is clear from the plot that higher age have higher cost of insurance.</p>
-</div>
-<div id="bmi" class="section level3">
-<h3>bmi</h3>
-<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<p>It is clear from the plot that higher bmi have higher cost of insurance.</p>
-</div>
-<div id="conclusion" class="section level3">
-<h3>conclusion</h3>
-<p>Variables that affect charge of insurance: <code>smoking</code>, <code>whether or not having children</code>, <code>sex</code>, <code>age</code>, <code>bmi</code>.</p>
-</div>
-<div id="collinearity-examination" class="section level3">
-<h3>collinearity examination</h3>
-<pre class="r"><code>cost_df_cor = cost_df %&gt;% 
-  select(age, sex, bmi, smoker, charges, children_group)
-
-
-
-model.matrix(~0+., data=cost_df_cor) %&gt;% 
-  cor(use=&quot;pairwise.complete.obs&quot;) %&gt;% 
-  ggcorrplot(show.diag = F, type=&quot;lower&quot;, lab=TRUE, lab_size=2)</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<p>There is no collinearity between any of the variables.</p>
-</div>
-<div id="model-building" class="section level3">
-<h3>Model building</h3>
-<pre class="r"><code>model &lt;- lm(charges ~ smoker + children_group + sex + age + bmi, data = cost_df)
-summary(model)%&gt;% 
-  broom::tidy() %&gt;% 
-  knitr::kable()</code></pre>
+<p>There is no collinearity between any of the variables. Therefore, no need to adjust variable for model building. In addition, smoking seems to be the highest correlated variable to charges among other variables.</p>
+<p><br></p>
+<p><strong>Fit regression using all predictors</strong></p>
 <table>
 <thead>
 <tr class="header">
@@ -471,17 +500,195 @@ summary(model)%&gt;%
 </tr>
 </tbody>
 </table>
+<p>The model building result shows that sex is not a significant variable with p-valur &gt; 0.05. Therefore, when we do the stepwise regression, we would likely to remove the variable of sex.</p>
+<p><br></p>
 </div>
-<div id="model-diagnostic" class="section level3">
-<h3>Model diagnostic</h3>
-<pre class="r"><code>par(mfrow = c(2,2))
-plot(model)</code></pre>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div id="stepwise-regression" class="section level3">
+<h3>Stepwise regression</h3>
+<pre><code>## Start:  AIC=21962.9
+## charges ~ smoker + children_group + sex + age + bmi
+## 
+##                  Df  Sum of Sq        RSS   AIC
+## - sex             1 9.0380e+06 4.5793e+10 21961
+## &lt;none&gt;                         4.5784e+10 21963
+## - children_group  1 2.7661e+08 4.6060e+10 21968
+## - bmi             1 4.8035e+09 5.0587e+10 22087
+## - age             1 1.6233e+10 6.2017e+10 22344
+## - smoker          1 1.1325e+11 1.5903e+11 23531
+## 
+## Step:  AIC=21961.15
+## charges ~ smoker + children_group + age + bmi
+## 
+##                  Df  Sum of Sq        RSS   AIC
+## &lt;none&gt;                         4.5793e+10 21961
+## + sex             1 9.0380e+06 4.5784e+10 21963
+## - children_group  1 2.7576e+08 4.6068e+10 21967
+## - bmi             1 4.7946e+09 5.0587e+10 22085
+## - age             1 1.6261e+10 6.2054e+10 22342
+## - smoker          1 1.1378e+11 1.5957e+11 23533</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = charges ~ smoker + children_group + age + bmi, data = cost_df)
+## 
+## Coefficients:
+##     (Intercept)          smoker1  children_group1              age  
+##        -12204.7          23669.4            947.9            260.2  
+##             bmi  
+##           320.4</code></pre>
+<p>The stepwise regression process confirm that sex is not significant variable.</p>
+<p><br></p>
+</div>
+<div id="final-model-with-significant-variables" class="section level3">
+<h3>Final model with significant variables</h3>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-12204.7408</td>
+<td align="right">973.77880</td>
+<td align="right">-12.533381</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">smoker1</td>
+<td align="right">23669.4400</td>
+<td align="right">423.69654</td>
+<td align="right">55.864133</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">children_group1</td>
+<td align="right">947.9286</td>
+<td align="right">344.67562</td>
+<td align="right">2.750205</td>
+<td align="right">0.0060413</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">260.1708</td>
+<td align="right">12.31921</td>
+<td align="right">21.119120</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">bmi</td>
+<td align="right">320.3547</td>
+<td align="right">27.93564</td>
+<td align="right">11.467599</td>
+<td align="right">0.0000000</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</div>
+</div>
+<div id="model-diagnostic" class="section level2">
+<h2>Model diagnostic</h2>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The graph above did not show homoscedasticity of residual. Therefore, we need to transform the model.</p>
+<p><br></p>
+</div>
+<div id="model-transformation" class="section level2">
+<h2>Model transformation</h2>
+<div id="box-cox-transformation" class="section level3">
+<h3>Box-Cox Transformation</h3>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Since lamda = 0, try natural log transformation.</p>
+<p><br></p>
+<p><strong>Before transformation, remove outliers first</strong></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.</p>
+<p><br></p>
+<p><strong>Transform charges to ln(charges)</strong></p>
+<pre><code>## 
+## Call:
+## lm(formula = Lncharges ~ smoker + children_group + age + bmi, 
+##     data = cost_df_log)
+## 
+## Coefficients:
+##     (Intercept)          smoker1  children_group1              age  
+##         6.93388          1.55018          0.22609          0.03551  
+##             bmi  
+##         0.01059</code></pre>
+<p><br></p>
+</div>
+<div id="diagnostic-for-transformed-model" class="section level3">
+<h3>Diagnostic for transformed model</h3>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /><img src="medical_cost_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<p>Lamda is near 1 now, and the residual distribution improved from un-transformed data. We conclude this model is acceptable.</p>
+<p><br></p>
+</div>
+</div>
+<div id="final-model" class="section level2">
+<h2>Final model</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">6.9338823</td>
+<td align="right">0.0721953</td>
+<td align="right">96.043415</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">smoker1</td>
+<td align="right">1.5501799</td>
+<td align="right">0.0313774</td>
+<td align="right">49.404289</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">children_group1</td>
+<td align="right">0.2260899</td>
+<td align="right">0.0255357</td>
+<td align="right">8.853886</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">0.0355121</td>
+<td align="right">0.0009124</td>
+<td align="right">38.919881</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">bmi</td>
+<td align="right">0.0105884</td>
+<td align="right">0.0020714</td>
+<td align="right">5.111788</td>
+<td align="right">4e-07</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<div id="decode-the-model-estimates" class="section level3">
+<h3>Decode the model estimates</h3>
+<p>Holding all other variable constant, smokers will have 1.55 times of insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges,</p>
 </div>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -513,7 +720,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

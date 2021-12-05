@@ -376,7 +376,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
 <pre><code>## Warning: Removed 190 rows containing non-finite values (stat_bin).</code></pre>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <pre><code>## Warning: Removed 158 rows containing non-finite values (stat_bin).</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="data_exploration1_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <div id="interested-variables-and-smoking" class="section level3 tabset">
 <h3 class="tabset">Interested variables and smoking</h3>
 <div id="insure" class="section level4">
@@ -400,7 +400,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
       x = &#39;insure type&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insure in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="data_exploration1_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <pre class="r"><code>test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
   pivot_wider(
   names_from = &quot;insure&quot;, 
@@ -432,7 +432,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
       x = &#39;generalhealth&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of generalhealth in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="data_exploration1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <pre class="r"><code>test_data_generalhealth_insurancetype = analyse_generalhealth_insurancetype %&gt;% 
   pivot_wider(
   names_from = &quot;insure&quot;, 
@@ -459,7 +459,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
       x = &#39;sickadvice&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of sickadvice in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="data_exploration1_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <pre class="r"><code>test_data_sickadvice_insurancetype = analyse_sickadvice_insurancetype %&gt;% 
   pivot_wider(
   names_from = &quot;insure&quot;, 
@@ -490,7 +490,7 @@ plot1 + plot2 + plot3 + plot4</code></pre>
       x = &#39;didntgetcare&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of didntgetcare in different smoking group &#39;)</code></pre>
-<p><img src="data-exploration1_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="data_exploration1_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <pre class="r"><code>test_data_didntgetcare_insurancetype = analyse_didntgetcare_insurancetype %&gt;% 
   pivot_wider(
   names_from = &quot;insure&quot;, 

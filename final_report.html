@@ -11,10 +11,10 @@
 
 
 
-<title>About this website</title>
+<title>Final Report</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -29,9 +29,6 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -223,69 +220,6 @@ $(document).ready(function () {
 
 
 
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-
 
 </head>
 
@@ -293,16 +227,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -323,7 +247,7 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="data-exploration1.html">Data exploration</a>
+  <a href="exploration.html">Data exploration</a>
 </li>
 <li>
   <a href="model-building.html">Model building</a>
@@ -358,20 +282,68 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">About this website</h1>
+<h1 class="title toc-ignore">Final Report</h1>
 
 </div>
 
 
-<div id="this-page-has-information-about-this-website" class="section level1">
-<h1>This page has information about this website</h1>
-<p>xxx</p>
+<div id="motivation" class="section level2">
+<h2>Motivation:</h2>
+<p>It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.</p>
+<p>Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, our research topic can be divided into three research questions. We would like to investigate if smokers in NYC tend to get insurance, what type of insurance they prefer, and the factors that affect insurance cost.</p>
+<p>Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.</p>
+</div>
+<div id="related-work" class="section level2">
+<h2>Related work:</h2>
+<p>The <a href="https://www.healthmarkets.com/content/smoking-and-health-insurance">Health Market website</a> introduced the idea of <strong>tobacco rating</strong>. Tobacco rating is the practice of charging tobacco users more for health insurance. In fact, the charge for smokers can be up to 50% more than non-smokers, which lead us to consider if smokers would be frustrated to purchase insurance.</p>
+<p>In addition, there are many tweets on twitter that discuss the relationship between smoking and health insurance. We have read that smokers lose access to many health resources due to higher cost of insurance, and insurance won’t approve as many treatments for smokers as non-smokers.</p>
+<p>These facts inspired us to look deep into the relationship between smoking and health insurance.</p>
+</div>
+<div id="initial-questions" class="section level2">
+<h2>Initial questions:</h2>
+<p>The initial questions we were trying to answer was if smokers in NYC tend to get insurance, what type of insurance they prefer. Over the course of the project, we added a new research question relating to the topic, which was the investigation of factors that affect insurance cost.</p>
+<p>This new question assists our main research topic, because we can use the factors (age, bmi, smoker, etc) to not only explain what kind of personal characteristics would affect insurance cost, but also build a prediction model for health insurance charges. By doing such, we would gain better insights to the underlying relationship between health insurance and smoking, along with other important variables that contributes to the cost variation of insurance.</p>
+</div>
+<div id="data" class="section level2">
+<h2>Data:</h2>
+<p>Source, scraping method, cleaning, etc.</p>
+<div id="data-source" class="section level3">
+<h3>Data source</h3>
+<div id="datasets-for-analysis" class="section level4">
+<h4>Datasets for analysis</h4>
+<ul>
+<li><p><a href="https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page">Community Health Survey Public Use Data</a>. This dataset contains survey questions regarding smoking and health insurance. We extracted related questions from the survey for analysis.</p></li>
+<li><p><a href="https://www.kaggle.com/mirichoi0218/insurance">Medical Cost Personal Dataset</a>. This dataset sheds lights on insurance charges for different personal characteristics, such as smoking, age, bmi, region, etc.</p></li>
+</ul>
+</div>
+<div id="datasets-for-mapping" class="section level4">
+<h4>Datasets for mapping</h4>
+<ul>
+<li><p><a href="https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h">Primary Care Access and Planning - Health Insurance Enrollment</a>. This dataset is used for mapping of health consulting centers in NYC.</p></li>
+<li><p><a href="https://health.data.ny.gov/Health/Medicaid-Enrolled-Provider-Listing/keti-qx5t">Medicaid Enrolled Provider Listing</a>: This dataset is used for mapping of Medicaid provide locations in NYC.</p></li>
+<li><p>In addition, locations of major health insurance carriers in NYC is collected manually and used to create interactive mapping of these carriers.</p></li>
+</ul>
+</div>
+</div>
+<div id="data-cleaning" class="section level3">
+<h3>Data cleaning</h3>
+</div>
+</div>
+<div id="exploratory-analysis" class="section level2">
+<h2>Exploratory analysis:</h2>
+<p>Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.</p>
+</div>
+<div id="additional-analysis" class="section level2">
+<h2>Additional analysis:</h2>
+<p>If you undertake formal statistical analyses, describe these in detail</p>
+</div>
+<div id="discussion" class="section level2">
+<h2>Discussion:</h2>
+<p>What were your findings? Are they what you expect? What insights into the data can you make?</p>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -404,35 +376,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
