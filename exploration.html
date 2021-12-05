@@ -13,8 +13,8 @@
 
 <title>Data exploration</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -333,21 +333,18 @@ dataset_basic = read_csv(&quot;data/dataset_basic.csv&quot;) %&gt;%
 current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)</code></pre>
 <div id="knowledge-about-insurance-in-our-dataset" class="section level2">
 <h2>1. Knowledge about <strong>insurance</strong> in our dataset</h2>
-<div id="holding-status-of-insurace-among-participants" class="section level3">
-<h3>Holding status of insurace among participants</h3>
+<p>XXXXXX</p>
 <pre class="r"><code>insurehold = read_csv(&quot;data/dataset_basic.csv&quot;) %&gt;% 
   drop_na() %&gt;% 
   mutate(
   insuredgateway = factor(insuredgateway, levels = c(1,2), labels = c(&quot;yes&quot;, &quot;no&quot;))) %&gt;% 
   ggplot(aes(x = insuredgateway,fill = insuredgateway))+
   geom_bar()+
+  theme(legend.position = &quot;none&quot;) +
   labs(
     x = &quot;Hold status of insurance&quot;,
     y = &quot;Number of participants&quot;,
     title = &quot;Holding status of insurace among participants&quot;)</code></pre>
-</div>
-<div id="type-of-insurance" class="section level3">
-<h3>Type of insurance</h3>
 <pre class="r"><code>insuretype = dataset_basic %&gt;% 
   drop_na() %&gt;% 
   mutate(insure = fct_infreq(insure)) %&gt;% 
@@ -418,7 +415,7 @@ knitr::kable(insur)</code></pre>
 </tr>
 </tbody>
 </table>
-</div>
+<p><br></p>
 <div id="knowledge-about-smoker-in-our-dataset" class="section level3 tabset">
 <h3 class="tabset">2. Knowledge about <strong>smoker</strong> in our dataset</h3>
 <div id="age-distribution" class="section level4">
