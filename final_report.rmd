@@ -70,7 +70,7 @@ If you undertake formal statistical analyses, describe these in detail
 
 In order to assists our main research topic, the relationship between smoking and health insurance, we would like to investigate the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children. A prediction model is build to analyse this question.
 
-```{r}
+```{r, load insurance cost data}
 cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
 
 cost_df = cost_df %>% 
@@ -292,7 +292,7 @@ summary(model_log) %>%
 
 #### Decode the model estimates
 
-Holding all other variable fixed, smoking is associated with a 1.55% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
+Holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
 
 
 ## Discussion: 
