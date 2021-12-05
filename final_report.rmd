@@ -152,7 +152,7 @@ dataset_basic = chs_14_16 %>%
          agegroup = factor(agegroup,ordered = TRUE),
          imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))
          )
-write_csv(dataset_basic,"data/dataset_basic.csv")
+#write_csv(dataset_basic,"data/dataset_basic.csv")
 ```
 
 
