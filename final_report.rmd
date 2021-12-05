@@ -2,15 +2,18 @@
 title: "Final Report"
 authors: "Jing Lyu, Mengfan Luo, Yushan Wang, Yiqun Jin"
 output: 
-  html_document
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
 ---
 ```{r, echo = FALSE, message=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+#knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(ggpubr)
 library(ggcorrplot)
 library(olsrr)
-library(MASS) # boxcox
+library(MASS)
 library(plotly)
 library(plyr)
 library(leaflet)
@@ -20,7 +23,7 @@ library(haven)
 
 ```
 
-## Motivation: 
+## Motivation
 
 It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.
 
@@ -29,7 +32,7 @@ Since health insurance is vital for people’s well-being, and the cost is the m
 Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
 
 
-## Related work: 
+## Related work 
 
 The [Health Market website](https://www.healthmarkets.com/content/smoking-and-health-insurance) introduced the idea of **tobacco rating**. Tobacco rating is the practice of charging tobacco users more for health insurance. In fact, the charge for smokers can be up to 50% more than non-smokers, which lead us to consider if smokers would be frustrated to purchase insurance. 
 
@@ -37,13 +40,13 @@ In addition, there are many tweets on twitter that discuss the relationship betw
 
 These facts inspired us to look deep into the relationship between smoking and health insurance.
 
-## Initial questions:
+## Initial questions
 
 The initial questions we were trying to answer was if smokers in NYC tend to get insurance, what type of insurance they prefer. Over the course of the project, we added a new research question relating to the topic, which was the investigation of factors that affect insurance cost. 
 
 This new question assists our main research topic, because we can use the factors (age, bmi, smoker, etc) to not only explain what kind of personal characteristics would affect insurance cost, but also build a prediction model for health insurance charges. By doing such, we would gain better insights to the underlying relationship between health insurance and smoking, along with other important variables that contributes to the cost variation of insurance.
 
-## Data: 
+## Data
 Source, scraping method, cleaning, etc.
 
 ### Data source
@@ -64,32 +67,70 @@ Source, scraping method, cleaning, etc.
 
 ### Data cleaning
 
-For **Community Health Survey Public Use Data**, we select year 2014-2016 and variables relating to smoking and insurance. 
+For **Community Health Survey Public Use Data**, we select year 2014-2016 and variables relating to smoking, insurance, and basic health and economic status. The resulting dataset, consists of roughly 28000 participants and includes the following 12 variables:
+
+**Insurance related**
+
+* `insuredgateway`: Whether having health insurance (1=Yes, 2=No) 
+
+* `insure`: Type of health insurance coverage 
+
+(1=Employer, 2=Self-purchase,3=Medicare,4=Medicaid/Family Health+,5=Milit/CHAMPUS/Tricare,6=COBRA/Other,7=Uninsured)
+
+
+**Smoking related**
+
+* `smoker`: Smoking status (1= Never, 2= Current, 3= Former)
+
+* `everyday`: Smoking frequency (1 = everyday smoker, 2 = casual smoker)
+
+* `numberperdaya`:  Average cigarettes smoked per day
+
+* `cost20cigarettes`: Cost of 20 cigarettes (one pack)
+
+**Health and economic status**
+
+* `agegroup`: Age groups (1=18-24yrs,2=25-44 yrs,3=45-64 yrs,4=65+ yrs)
+
+* `generalhealth`: Self-evaluated general health status 
+ 
+ (1=Excellent,2=Very good,3=Good,4=Fair,5=Poor)
+
+* `sex`: Participant's sex (1= male, 2= female)
+
+* `bmi`: Participant's BMI ($kg/m^2$)
+
+* `child`: Number of children the participant have: (1= yes, 0= no)
+
+* `imputed_povertygroup`: Federal poverty level(FPL) for the household 
+
+(1= <100% FPL, 2=100 - <200% FPL, 3=200 - <400% FPL, 4=400 - <600% FPL, 5= >600% FPL)
+
 
 ```{r}
 
 chs16 = read_sas("data/chs2016_public.sas7bdat")
 
 chs16_filter = chs16 %>% 
-  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
+  dplyr::select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2016) %>% 
-  rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
+  dplyr::rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
 
 
 chs15 = read_sas("data/chs2015_public.sas7bdat")
 
 chs15_filter = chs15 %>% 
-  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
+  dplyr::select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2015) %>% 
-  rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
+  dplyr::rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
 
 
 chs14 = read_sas("data/chs2014_public.sas7bdat")
 
 chs14_filter = chs14 %>% 
-  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
+  dplyr::select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2014) %>% 
-  rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
+  dplyr::rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
 
 
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
@@ -99,7 +140,7 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
 
 ```{r}
 dataset_basic = chs_14_16 %>% 
-  select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
+  select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex,insuredgateway) %>% 
   mutate(numberperdaya = round(numberperdaya,1),
          imputed_povertygroup = factor(imputed_povertygroup),
          child = factor(child,levels = c(1,2)),
@@ -111,8 +152,10 @@ dataset_basic = chs_14_16 %>%
          agegroup = factor(agegroup,ordered = TRUE),
          imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))
          )
-#write_csv(dataset_basic,"data/dataset_basic.csv")
+write_csv(dataset_basic,"data/dataset_basic.csv")
 ```
+
+
 
 For **Medical Cost Personal Dataset**, we change character entries to numerical entries, and mutate some continuous variables into factor variables
 
@@ -126,22 +169,6 @@ cost_df = cost_df %>%
     sex = ifelse(sex == "male", 1, 2),
     sex = as.factor(sex),
     children = as.factor(children),
-    age_group = case_when(age < 18 ~ 1, 
-                          age >= 18 & age < 24 ~ 2,
-                          age >= 25 & age < 44 ~ 3,
-                          age >= 45 & age < 64 ~ 4,
-                          age >= 65 ~ 5
-                          ),
-    age_group = as.factor(age_group),
-    
-    bmi_group = case_when(bmi < 20 ~ 1, 
-                          bmi >= 20 & bmi < 30 ~ 2,
-                          bmi >= 30 & bmi < 40 ~ 3,
-                          bmi >= 40 & bmi < 50 ~ 4,
-                          bmi >= 50 ~ 5
-                          ),
-    bmi_group = as.factor(bmi_group),
-    
     children_group = ifelse(children == 0, 0, 1),
     children_group = as.factor(children_group)
      
@@ -150,13 +177,23 @@ cost_df = cost_df %>%
 
 ```
 
+**This dataset includes the following variables**
+
+* `age`: Age
+* `sex`: Sex (male = 1, female = 2)
+* `bmi`: Body Mass Index
+* `children`: number of children the person has
+* `smoker`: smoking status (non-smoker = 0, smoker = 1)
+* `region`: region in th US
+* `charges`: Insurance charges
+* `children_group`: whether or not the person has children (No children = 0, At least one child = 1)
 
 
-## Exploratory analysis: 
+## Exploratory analysis
 Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
 
 
-## Additional analysis: 
+## Additional analysis
 If you undertake formal statistical analyses, describe these in detail
 
 In order to assists our main research topic, the relationship between smoking and health insurance, we would like to investigate the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children. A **prediction model** is build to analyse this question.
@@ -164,14 +201,14 @@ In order to assists our main research topic, the relationship between smoking an
 
 ### A snapshot of the vairables
 
-#### Variable meanings
+We selected the following variable for modeling. Detailed information are in the table below:
 ```{r}
 var <- c("smoker", "children_group", "sex", "age", "bmi", "charges")
 
 var_meaning <- c("0 = non-smoker, 1 = smoker", "0 = No children, 1 = Have at least 1 child", "1 = male, 2 = female", "Age range from 18 to 63", "Body mass index range from 15.96 to 53.13", "Cost of health insurance")
 
 var_info <- data.frame(var, var_meaning) %>% 
-  rename(
+  dplyr::rename(
     "Variable name" = var,
     "Variable information" = var_meaning
   )
@@ -393,7 +430,7 @@ leaflet(health_center) %>%
 **Time of operation and walk-in:**
 ```{r}
 health_center_table = health_center %>% 
-  select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  dplyr::select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
   mutate(
     accept_walk_ins = c(rep("Yes",11))
   ) %>% 
@@ -401,7 +438,7 @@ health_center_table = health_center %>%
     health_center, days_of_operation, hours_of_operation, accept_walk_ins,
     street_address, telephone_number
     ) %>% 
-  rename(
+  dplyr::rename(
     "Health Center name" = health_center,
     "Street address" = street_address,
     "Telephone number" = telephone_number,
@@ -438,13 +475,13 @@ leaflet(insurance_agency) %>%
 **Time of operation and walk-in:**
 ```{r}
 insurance_agency_table =insurance_agency %>% 
-  select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  dplyr::select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
   
   relocate(
     insurance_agency, days_of_operation, hours_of_operation, accept_walk_ins,
     street_address, telephone_number
     ) %>% 
-  rename(
+  dplyr::rename(
     "Insurance agency name" = insurance_agency,
     "Street address" = street_address,
     "Telephone number" = telephone_number,
@@ -490,4 +527,17 @@ leaflet(medicaid) %>%
 What were your findings? Are they what you expect? What insights into the data can you make?
 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. This finding confirmed the fact that smokers are charged for higher insurance. In addition, being older, higher body mass index, and having at least 1 children also increase insurance costs. 
+
+## Citation
+
+What you need to know about smoking and health insurance. HealthMarkets. (n.d.). Retrieved December 5, 2021, from https://www.healthmarkets.com/content/smoking-and-health-insurance. 
+
+What's Medicare? Medicare. (n.d.). Retrieved December 5, 2021, from https://www.medicare.gov/what-medicare-covers/your-medicare-coverage-choices/whats-medicare. 
+
+Members. Medical Mutual. (n.d.). Retrieved December 5, 2021, from https://www.medmutual.com/for-individuals-and-families/health-insurance-education/health-insurance-basics/employer-vs-individual-health-insurance.aspx. 
+
+Wikimedia Foundation. (2021, August 14). Consolidated omnibus budget reconciliation act of 1985. Wikipedia. Retrieved December 5, 2021, from https://en.wikipedia.org/wiki/Consolidated_Omnibus_Budget_Reconciliation_Act_of_1985. 
+
+
+
 

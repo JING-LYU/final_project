@@ -29,22 +29,6 @@ cost_df = cost_df %>%
     sex = ifelse(sex == "male", 1, 2),
     sex = as.factor(sex),
     children = as.factor(children),
-    age_group = case_when(age < 18 ~ 1, 
-                          age >= 18 & age < 24 ~ 2,
-                          age >= 25 & age < 44 ~ 3,
-                          age >= 45 & age < 64 ~ 4,
-                          age >= 65 ~ 5
-                          ),
-    age_group = as.factor(age_group),
-    
-    bmi_group = case_when(bmi < 20 ~ 1, 
-                          bmi >= 20 & bmi < 30 ~ 2,
-                          bmi >= 30 & bmi < 40 ~ 3,
-                          bmi >= 40 & bmi < 50 ~ 4,
-                          bmi >= 50 ~ 5
-                          ),
-    bmi_group = as.factor(bmi_group),
-    
     children_group = ifelse(children == 0, 0, 1),
     children_group = as.factor(children_group)
      

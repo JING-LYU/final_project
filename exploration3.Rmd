@@ -1,5 +1,5 @@
 ---
-title: "Data exploration"
+title: "data exploration"
 output: 
   html_document:
     code_folding: hide
@@ -34,24 +34,11 @@ scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
-```{r message=FALSE}
-ataset_basic = read_csv("data/dataset_basic.csv")
+```{r, message=FALSE}
 
-dataset_basic = read_csv("data/dataset_basic.csv") %>% 
-  mutate(
-         child = factor(child,levels = c(1,2),labels = c("yes","no")),
-         sex = factor(sex,labels = c("male","female")),
-         insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured")),
-         smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
-         agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs"))
-         ) %>% 
-  select(insure,agegroup,smoker,bmi,child,sex)
-```
+dataset_basic = read_csv("data/dataset_basic.csv")
 
-
-```{r message=FALSE}
-
-smoke_df = read_csv("data/dataset_basic.csv") %>% 
+smoke_df = dataset_basic %>% 
   select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,poverty_group = imputed_povertygroup,bmi,child,sex) %>% 
   drop_na(smoker) %>% 
   mutate(
@@ -69,18 +56,28 @@ smoke_df = read_csv("data/dataset_basic.csv") %>%
          )
 
 current_smoker = smoke_df %>% filter(smoker == "current")
+
+dataset_basic = dataset_basic %>% 
+  mutate(
+         child = factor(child,levels = c(1,2),labels = c("yes","no")),
+         sex = factor(sex,labels = c("male","female")),
+         insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured")),
+         smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs"))
+         ) %>% 
+  select(insure,agegroup,smoker,bmi,child,sex)
+
+
 ```
 
-## 1. Explore relationship between `insurance` and target variables
 
-<br>
+### Distributions and statistical tests of `target variables` and `insurance` {.tabset}
 
-### Distributions {.tabset}
 #### Smoking
 
 ##### **Distribution**
 
-```{r message=FALSE}
+```{r message=FALSE} 
 analyse_smoke_insurancetype = 
   dataset_basic %>%
   drop_na(smoker,insure) %>% 
@@ -96,8 +93,53 @@ analyse_smoke_insurancetype %>%
       title = 'The distribution of insurance in different smoking group ')
 ```
 
+##### **Chi-quare test between insurance type and smoking**
+
+$H_0$ : insurance type and smoking are independent, there is no relationship between the two categorical variables. 
+
+$H_1$ : insurance type and smoking are dependent, there is a relationship between the two categorical variables. 
+
+*Test result:*
+
+```{r}
+#test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
+#  pivot_wider(
+#  names_from = "insure", 
+#  values_from = "n")
+
+#test_data_smoke_insurancetype %>% knitr::kable()
+#chisq.test(test_data_smoke_insurancetype[-1])
+
+dat = 
+  dataset_basic %>%
+  drop_na(smoker,insure) 
+
+dat %$%
+  ctable(smoker, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
+
+
+# plot
+ggbarstats(
+  data = dat,
+  x = smoker,
+  y = insure
+) +
+  labs(caption = NULL) # remove caption
+
+
+```
+
+
+
 #### Age
-##### **Distribution**
+##### Plot
 
 ```{r message=FALSE}
 analyse_agegroup_insurancetype = 
@@ -115,10 +157,49 @@ analyse_agegroup_insurancetype %>%
       title = 'The distribution of insurance type in differnt agegroup')
 ```
 
+##### Chi-quare test  between insurance type and age
+
+$H_0$ : insurance type and age are independent, there is no relationship between the two categorical variables. 
+
+$H_1$ : insurance type and age are dependent, there is a relationship between the two categorical variables. 
+
+*Test result:*
+
+```{r}
+#test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
+#  pivot_wider(
+#  names_from = "insure", 
+#  values_from = "n")
+
+#test_data_smoke_insurancetype %>% knitr::kable()
+#chisq.test(test_data_smoke_insurancetype[-1])
+
+dat = 
+  dataset_basic %>%
+  drop_na(agegroup,insure) 
+
+dat %$%
+  ctable(agegroup, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
+
+
+ggbarstats(
+  data = dat,
+  x = smoker,
+  y = insure
+) +
+  labs(caption = NULL) # remove caption
+
+```
 
 #### Have children or not
-##### **Distribution**
-
+##### Plot
 ```{r message=FALSE}
 analyse_children_insurancetype = 
   dataset_basic %>%
@@ -136,101 +217,7 @@ analyse_children_insurancetype %>%
 ```
 
 
-#### BMI
-##### **Distribution**
-
-```{r message=FALSE}
-analyse_bmi_insurancetype = 
-  dataset_basic %>%
-  drop_na(bmi,insure) 
-  
-  
-  
-analyse_bmi_insurancetype %>% 
-  ggplot(aes(x = insure, y = bmi,fill = insure)) + 
-  geom_boxplot(alpha=0.6) +
-    theme(legend.position="none") +
-    scale_fill_brewer(palette="Dark2")+
-    labs(
-      x = 'insurance',
-      y = 'bmi',
-      title = 'The distribution of bmi in groups having different insurance type') +
-  coord_flip()
-```
-
-
-
-<br>
-
-### Statistical test {.tabset}
-
-#### Smoking
-
-##### **Chi-quare test between insurance type and smoking**
-
-$H_0$ : insurance type and smoking are independent, there is no relationship between the two categorical variables. 
-
-$H_1$ : insurance type and smoking are dependent, there is a relationship between the two categorical variables. 
-
-*Test result:*
-
-```{r}
-dat = 
-  dataset_basic %>%
-  drop_na(smoker,insure) 
-```
-
-```{r}
-#| my-chunk, echo = FALSE, fig.width = 10,
-
-# plot
-ggbarstats(
-  data = dat,
-  x = smoker,
-  y = insure,
-  title = "Chi-quare test between insurance type and smoking"
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) 
-
-
-```
-
-
-
-
-#### Age
-##### **Chi-quare test  between insurance type and age**
-
-$H_0$ : insurance type and age are independent, there is no relationship between the two categorical variables. 
-
-$H_1$ : insurance type and age are dependent, there is a relationship between the two categorical variables. 
-
-*Test result:*
-
-```{r}
-dat = 
-  dataset_basic %>%
-  drop_na(agegroup,insure) 
-
-ggbarstats(
-  data = dat,
-  x = smoker,
-  y = insure,
-  title = "Chi-quare test result between insurance type and age"
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 30, vjust = .5, hjust = 1)
-  ) 
-
-```
-
-
-#### Have children or not
-##### **Chi-quare test  between insurance type and children**
+##### Chi-quare test  between insurance type and children
 
 $H_0$ : insurance type and have children or not are independent, there is no relationship between the two categorical variables. 
 
@@ -251,37 +238,65 @@ dat =
   dataset_basic %>%
   drop_na(child,insure)
 
+# fourth method:
+dat %$%
+  ctable(child, insure,
+    prop = "r", chisq = TRUE, headings = FALSE
+  ) %>%
+  print(
+    method = "render",
+    style = "rmarkdown",
+    footnote = NA
+  )
 
 ggbarstats(
   data = dat,
   x = child,
-  y = insure,
-  title = "Chi-quare test between insurance type and children"
+  y = insure
 ) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) 
+  labs(caption = NULL) # remove caption
+
 ```
 
-
 #### BMI
-##### **ANOVA test  between insurance type and BMI**
+##### Plot
+
+```{r message=FALSE}
+analyse_bmi_insurancetype = 
+  dataset_basic %>%
+  drop_na(bmi,insure) 
+  
+  
+  
+analyse_bmi_insurancetype %>% 
+  ggplot(aes(x = insure, y = bmi,fill = insure)) + 
+  geom_boxplot(alpha=0.6) +
+    theme(legend.position="none") +
+    scale_fill_brewer(palette="Dark2")+
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) +
+    labs(
+      x = 'insurance',
+      y = 'bmi',
+      title = 'The distribution of bmi in groups having different insurance type')
+```
+
+##### ANOVA test  between insurance type and BMI
 
 *Test result:*
 ```{r}
 anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
-anova %>% 
-  broom::tidy() %>% 
-  knitr::kable()
+summary(anova)
 Tukey_comp = TukeyHSD(anova)
-
+Tukey_comp 
 plot(Tukey_comp)
 ```
 
-<br>
 
-### Exploration of smoking data {.tabset}
+
+### Exploration on smoking status {.tabset}
+
 #### Age distribution
 
 ##### Plot
@@ -304,8 +319,6 @@ smoke_df %>%
 
 
 ```
-
-
 
 
 #### Health self-evaluation
@@ -365,8 +378,7 @@ smoke_df %>%
 
 ##### Smoking intensity and frequency
 
-
-```{r message=FALSE, warning=FALSE}
+```{r}
 current_smoker %>%
   ggplot(aes(x = smoker_cat, fill = everyday))+
   geom_histogram(stat="count") +
@@ -377,7 +389,7 @@ current_smoker %>%
 ```
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 current_smoker %>% 
   ggplot(aes(x = numberperdaya, fill = everyday)) + 
   geom_histogram(alpha = .7)+
@@ -391,9 +403,28 @@ current_smoker %>%
 ```
 
 
-#### Cost on smoke
+```{r}
+current_smoker %>% 
+  ggplot(aes(x = cost20cigarettes, fill = smoker_cat)) + 
+  geom_histogram(alpha = .7)+
+  xlim(0,20)+
+  labs(
+    x = "Cost on each pack (20 cigarattes)",
+    y = "Number of smokers",
+    title = "Cost on each pack (20 cigarattes) consumed by current smokers"
+       )
+  theme(legend.position = "bottom") 
+  
+  
 
-```{r message=FALSE, warning=FALSE}
+current_smoker %>%
+  ggplot(aes(x = smoker_cat, y = cost20cigarettes, fill = smoker_cat))+
+  geom_violin() +
+    labs(
+      x = 'Type of smokers',
+      y = 'Cost of every 20 (one pack) cigrattes',
+      title = 'Cost of every 20 (one pack) cigrattes\namong different type of smokers')
+  
   
 current_smoker %>% 
   ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday))+
@@ -408,24 +439,6 @@ current_smoker %>%
 
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

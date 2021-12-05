@@ -15,40 +15,6 @@ library(patchwork)
 ```
 
 
-## Data loading and crude cleaning
-
-We select year 2014-2016 and variables relating to smoking and insurance. 
-
-```{r}
-
-chs16 = read_sas("data/chs2016_public.sas7bdat")
-
-chs16_filter = chs16 %>% 
-  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
-  mutate(year = 2016) %>% 
-  rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
-
-
-chs15 = read_sas("data/chs2015_public.sas7bdat")
-
-chs15_filter = chs15 %>% 
-  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
-  mutate(year = 2015) %>% 
-  rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
-
-
-chs14 = read_sas("data/chs2014_public.sas7bdat")
-
-chs14_filter = chs14 %>% 
-  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
-  mutate(year = 2014) %>% 
-  rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
-
-
-chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
-  
-```
-
 
 ```{}
 dataset_update = chs_14_16 %>% 
@@ -68,7 +34,7 @@ dataset_update = chs_14_16 %>%
 ```
 
 
-```{r}
+```{}
 dataset_basic = chs_14_16 %>% 
   select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
   mutate(numberperdaya = round(numberperdaya,1),
@@ -109,8 +75,6 @@ smoke_df = dataset_basic %>%
          everyday = factor(everyday, levels = c(1,2), labels = c("everyday smoker", "casual smoker"))
          
          )
-         
-        
 ```
 
 
@@ -196,6 +160,14 @@ current_smoker = smoke_df %>% filter(smoker == "current")
 
 
 ```{r}
+current_smoker %>%
+  ggplot(aes(x = smoker_cat, fill = everyday))+
+  geom_histogram(stat="count") +
+    labs(
+      x = 'Type of current smokers',
+      y = 'Number of smokers in each type',
+      title = 'Number of current smokers of diffirent types')
+
 
 current_smoker %>% 
   ggplot(aes(x = numberperdaya, fill = everyday)) + 
@@ -203,26 +175,24 @@ current_smoker %>%
   xlim(0,30)+
   labs(
     x = "Average number of cigarattes smoked per day",
-    y = "Number of smokers"
+    y = "Number of smokers",
+    title = "Average number of cigarattes smoked per day by current smokers"
        )+
   theme(legend.position = "bottom") 
 
   
 current_smoker %>% 
-  ggplot(aes(x = cost20cigarettes, fill = everyday)) + 
+  ggplot(aes(x = cost20cigarettes, fill = smoker_cat)) + 
   geom_histogram(alpha = .7)+
   xlim(0,20)+
   labs(
     x = "Cost on each pack (20 cigarattes)",
-    y = "Number of smokers"
+    y = "Number of smokers",
+    title = "Cost on each pack (20 cigarattes) consumed by current smokers"
        )
   theme(legend.position = "bottom") 
   
   
-current_smoker %>% 
-  ggplot(aes(x = cost20cigarettes)) + 
-  geom_density()
-
 
 current_smoker %>%
   ggplot(aes(x = smoker_cat, y = cost20cigarettes, fill = smoker_cat))+
@@ -234,8 +204,10 @@ current_smoker %>%
   
   
 current_smoker %>% 
-  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = smoker_cat))+
+  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday))+
   geom_point(alpha = .5,size = 3) +
+  xlim(0,50)+
+  ylim(0,40)+
   #facet_grid(.~smoker_cat,scales = "free") +
     labs(
       x = 'Number of cigrattes consumed everyday',
@@ -243,45 +215,4 @@ current_smoker %>%
       title = 'Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday')
 
 
-
-
 ```
-
-
-
-Chi-squared test for `insure` and 
-
-2.
-
-```{r}
-analyse_poverty_insurancetype = 
-  dataset_basic %>%
-  drop_na(imputed_povertygroup,insure) %>% 
-  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %>% 
-  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
-  group_by(imputed_povertygroup,insure) %>% 
-  summarize(n = n())
-```
-
-
-```{r}
-test_data_poverty_insurance = analyse_poverty_insurancetype %>% 
-  pivot_wider(
-  names_from = "insure", 
-  values_from = "n")
-```
-
-```{r}
-chisq.test(test_data_poverty_insurance[-1])
-
-```
-
-
-
-
-
-
-
-
-
-

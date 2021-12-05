@@ -6,18 +6,14 @@ navbar:
     - text: "Data exploration"
       href: exploration.html
     - text: "Model building"
-      menu:
-      - text: "? model building"
-        href: model-building.html
-      - text: "Insurance cost model building"
-        href: medical_cost.html
-    - text: "Analysis and discussion"
-      href: analysis.html
+      href: medical_cost.html
+    - text: "Discussion"
+      href: discussion.html
     - text: "Mapping"
       href: mapping.html
     - text: "Report"
       href: report.html
-    - text: "Dashboard"
+    - text: "Shiny Dashboard"
       href: https://yiqunjin.shinyapps.io/shiny_dashboard/
     - icon: fa-envelope fa-lg
       href: mailto:<yw3772@cumc.columbia.com>
