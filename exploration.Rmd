@@ -19,7 +19,7 @@ library(ggplot2)
 ```
 
 ```{r message=FALSE}
-dataset_basic = read_csv("data/dataset_basic.csv") %>% 
+dataset_basic = read_csv("data/dataset_update.csv") %>% 
   mutate(
          child = factor(child,levels = c(1,2),labels = c("yes","no")),
          sex = factor(sex,labels = c("male","female")),
