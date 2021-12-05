@@ -107,6 +107,7 @@ cost_df = cost_df %>%
 
 ```
 
+**Prediction Model building**
 
 ### A snapshot of the vairables
 
@@ -295,6 +296,8 @@ summary(model_log) %>%
 #### Decode the model estimates
 
 Holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
+
+### Shiny
 
 ## Additional visualization
 
