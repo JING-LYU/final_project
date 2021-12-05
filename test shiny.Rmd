@@ -214,7 +214,7 @@ non_smoker_result = predict(model_log,predict_data_non_smoke,interval = "confide
 saved = round(smoker_result$fit - result$fit)
 higher = round(result$fit - non_smoker_result$fit)
 
-if (input[["smoke_or_not"]] == "No") cat("Congratulation! As a non-smoker, You saved $",saved, "for insurance premium")
+if (input[["smoke_or_not"]] == "No") cat("Congratulation! As a non-smoker, You saved $",saved, "for insurance premium than smoker")
 if (input[["smoke_or_not"]] == "Yes") cat("As a smoker, Your insurance premium is $", higher,"higher than non-smoker")
 
 })
