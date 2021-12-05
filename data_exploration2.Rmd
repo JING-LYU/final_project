@@ -11,6 +11,7 @@ library(tidyverse)
 library(rvest)
 library(httr)
 library(haven)
+library(patchwork)
 ```
 
 
@@ -49,7 +50,7 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
 ```
 
 
-```{r}
+```{}
 dataset_update = chs_14_16 %>% 
   select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
   mutate(numberperdaya = round(numberperdaya,1),
@@ -63,8 +64,9 @@ dataset_update = chs_14_16 %>%
          agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs")),
          imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5),labels = c("<100% FPL","100 - <200% FPL","200 - <400% FPL","400 - <600% FPL",">600% FPL"))
          )
-write_csv(dataset_basic,"data/dataset_update.csv")
+#write_csv(dataset_update,"data/dataset_update.csv")
 ```
+
 
 ```{r}
 dataset_basic = chs_14_16 %>% 
@@ -89,15 +91,24 @@ write_csv(dataset_basic,"data/dataset_basic.csv")
 
 ```{r}
 
+dataset_basic = read_csv("data/dataset_basic.csv")
+
 smoke_df = dataset_basic %>% 
-  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
+  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,poverty_group = imputed_povertygroup,bmi,child,sex) %>% 
   drop_na(smoker) %>% 
   mutate(
          smoker_cat = case_when(
            numberperdaya <= 10 ~ 1,
            (numberperdaya > 10) & (numberperdaya <= 20) ~2,
            numberperdaya > 20 ~ 3),
-         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c("light","normal","heavy")))
+         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c("light","normal","heavy")),
+         smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs")),
+         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c("Poor","Fair","Good","Very good","Excellent")),
+         poverty_group = factor(poverty_group,levels = c(1,2,3,4,5),labels = c("<100% FPL","100 - <200% FPL","200 - <400% FPL","400 - <600% FPL",">600% FPL")),
+         everyday = factor(everyday, levels = c(1,2), labels = c("everyday smoker", "casual smoker"))
+         
+         )
          
         
 ```
@@ -147,7 +158,7 @@ smoke_df %>%
   ggplot(aes(x = smoker, y = health_percent, fill = generalhealth)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
-      x = 'Type of smokers',
+      x = 'Smoking status',
       y = 'Health self-evaluation \n(% in each types of smoker)',
       title = 'Self-evaluation of health conditions among people in different smoking status\n(% in each types of smoker)')
 ```
@@ -155,8 +166,8 @@ smoke_df %>%
 
 ```{r}
 smoke_df %>% 
-  drop_na(imputed_povertygroup) %>% 
-  group_by(imputed_povertygroup,smoker) %>% 
+  drop_na(poverty_group) %>% 
+  group_by(poverty_group,smoker) %>% 
   summarize(
     count = n(),
   ) %>% 
@@ -164,23 +175,54 @@ smoke_df %>%
     smokegroup_count = smokegroup_count,
     poverty_percent = count/smokegroup_count,
     smoker = fct_reorder(smoker,count)) %>% 
-  ggplot(aes(x = smoker, y = poverty_percent, fill = imputed_povertygroup)) + 
+  ggplot(aes(x = smoker, y = poverty_percent, fill = poverty_group)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'Smoking status',
-      y = 'imputed_povertygroup',
-      title = 'povertygroup among different smoking status')
+      y = 'Poverty groups',
+      title = 'Poverty groups among people in different smoking status')
 ```
 
 
 
-For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we focus on the current smokers.
+For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we **focus on the current smokers**.
 
 
 * Cost and number of daily consumption
 
 ```{r}
 current_smoker = smoke_df %>% filter(smoker == "current")
+```
+
+
+```{r}
+
+current_smoker %>% 
+  ggplot(aes(x = numberperdaya, fill = everyday)) + 
+  geom_histogram(alpha = .7)+
+  xlim(0,30)+
+  labs(
+    x = "Average number of cigarattes smoked per day",
+    y = "Number of smokers"
+       )+
+  theme(legend.position = "bottom") 
+
+  
+current_smoker %>% 
+  ggplot(aes(x = cost20cigarettes, fill = everyday)) + 
+  geom_histogram(alpha = .7)+
+  xlim(0,20)+
+  labs(
+    x = "Cost on each pack (20 cigarattes)",
+    y = "Number of smokers"
+       )
+  theme(legend.position = "bottom") 
+  
+  
+current_smoker %>% 
+  ggplot(aes(x = cost20cigarettes)) + 
+  geom_density()
+
 
 current_smoker %>%
   ggplot(aes(x = smoker_cat, y = cost20cigarettes, fill = smoker_cat))+
@@ -201,5 +243,45 @@ current_smoker %>%
       title = 'Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday')
 
 
+
+
 ```
+
+
+
+Chi-squared test for `insure` and 
+
+2.
+
+```{r}
+analyse_poverty_insurancetype = 
+  dataset_basic %>%
+  drop_na(imputed_povertygroup,insure) %>% 
+  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
+  group_by(imputed_povertygroup,insure) %>% 
+  summarize(n = n())
+```
+
+
+```{r}
+test_data_poverty_insurance = analyse_poverty_insurancetype %>% 
+  pivot_wider(
+  names_from = "insure", 
+  values_from = "n")
+```
+
+```{r}
+chisq.test(test_data_poverty_insurance[-1])
+
+```
+
+
+
+
+
+
+
+
+
 
