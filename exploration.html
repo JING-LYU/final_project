@@ -344,7 +344,7 @@ dataset_basic = read_csv(&quot;data/dataset_basic.csv&quot;) %&gt;%
 
 current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)</code></pre>
 <div id="explore-relationship-between-insurance-and-target-variables" class="section level2">
-<h2>Explore relationship between <code>insurance</code> and target variables</h2>
+<h2>1. Explore relationship between <code>insurance</code> and target variables</h2>
 <p><br></p>
 <div id="distributions" class="section level3 tabset">
 <h3 class="tabset">Distributions</h3>
@@ -423,9 +423,6 @@ analyse_bmi_insurancetype %&gt;%
   geom_boxplot(alpha=0.6) +
     theme(legend.position=&quot;none&quot;) +
     scale_fill_brewer(palette=&quot;Dark2&quot;)+
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
     labs(
       x = &#39;insurance&#39;,
       y = &#39;bmi&#39;,
@@ -445,31 +442,10 @@ analyse_bmi_insurancetype %&gt;%
 <p><span class="math inline">\(H_0\)</span> : insurance type and smoking are independent, there is no relationship between the two categorical variables.</p>
 <p><span class="math inline">\(H_1\)</span> : insurance type and smoking are dependent, there is a relationship between the two categorical variables.</p>
 <p><em>Test result:</em></p>
-<pre class="r"><code>#test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
-#  pivot_wider(
-#  names_from = &quot;insure&quot;, 
-#  values_from = &quot;n&quot;)
-
-#test_data_smoke_insurancetype %&gt;% knitr::kable()
-#chisq.test(test_data_smoke_insurancetype[-1])
-
-dat = 
+<pre class="r"><code>dat = 
   dataset_basic %&gt;%
-  drop_na(smoker,insure) 
-
-
-# plot
-ggbarstats(
-  data = dat,
-  x = smoker,
-  y = insure,
-  title = &quot;Chi-quare test between insurance type and smoking&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+  drop_na(smoker,insure) </code></pre>
+<p><img src="exploration_files/figure-html/my-chunk1-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="age-1" class="section level4">
@@ -479,29 +455,10 @@ ggbarstats(
 <p><span class="math inline">\(H_0\)</span> : insurance type and age are independent, there is no relationship between the two categorical variables.</p>
 <p><span class="math inline">\(H_1\)</span> : insurance type and age are dependent, there is a relationship between the two categorical variables.</p>
 <p><em>Test result:</em></p>
-<pre class="r"><code>#test_data_smoke_insurancetype = analyse_smoke_insurancetype %&gt;% 
-#  pivot_wider(
-#  names_from = &quot;insure&quot;, 
-#  values_from = &quot;n&quot;)
-
-#test_data_smoke_insurancetype %&gt;% knitr::kable()
-#chisq.test(test_data_smoke_insurancetype[-1])
-
-dat = 
+<pre class="r"><code>dat = 
   dataset_basic %&gt;%
-  drop_na(agegroup,insure) 
-
-ggbarstats(
-  data = dat,
-  x = smoker,
-  y = insure,
-  title = &quot;Chi-quare test result between insurance type and age&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
+  drop_na(agegroup,insure) </code></pre>
+<p><img src="exploration_files/figure-html/my-chunk2-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="have-children-or-not-1" class="section level4">
@@ -521,20 +478,8 @@ ggbarstats(
 
 dat = 
   dataset_basic %&gt;%
-  drop_na(child,insure)
-
-
-ggbarstats(
-  data = dat,
-  x = child,
-  y = insure,
-  title = &quot;Chi-quare test between insurance type and children&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+  drop_na(child,insure)</code></pre>
+<p><img src="exploration_files/figure-html/my-chunk3-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="bmi-1" class="section level4">
@@ -579,7 +524,7 @@ anova %&gt;%
 <pre class="r"><code>Tukey_comp = TukeyHSD(anova)
 
 plot(Tukey_comp)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-10-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
 <p><br></p>
 </div>
 </div>
@@ -603,7 +548,7 @@ plot(Tukey_comp)</code></pre>
       x = &#39;Smoking status&#39;,
       y = &#39;Number of smokers&#39;,
       title = &#39;Age distribution among people in different smoking status&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="health-self-evaluation" class="section level4">
@@ -630,7 +575,7 @@ smoke_df %&gt;%
       x = &#39;Smoking status&#39;,
       y = &#39;Health self-evaluation \n(% in each types of smoker)&#39;,
       title = &#39;Self-evaluation of health conditions among people in different smoking status\n(% in each types of smoker)&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-15-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="poverty-status" class="section level4">
@@ -653,7 +598,7 @@ smoke_df %&gt;%
       x = &#39;Smoking status&#39;,
       y = &#39;Poverty groups&#39;,
       title = &#39;Poverty groups among people in different smoking status&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-16-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="current-smokers" class="section level4">
@@ -667,7 +612,7 @@ smoke_df %&gt;%
       x = &#39;Type of current smokers&#39;,
       y = &#39;Number of smokers in each type&#39;,
       title = &#39;Number of current smokers of diffirent types&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
 <pre class="r"><code>current_smoker %&gt;% 
   ggplot(aes(x = numberperdaya, fill = everyday)) + 
   geom_histogram(alpha = .7)+
@@ -678,7 +623,7 @@ smoke_df %&gt;%
     title = &quot;Average number of cigarattes smoked per day by current smokers&quot;
        )+
   theme(legend.position = &quot;bottom&quot;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-15-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-18-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="cost-on-smoke" class="section level4">
@@ -693,7 +638,7 @@ smoke_df %&gt;%
       x = &#39;Number of cigrattes consumed everyday&#39;,
       y = &#39;Cost of every 20 (one pack) cigrattes&#39;,
       title = &#39;Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-16-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-19-1.png" width="90%" /></p>
 </div>
 </div>
 </div>
