@@ -335,7 +335,7 @@ chs14_filter = chs14 %&gt;%
 
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
 <pre class="r"><code>dataset_basic = chs_14_16 %&gt;% 
-  select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %&gt;% 
+  select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex,insuredgateway) %&gt;% 
   mutate(numberperdaya = round(numberperdaya,1),
          imputed_povertygroup = factor(imputed_povertygroup),
          child = factor(child,levels = c(1,2)),
@@ -348,6 +348,33 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)</code></pre>
          imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))
          )
 #write_csv(dataset_basic,&quot;data/dataset_basic.csv&quot;)</code></pre>
+<p>For <strong>Community Health Survey Public Use Data</strong>, we select year 2014-2016 and variables relating to smoking, insurance, and basic health and economic status. The resulting dataset, available <strong>here</strong>, consists of roughly 28000 participants and includes the following 12 variables:</p>
+<p><strong>Insurance related</strong></p>
+<ul>
+<li><p><code>insuredgateway</code>: Whether having health insurance (1=Yes, 2=No)</p></li>
+<li><p><code>insure</code>: Type of health insurance coverage</p></li>
+</ul>
+<p>(1=Employer, 2=Self-purchase,3=Medicare,4=Medicaid/Family Health+,5=Milit/CHAMPUS/Tricare,6=COBRA/Other,7=Uninsured)</p>
+<p><strong>Smoking related</strong></p>
+<ul>
+<li><p><code>smoker</code>: Smoking status (1= Never, 2= Current, 3= Former)</p></li>
+<li><p><code>everyday</code>: Smoking frequency (1 = everyday smoker, 2 = casual smoker)</p></li>
+<li><p><code>numberperdaya</code>: Average cigarettes smoked per day</p></li>
+<li><p><code>cost20cigarettes</code>: Cost of 20 cigarettes (one pack)</p></li>
+</ul>
+<p><strong>Health and economic status</strong></p>
+<ul>
+<li><p><code>agegroup</code>: Age groups (1=18-24yrs,2=25-44 yrs,3=45-64 yrs,4=65+ yrs)</p></li>
+<li><p><code>generalhealth</code>: Self-evaluated general health status</p></li>
+</ul>
+<p>(1=Excellent,2=Very good,3=Good,4=Fair,5=Poor)</p>
+<ul>
+<li><p><code>sex</code>: Participant’s sex (1= male, 2= female)</p></li>
+<li><p><code>bmi</code>: Participant’s BMI (<span class="math inline">\(kg/m^2\)</span>)</p></li>
+<li><p><code>child</code>: Number of children the participant have: (1= yes, 0= no)</p></li>
+<li><p><code>imputed_povertygroup</code>: Federal poverty level(FPL) for the household</p></li>
+</ul>
+<p>(1= &lt;100% FPL, 2=100 - &lt;200% FPL, 3=200 - &lt;400% FPL, 4=400 - &lt;600% FPL, 5= &gt;600% FPL)</p>
 </div>
 
 

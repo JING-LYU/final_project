@@ -64,7 +64,45 @@ Source, scraping method, cleaning, etc.
 
 ### Data cleaning
 
-For **Community Health Survey Public Use Data**, we select year 2014-2016 and variables relating to smoking and insurance. 
+For **Community Health Survey Public Use Data**, we select year 2014-2016 and variables relating to smoking, insurance, and basic health and economic status. The resulting dataset, available **here**, consists of roughly 28000 participants and includes the following 12 variables:
+
+**Insurance related**
+
+* `insuredgateway`: Whether having health insurance (1=Yes, 2=No) 
+
+* `insure`: Type of health insurance coverage 
+
+(1=Employer, 2=Self-purchase,3=Medicare,4=Medicaid/Family Health+,5=Milit/CHAMPUS/Tricare,6=COBRA/Other,7=Uninsured)
+
+
+**Smoking related**
+
+* `smoker`: Smoking status (1= Never, 2= Current, 3= Former)
+
+* `everyday`: Smoking frequency (1 = everyday smoker, 2 = casual smoker)
+
+* `numberperdaya`:  Average cigarettes smoked per day
+
+* `cost20cigarettes`: Cost of 20 cigarettes (one pack)
+
+**Health and economic status**
+
+* `agegroup`: Age groups (1=18-24yrs,2=25-44 yrs,3=45-64 yrs,4=65+ yrs)
+
+* `generalhealth`: Self-evaluated general health status 
+ 
+ (1=Excellent,2=Very good,3=Good,4=Fair,5=Poor)
+
+* `sex`: Participant's sex (1= male, 2= female)
+
+* `bmi`: Participant's BMI ($kg/m^2$)
+
+* `child`: Number of children the participant have: (1= yes, 0= no)
+
+* `imputed_povertygroup`: Federal poverty level(FPL) for the household 
+
+(1= <100% FPL, 2=100 - <200% FPL, 3=200 - <400% FPL, 4=400 - <600% FPL, 5= >600% FPL)
+
 
 ```{r}
 
@@ -99,7 +137,7 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
 
 ```{r}
 dataset_basic = chs_14_16 %>% 
-  dplyr::select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
+  select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex,insuredgateway) %>% 
   mutate(numberperdaya = round(numberperdaya,1),
          imputed_povertygroup = factor(imputed_povertygroup),
          child = factor(child,levels = c(1,2)),
@@ -113,6 +151,8 @@ dataset_basic = chs_14_16 %>%
          )
 #write_csv(dataset_basic,"data/dataset_basic.csv")
 ```
+
+
 
 For **Medical Cost Personal Dataset**, we change character entries to numerical entries, and mutate some continuous variables into factor variables
 
