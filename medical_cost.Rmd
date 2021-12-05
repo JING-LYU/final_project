@@ -306,9 +306,8 @@ result = predict(model_log,predict_data,interval = "confidence") %>%
   geom_hline(yintercept = "1", size = 1.2) +
   labs(
     title = "Your recommended insurance charge $",
-    x = " ",
-    y = "amount of charge $",
-    caption = "Data from the rnoaa package") 
+    x = "amount of charge $",
+    y = "") 
 
 
 ggplotly(result)
