@@ -66,6 +66,7 @@ dataset_update = chs_14_16 %>%
 write_csv(dataset_basic,"data/dataset_update.csv")
 ```
 
+
 ```{r}
 dataset_basic = chs_14_16 %>% 
   select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
@@ -89,7 +90,7 @@ write_csv(dataset_basic,"data/dataset_basic.csv")
 
 ```{r}
 
-smoke_df = dataset_basic %>% 
+smoke_df = dataset_update %>% 
   select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
   drop_na(smoker) %>% 
   mutate(
@@ -169,18 +170,27 @@ smoke_df %>%
     labs(
       x = 'Smoking status',
       y = 'imputed_povertygroup',
-      title = 'povertygroup among different smoking status')
+      title = 'povertygroup among people in different smoking status')
 ```
 
 
 
-For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we focus on the current smokers.
+For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we **focus on the current smokers**.
 
 
 * Cost and number of daily consumption
 
 ```{r}
 current_smoker = smoke_df %>% filter(smoker == "current")
+
+current_smoker %>% 
+  ggplot(aes(x = numberperdaya)) + 
+  geom_density()
+
+current_smoker %>% 
+  ggplot(aes(x = cost20cigarettes)) + 
+  geom_density()
+
 
 current_smoker %>%
   ggplot(aes(x = smoker_cat, y = cost20cigarettes, fill = smoker_cat))+
@@ -201,5 +211,45 @@ current_smoker %>%
       title = 'Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday')
 
 
+
+
 ```
+
+
+
+Chi-squared test for `insure` and 
+
+2.
+
+```{r}
+analyse_poverty_insurancetype = 
+  dataset_basic %>%
+  drop_na(imputed_povertygroup,insure) %>% 
+  mutate(imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))) %>% 
+  mutate(insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured"))) %>% 
+  group_by(imputed_povertygroup,insure) %>% 
+  summarize(n = n())
+```
+
+
+```{r}
+test_data_poverty_insurance = analyse_poverty_insurancetype %>% 
+  pivot_wider(
+  names_from = "insure", 
+  values_from = "n")
+```
+
+```{r}
+chisq.test(test_data_poverty_insurance[-1])
+
+```
+
+
+
+
+
+
+
+
+
 
