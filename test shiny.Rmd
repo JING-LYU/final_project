@@ -153,7 +153,7 @@ ggplotly(result)
 ### Chart B
 
 ```{r}
-renderText({
+renderPrint({
  predict_data = tibble(smoker = "1",
                       children_group = "1",
                       age = input[["age_choice"]],
@@ -169,11 +169,60 @@ result = predict(model_log,predict_data,interval = "confidence") %>%
     lwr = exp(lwr),
     upr = exp(upr)
   )
-fit_out = paste("Your predicted insurance premium is", as.character(result$fit))
-ci_out = paste("Your recommended annal insurance premium range is ", as.character(result$lwr), "to", as.character(result$upr))
-paste(fit_out, ci_out, collapse = "</br>")
+fit_round = round(result$fit)
+lwr_round = round(result$lwr)
+upr_round = round(result$upr)
 
-#paste("Your predicted insurance premium is", as.character(result$fit),\n, "Your recommended annal insurance premium range is ", as.character(result$lwr), "to", as.character(result$upr))
+fit_out = paste("Your predicted insurance premium is $", fit_round)
+ci_out = paste("Your recommended annal insurance premium range is $", lwr_round, "to $", upr_round)
+
+cat(fit_out, ci_out, sep = "\n")
+
+})
+```
+
+### Chart C
+
+```{r}
+renderPrint({
+  predict_data = tibble(smoker = "1",
+                      children_group = "1",
+                      age = input[["age_choice"]],
+                      bmi = input[["BMI_choice"]]
+                      ) %>% 
+  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes","1", "0"),
+         children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"))
+
+result = predict(model_log,predict_data,interval = "confidence") %>% 
+  as_tibble() %>% 
+  mutate(fit = exp(fit))
+
+predict_data_smoker = tibble(smoker = "1",
+                      children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"),
+                      age = input[["age_choice"]],
+                      bmi = input[["BMI_choice"]]
+                      ) 
+
+smoker_result = predict(model_log,predict_data_smoker,interval = "confidence") %>% 
+  as_tibble() %>% 
+  mutate(fit = exp(fit))
+
+predict_data_non_smoke = tibble(smoker = "0",
+                      children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"),
+                      age = input[["age_choice"]],
+                      bmi = input[["BMI_choice"]]
+                      ) 
+
+non_smoker_result = predict(model_log,predict_data_non_smoke,interval = "confidence") %>% 
+  as_tibble() %>% 
+  mutate(fit = exp(fit))
+
+saved = round(smoker_result$fit - result$fit)
+higher = round(result$fit - non_smoker_result$fit)
+
+if (input[["smoke_or_not"]] == "No") cat("Congratulation! As a non-smoker, You saved $",saved, "for insurance premium")
+if (input[["smoke_or_not"]] == "Yes") cat("As a smoker, Your insurance premium is $", higher,"higher than non-smoker")
+
 })
 ```
 

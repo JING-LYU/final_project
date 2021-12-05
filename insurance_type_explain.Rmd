@@ -11,6 +11,25 @@ output:
 library(tidyverse)
 ```
 
+
+### A glance at **insurance**
+
+
+```{r}
+read_csv("data/dataset_basic.csv") %>% 
+  drop_na() %>% 
+  mutate(
+  insuredgateway = factor(insuredgateway, levels = c(1,2), labels = c("yes", "no"))) %>% 
+  ggplot(aes(x = insuredgateway))+
+  geom_bar()+
+  labs(
+    x = "Hold status of insurance",
+    y = "Number of participants",
+    title = "Holding status of insurace among participants")
+  
+```
+
+
 ## Table
 
 ```{r}
