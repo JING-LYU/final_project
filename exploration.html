@@ -13,8 +13,8 @@
 
 <title>data exploration</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -314,7 +314,27 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_update.csv&quot;) %&gt;% 
+<pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_basic.csv&quot;)
+
+smoke_df = dataset_basic %&gt;% 
+  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,poverty_group = imputed_povertygroup,bmi,child,sex) %&gt;% 
+  drop_na(smoker) %&gt;% 
+  mutate(
+         smoker_cat = case_when(
+           numberperdaya &lt;= 10 ~ 1,
+           (numberperdaya &gt; 10) &amp; (numberperdaya &lt;= 20) ~2,
+           numberperdaya &gt; 20 ~ 3),
+         smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c(&quot;light&quot;,&quot;normal&quot;,&quot;heavy&quot;)),
+         smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c(&quot;18-24yrs&quot;,&quot;25-44yrs&quot;, &quot;45-64yrs&quot;, &quot;65+yrs&quot;)),
+         generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c(&quot;Poor&quot;,&quot;Fair&quot;,&quot;Good&quot;,&quot;Very good&quot;,&quot;Excellent&quot;)),
+         poverty_group = factor(poverty_group,levels = c(1,2,3,4,5),labels = c(&quot;&lt;100% FPL&quot;,&quot;100 - &lt;200% FPL&quot;,&quot;200 - &lt;400% FPL&quot;,&quot;400 - &lt;600% FPL&quot;,&quot;&gt;600% FPL&quot;)),
+         everyday = factor(everyday, levels = c(1,2), labels = c(&quot;everyday smoker&quot;, &quot;casual smoker&quot;))
+         
+         )
+
+
+dataset_basic = dataset_basic %&gt;% 
   mutate(
          child = factor(child,levels = c(1,2),labels = c(&quot;yes&quot;,&quot;no&quot;)),
          sex = factor(sex,labels = c(&quot;male&quot;,&quot;female&quot;)),
@@ -1123,6 +1143,79 @@ Tukey_comp </code></pre>
 ## Uninsured-COBRA/Other                          0.98790464 0.9998440</code></pre>
 <pre class="r"><code>plot(Tukey_comp)</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="exploration-on-smoking-status" class="section level3 tabset">
+<h3 class="tabset">Exploration on smoking status</h3>
+<div id="age-distribution" class="section level4">
+<h4>Age distribution</h4>
+<div id="plot-4" class="section level5">
+<h5>Plot</h5>
+<pre class="r"><code>smoke_df %&gt;% 
+  drop_na(agegroup) %&gt;% 
+  group_by(agegroup,smoker) %&gt;% 
+  summarize(
+    count = n(),
+  ) %&gt;% 
+  mutate(smoker = fct_reorder(smoker,count)) %&gt;% 
+  ggplot(aes(x = smoker, y = count, fill = agegroup)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;Number of smokers&#39;,
+      title = &#39;Age distribution among people in different smoking status&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+</div>
+<div id="health-self-evaluation" class="section level4">
+<h4>Health self-evaluation</h4>
+<div id="plot-5" class="section level5">
+<h5>Plot</h5>
+<pre class="r"><code>smokegroup_count = smoke_df %&gt;% 
+  drop_na(smoker) %&gt;% 
+  group_by(smoker) %&gt;% 
+  summarize(
+    smokegroup_count = n()) %&gt;% 
+  pull()
+
+smoke_df %&gt;% 
+  drop_na(generalhealth) %&gt;% 
+  group_by(generalhealth,smoker) %&gt;% 
+  summarize(
+    count = n())%&gt;% 
+  mutate(smokegroup_count = smokegroup_count,
+         health_percent = count/smokegroup_count)%&gt;% 
+  ggplot(aes(x = smoker, y = health_percent, fill = generalhealth)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;Health self-evaluation \n(% in each types of smoker)&#39;,
+      title = &#39;Self-evaluation of health conditions among people in different smoking status\n(% in each types of smoker)&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+</div>
+<div id="poverty-status" class="section level4">
+<h4>Poverty status</h4>
+<div id="plot-6" class="section level5">
+<h5>Plot</h5>
+<pre class="r"><code>smoke_df %&gt;% 
+  drop_na(poverty_group) %&gt;% 
+  group_by(poverty_group,smoker) %&gt;% 
+  summarize(
+    count = n(),
+  ) %&gt;% 
+  mutate(
+    smokegroup_count = smokegroup_count,
+    poverty_percent = count/smokegroup_count,
+    smoker = fct_reorder(smoker,count)) %&gt;% 
+  ggplot(aes(x = smoker, y = poverty_percent, fill = poverty_group)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;Poverty groups&#39;,
+      title = &#39;Poverty groups among people in different smoking status&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 </div>
 </div>
 </div>
