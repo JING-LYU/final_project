@@ -181,7 +181,7 @@ dat =
 ```
 
 ```{r}
-#| my-chunk, echo = FALSE, fig.width = 10,
+#| my-chunk1, echo = FALSE, fig.width = 10,
 
 # plot
 ggbarstats(
@@ -214,7 +214,10 @@ $H_1$ : insurance type and age are dependent, there is a relationship between th
 dat = 
   dataset_basic %>%
   drop_na(agegroup,insure) 
+```
 
+```{r}
+#| my-chunk2, echo = FALSE, fig.width = 10,
 ggbarstats(
   data = dat,
   x = smoker,
@@ -223,7 +226,7 @@ ggbarstats(
 ) +
   labs(caption = NULL) +
   theme(
-    axis.text.x = element_text(angle = 30, vjust = .5, hjust = 1)
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) 
 
 ```
@@ -250,7 +253,10 @@ $H_1$ : insurance type and have children or not are dependent, there is a relati
 dat = 
   dataset_basic %>%
   drop_na(child,insure)
+```
 
+```{r}
+#| my-chunk3, echo = FALSE, fig.width = 10,
 
 ggbarstats(
   data = dat,
