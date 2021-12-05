@@ -120,13 +120,11 @@ Row {data-height = 500}
 
 ```{r}
 renderPlotly({
-predict_data = tibble(smoker = "1",
-                      children_group = "1",
+predict_data = tibble(smoker = if_else(input[["smoke_or_not"]] == "Yes","1", "0"),
+                      children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"),
                       age = input[["age_choice"]],
                       bmi = input[["BMI_choice"]]
-                      ) %>% 
-  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes",smoker, "0"),
-         children_group = if_else(input[["have_kids_or_not"]] == "Yes", children_group, "0"))
+                      ) 
 
 result = predict(model_log,predict_data,interval = "confidence") %>% 
   as_tibble() %>% 
@@ -154,13 +152,11 @@ ggplotly(result)
 
 ```{r}
 renderPrint({
- predict_data = tibble(smoker = "1",
-                      children_group = "1",
+ predict_data = tibble(smoker = if_else(input[["smoke_or_not"]] == "Yes","1", "0"),
+                      children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"),
                       age = input[["age_choice"]],
                       bmi = input[["BMI_choice"]]
-                      ) %>% 
-  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes","1", "0"),
-         children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"))
+                      )
 
 result = predict(model_log,predict_data,interval = "confidence") %>% 
   as_tibble() %>% 
@@ -185,13 +181,11 @@ cat(fit_out, ci_out, sep = "\n")
 
 ```{r}
 renderPrint({
-  predict_data = tibble(smoker = "1",
-                      children_group = "1",
+  predict_data = tibble(smoker = if_else(input[["smoke_or_not"]] == "Yes","1", "0"),
+                      children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"),
                       age = input[["age_choice"]],
                       bmi = input[["BMI_choice"]]
-                      ) %>% 
-  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes","1", "0"),
-         children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"))
+                      )
 
 result = predict(model_log,predict_data,interval = "confidence") %>% 
   as_tibble() %>% 
