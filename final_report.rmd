@@ -71,25 +71,25 @@ For **Community Health Survey Public Use Data**, we select year 2014-2016 and va
 chs16 = read_sas("data/chs2016_public.sas7bdat")
 
 chs16_filter = chs16 %>% 
-  select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
+  dplyr::select(agegroup,generalhealth,insuredgateway16,insure16,insured,insure5,sickadvice16,sickplace,didntgetcare16,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2016) %>% 
-  rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
+  dplyr::rename(insuredgateway = insuredgateway16, insure = insure16,sickadvice = sickadvice16,didntgetcare = didntgetcare16)
 
 
 chs15 = read_sas("data/chs2015_public.sas7bdat")
 
 chs15_filter = chs15 %>% 
-  select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
+  dplyr::select(agegroup,generalhealth,insuredgateway15,insure15,insured,insure5,sickadvice15,sickplace,didntgetcare15,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2015) %>% 
-  rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
+  dplyr::rename(insuredgateway = insuredgateway15, insure = insure15,sickadvice = sickadvice15,didntgetcare = didntgetcare15)
 
 
 chs14 = read_sas("data/chs2014_public.sas7bdat")
 
 chs14_filter = chs14 %>% 
-  select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
+  dplyr::select(agegroup,generalhealth,insuredgateway14,insure14,insured,insure5,sickadvice14,sickplace,didntgetcare14,smoker,everyday,numberperdaya,cost20cigarettes,imputed_povertygroup ,bmi,child,sex) %>% 
   mutate(year = 2014) %>% 
-  rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
+  dplyr::rename(insuredgateway = insuredgateway14, insure = insure14,sickadvice = sickadvice14,didntgetcare = didntgetcare14)
 
 
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
@@ -99,7 +99,7 @@ chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
 
 ```{r}
 dataset_basic = chs_14_16 %>% 
-  select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
+  dplyr::select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
   mutate(numberperdaya = round(numberperdaya,1),
          imputed_povertygroup = factor(imputed_povertygroup),
          child = factor(child,levels = c(1,2)),
@@ -171,7 +171,7 @@ var <- c("smoker", "children_group", "sex", "age", "bmi", "charges")
 var_meaning <- c("0 = non-smoker, 1 = smoker", "0 = No children, 1 = Have at least 1 child", "1 = male, 2 = female", "Age range from 18 to 63", "Body mass index range from 15.96 to 53.13", "Cost of health insurance")
 
 var_info <- data.frame(var, var_meaning) %>% 
-  rename(
+  dplyr::rename(
     "Variable name" = var,
     "Variable information" = var_meaning
   )
@@ -393,7 +393,7 @@ leaflet(health_center) %>%
 **Time of operation and walk-in:**
 ```{r}
 health_center_table = health_center %>% 
-  select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  dplyr::select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
   mutate(
     accept_walk_ins = c(rep("Yes",11))
   ) %>% 
@@ -401,7 +401,7 @@ health_center_table = health_center %>%
     health_center, days_of_operation, hours_of_operation, accept_walk_ins,
     street_address, telephone_number
     ) %>% 
-  rename(
+  dplyr::rename(
     "Health Center name" = health_center,
     "Street address" = street_address,
     "Telephone number" = telephone_number,
@@ -438,13 +438,13 @@ leaflet(insurance_agency) %>%
 **Time of operation and walk-in:**
 ```{r}
 insurance_agency_table =insurance_agency %>% 
-  select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  dplyr::select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
   
   relocate(
     insurance_agency, days_of_operation, hours_of_operation, accept_walk_ins,
     street_address, telephone_number
     ) %>% 
-  rename(
+  dplyr::rename(
     "Insurance agency name" = insurance_agency,
     "Street address" = street_address,
     "Telephone number" = telephone_number,
