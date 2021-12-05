@@ -82,7 +82,7 @@ dataset_basic = chs_14_16 %>%
          agegroup = factor(agegroup,ordered = TRUE),
          imputed_povertygroup = factor(imputed_povertygroup,levels = c(1,2,3,4,5))
          )
-#write_csv(dataset_basic,"data/dataset_basic.csv")
+write_csv(dataset_basic,"data/dataset_basic.csv")
 ```
 
 
@@ -90,6 +90,8 @@ dataset_basic = chs_14_16 %>%
 ## About smoking
 
 ```{r}
+
+dataset_basic = read_csv("data/dataset_basic.csv")
 
 smoke_df = dataset_basic %>% 
   select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,poverty_group = imputed_povertygroup,bmi,child,sex) %>% 
