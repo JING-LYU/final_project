@@ -530,6 +530,10 @@ During the prediction model building process, we found that when holding all oth
 
 ## Citation
 
+Department of Health and Mental Hygiene. (2018, June 20). Primary care access and planning - health insurance enrollment: NYC Open Data. Primary Care Access and Planning - Health Insurance Enrollment | NYC Open Data. Retrieved December 5, 2021, from https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h. 
+
+Health Insurance Companies - eHealth. (n.d.). Retrieved December 5, 2021, from https://www.ehealthinsurance.com/health-insurance-companies. 
+
 What you need to know about smoking and health insurance. HealthMarkets. (n.d.). Retrieved December 5, 2021, from https://www.healthmarkets.com/content/smoking-and-health-insurance. 
 
 What's Medicare? Medicare. (n.d.). Retrieved December 5, 2021, from https://www.medicare.gov/what-medicare-covers/your-medicare-coverage-choices/whats-medicare. 
