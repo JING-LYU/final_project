@@ -13,11 +13,14 @@ library(olsrr)
 library(MASS) # boxcox
 library(plotly)
 library(plyr)
+library(leaflet)
+library(rvest)
+library(httr)
 ```
 
 ## Motivation: 
 
- It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.
+It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.
 
 Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, our research topic can be divided into three research questions. We would like to investigate if smokers in NYC tend to get insurance, what type of insurance they prefer, and the factors that affect insurance cost. 
 
@@ -266,7 +269,6 @@ model_log
 ```
 
 
-
 #### Diagnostic for transformed model
 
 ```{r}
@@ -293,6 +295,124 @@ summary(model_log) %>%
 #### Decode the model estimates
 
 Holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
+
+## Additional visualization
+
+### Mapping
+
+#### Health center location mapping
+
+For general public seeking assistance with signing up for health insurance or SNAP (Supplemental Nutrition Assistance Program), here is a mapping of health center locations, where health insurance enrollment and assistance with SNAP benefits (Food Stamps) are offered.
+
+```{r, echo = FALSE}
+health_center = read.csv("data/health_center.csv") %>% 
+  janitor::clean_names() 
+```
+
+```{r leaflet mapping}
+leaflet(health_center) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
+  addMarkers(lat = ~latitude, 
+             lng = ~longitude, 
+             popup = paste("Health Center name:", health_center$health_center, "<br>", "Street address:", health_center$street_address, "<br>", "Telephone number:", health_center$telephone_number, "<br>", "Borough:", health_center$borough),
+             clusterOptions = markerClusterOptions())
+```
+
+<br>
+**Time of operation and walk-in:**
+```{r}
+health_center_table = health_center %>% 
+  select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  mutate(
+    accept_walk_ins = c(rep("Yes",11))
+  ) %>% 
+  relocate(
+    health_center, days_of_operation, hours_of_operation, accept_walk_ins,
+    street_address, telephone_number
+    ) %>% 
+  rename(
+    "Health Center name" = health_center,
+    "Street address" = street_address,
+    "Telephone number" = telephone_number,
+    "Days of operation" = days_of_operation,
+    "Hours of operation" = hours_of_operation,
+    "Accept walk in" = accept_walk_ins
+  )
+  
+rmarkdown::paged_table(health_center_table)
+```
+
+#### Insurance agency location mapping
+
+This map shows the locations of major health insurance carriers in NYC.
+
+<img src="images/insurance_agency.jpeg" style="width:70%">
+
+```{r, echo = FALSE}
+insurance_agency = read.csv("data/insurance_agency.csv") %>% 
+  na.omit() %>% 
+  janitor::clean_names() 
+```
+
+```{r}
+leaflet(insurance_agency) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
+  addMarkers(lat = ~latitude, 
+             lng = ~longitude, 
+             popup = paste("Insurance agency name:", insurance_agency$insurance_agency, "<br>", "Street address:", insurance_agency$street_address, "<br>", "Telephone number:", insurance_agency$telephone_number, "<br>", "Borough:", insurance_agency$borough),
+             clusterOptions = markerClusterOptions())
+```
+
+<br>
+**Time of operation and walk-in:**
+```{r}
+insurance_agency_table =insurance_agency %>% 
+  select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  
+  relocate(
+    insurance_agency, days_of_operation, hours_of_operation, accept_walk_ins,
+    street_address, telephone_number
+    ) %>% 
+  rename(
+    "Insurance agency name" = insurance_agency,
+    "Street address" = street_address,
+    "Telephone number" = telephone_number,
+    "Days of operation" = days_of_operation,
+    "Hours of operation" = hours_of_operation,
+    "Accept walk in" = accept_walk_ins
+  )
+  
+rmarkdown::paged_table(insurance_agency_table)
+```
+
+#### Medicaid location mapping
+
+Medicaid provides health coverage to low-income people, including eligible low-income adults, children, pregnant women, elderly adults and people with disabilities. Medicaid is one of the largest payers for health care in the United States and is administered by states, according to federal requirements. The program is funded jointly by states and the federal government.
+
+```{r, echo = FALSE, message = FALSE}
+medicaid_provider = GET("https://health.data.ny.gov/resource/keti-qx5t.csv",
+                        query = list("$limit" = 10000)) %>% 
+  content("parsed")
+
+medicaid = medicaid_provider %>% 
+  janitor::clean_names() %>% 
+  #drop_na() %>% 
+  filter(state == "NY") %>% 
+  filter(city %in% c("NEW YORK", "FLUSHING", "BRONX", "BROOKLYN", "STATEN ISLAND")) %>% 
+  filter(county %in%  c("NEW YORK", "QUEENS", "BRONX", "BROOKLYN", "STATEN ISLAND")) %>% 
+  subset(!(telephone %in% c(3155365160, 8458875530, 2129871777, 2128971994,2127723111)))
+
+```
+
+
+```{r, echo = FALSE, warning=FALSE}
+leaflet(medicaid) %>% 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) %>% 
+  addMarkers(lat = ~latitude, 
+             lng = ~longitude, 
+             popup = paste("Provider name:", medicaid$mmis_name, "<br>", "Street address:", medicaid$service_address, "<br>", "Telephone number:", medicaid$telephone),
+             clusterOptions = markerClusterOptions())
+```
 
 
 ## Discussion: 
