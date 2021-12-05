@@ -34,24 +34,11 @@ scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
-```{r message=FALSE}
-ataset_basic = read_csv("data/dataset_basic.csv")
+```{r, message=FALSE}
 
-dataset_basic = read_csv("data/dataset_basic.csv") %>% 
-  mutate(
-         child = factor(child,levels = c(1,2),labels = c("yes","no")),
-         sex = factor(sex,labels = c("male","female")),
-         insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured")),
-         smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
-         agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs"))
-         ) %>% 
-  select(insure,agegroup,smoker,bmi,child,sex)
-```
+dataset_basic = read_csv("data/dataset_basic.csv")
 
-
-```{r message=FALSE}
-
-smoke_df = read_csv("data/dataset_basic.csv") %>% 
+smoke_df = dataset_basic %>% 
   select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,poverty_group = imputed_povertygroup,bmi,child,sex) %>% 
   drop_na(smoker) %>% 
   mutate(
@@ -69,6 +56,18 @@ smoke_df = read_csv("data/dataset_basic.csv") %>%
          )
 
 current_smoker = smoke_df %>% filter(smoker == "current")
+
+dataset_basic = dataset_basic %>% 
+  mutate(
+         child = factor(child,levels = c(1,2),labels = c("yes","no")),
+         sex = factor(sex,labels = c("male","female")),
+         insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured")),
+         smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs"))
+         ) %>% 
+  select(insure,agegroup,smoker,bmi,child,sex)
+
+
 ```
 
 
@@ -78,7 +77,7 @@ current_smoker = smoke_df %>% filter(smoker == "current")
 
 ##### **Distribution**
 
-```{r message=FALSE}
+```{r message=FALSE} 
 analyse_smoke_insurancetype = 
   dataset_basic %>%
   drop_na(smoker,insure) %>% 
@@ -140,7 +139,7 @@ ggbarstats(
 
 
 #### Age
-##### **Distribution**
+##### Plot
 
 ```{r message=FALSE}
 analyse_agegroup_insurancetype = 
@@ -200,8 +199,7 @@ ggbarstats(
 ```
 
 #### Have children or not
-##### **Distribution**
-
+##### Plot
 ```{r message=FALSE}
 analyse_children_insurancetype = 
   dataset_basic %>%
@@ -261,7 +259,7 @@ ggbarstats(
 ```
 
 #### BMI
-##### **Distribution**
+##### Plot
 
 ```{r message=FALSE}
 analyse_bmi_insurancetype = 
@@ -294,6 +292,7 @@ Tukey_comp = TukeyHSD(anova)
 Tukey_comp 
 plot(Tukey_comp)
 ```
+
 
 
 ### Exploration on smoking status {.tabset}
@@ -379,8 +378,7 @@ smoke_df %>%
 
 ##### Smoking intensity and frequency
 
-
-```{r message=FALSE, warning=FALSE}
+```{r}
 current_smoker %>%
   ggplot(aes(x = smoker_cat, fill = everyday))+
   geom_histogram(stat="count") +
@@ -391,7 +389,7 @@ current_smoker %>%
 ```
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 current_smoker %>% 
   ggplot(aes(x = numberperdaya, fill = everyday)) + 
   geom_histogram(alpha = .7)+
@@ -405,9 +403,28 @@ current_smoker %>%
 ```
 
 
-#### Cost on smoke
+```{r}
+current_smoker %>% 
+  ggplot(aes(x = cost20cigarettes, fill = smoker_cat)) + 
+  geom_histogram(alpha = .7)+
+  xlim(0,20)+
+  labs(
+    x = "Cost on each pack (20 cigarattes)",
+    y = "Number of smokers",
+    title = "Cost on each pack (20 cigarattes) consumed by current smokers"
+       )
+  theme(legend.position = "bottom") 
+  
+  
 
-```{r message=FALSE, warning=FALSE}
+current_smoker %>%
+  ggplot(aes(x = smoker_cat, y = cost20cigarettes, fill = smoker_cat))+
+  geom_violin() +
+    labs(
+      x = 'Type of smokers',
+      y = 'Cost of every 20 (one pack) cigrattes',
+      title = 'Cost of every 20 (one pack) cigrattes\namong different type of smokers')
+  
   
 current_smoker %>% 
   ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday))+
@@ -422,24 +439,6 @@ current_smoker %>%
 
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
