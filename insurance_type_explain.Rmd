@@ -13,6 +13,7 @@ library(tidyverse)
 
 ## Table
 
+
 ```{r}
 insur_type <- c("Employer", "Medicare", "Milit/CHAMPUS", "Uninsured", "Self-purchased", "Medicaid/Family Health+", "COBRA/other")
 
