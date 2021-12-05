@@ -52,7 +52,7 @@ dataset_basic = read_csv("data/dataset_basic.csv") %>%
 
 ##### **Distribution**
 
-```{r message=FALSE}
+```{r message=FALSE} 
 analyse_smoke_insurancetype = 
   dataset_basic %>%
   drop_na(smoker,insure) %>% 
@@ -114,7 +114,7 @@ ggbarstats(
 
 
 #### Age
-##### Plot
+##### **Distribution**
 
 ```{r message=FALSE}
 analyse_agegroup_insurancetype = 
@@ -174,7 +174,8 @@ ggbarstats(
 ```
 
 #### Have children or not
-##### Plot
+##### **Distribution**
+
 ```{r message=FALSE}
 analyse_children_insurancetype = 
   dataset_basic %>%
@@ -234,7 +235,7 @@ ggbarstats(
 ```
 
 #### BMI
-##### Plot
+##### **Distribution**
 
 ```{r message=FALSE}
 analyse_bmi_insurancetype = 
