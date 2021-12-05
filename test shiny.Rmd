@@ -49,6 +49,16 @@ cost_df = cost_df %>%
 
 ```
 
+```{r build model}
+cost_df_out = cost_df[-c(544,578, 1301),]
+cost_df_log = cost_df_out %>% 
+  mutate(
+    Lncharges = log(charges)
+  ) 
+model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_log) 
+```
+
+
 Column {.sidebar}
 -----------------------------------------------------------------------
 
@@ -101,20 +111,15 @@ radioButtons(
   selected = "Yes"
 )
 ```
-Column {data-width=650}
+
+
+Row {data-height = 500}
 -----------------------------------------------------------------------
 
 ### Chart A
 
 ```{r}
 renderPlotly({
-cost_df_out = cost_df[-c(544,578, 1301),]
-cost_df_log = cost_df_out %>% 
-  mutate(
-    Lncharges = log(charges)
-  ) 
-model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_log) 
-
 predict_data = tibble(smoker = "1",
                       children_group = "1",
                       age = input[["age_choice"]],
@@ -143,3 +148,32 @@ result = predict(model_log,predict_data,interval = "confidence") %>%
 ggplotly(result)
 })
 ```
+
+
+### Chart B
+
+```{r}
+renderText({
+ predict_data = tibble(smoker = "1",
+                      children_group = "1",
+                      age = input[["age_choice"]],
+                      bmi = input[["BMI_choice"]]
+                      ) %>% 
+  mutate(smoker = if_else(input[["smoke_or_not"]] == "Yes","1", "0"),
+         children_group = if_else(input[["have_kids_or_not"]] == "Yes", "1", "0"))
+
+result = predict(model_log,predict_data,interval = "confidence") %>% 
+  as_tibble() %>% 
+  mutate(
+    fit = exp(fit),
+    lwr = exp(lwr),
+    upr = exp(upr)
+  )
+fit_out = paste("Your predicted insurance premium is", as.character(result$fit))
+ci_out = paste("Your recommended annal insurance premium range is ", as.character(result$lwr), "to", as.character(result$upr))
+paste(fit_out, ci_out, collapse = "</br>")
+
+#paste("Your predicted insurance premium is", as.character(result$fit),\n, "Your recommended annal insurance premium range is ", as.character(result$lwr), "to", as.character(result$upr))
+})
+```
+
