@@ -253,23 +253,11 @@ $(document).ready(function () {
         <li>
   <a href="exploration.html">Data exploration</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Model building
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="model-building.html">? model building</a>
-    </li>
-    <li>
-      <a href="medical_cost.html">Insurance cost model building</a>
-    </li>
-  </ul>
+<li>
+  <a href="medical_cost.html">Model building</a>
 </li>
 <li>
-  <a href="analysis.html">Analysis and discussion</a>
+  <a href="discussion.html">Discussion</a>
 </li>
 <li>
   <a href="mapping.html">Mapping</a>
@@ -278,7 +266,7 @@ $(document).ready(function () {
   <a href="report.html">Report</a>
 </li>
 <li>
-  <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Dashboard</a>
+  <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Shiny Dashboard</a>
 </li>
 <li>
   <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
@@ -343,8 +331,210 @@ dataset_basic = read_csv(&quot;data/dataset_basic.csv&quot;) %&gt;%
          )
 
 current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)</code></pre>
+<div id="knowledge-about-insurance-in-our-dataset" class="section level2">
+<h2>1. Knowledge about <strong>insurance</strong> in our dataset</h2>
+<div id="holding-status-of-insurace-among-participants" class="section level3">
+<h3>Holding status of insurace among participants</h3>
+<pre class="r"><code>insurehold = read_csv(&quot;data/dataset_basic.csv&quot;) %&gt;% 
+  drop_na() %&gt;% 
+  mutate(
+  insuredgateway = factor(insuredgateway, levels = c(1,2), labels = c(&quot;yes&quot;, &quot;no&quot;))) %&gt;% 
+  ggplot(aes(x = insuredgateway,fill = insuredgateway))+
+  geom_bar()+
+  labs(
+    x = &quot;Hold status of insurance&quot;,
+    y = &quot;Number of participants&quot;,
+    title = &quot;Holding status of insurace among participants&quot;)</code></pre>
+</div>
+<div id="type-of-insurance" class="section level3">
+<h3>Type of insurance</h3>
+<pre class="r"><code>insuretype = dataset_basic %&gt;% 
+  drop_na() %&gt;% 
+  mutate(insure = fct_infreq(insure)) %&gt;% 
+  ggplot(aes(x = insure,fill = insure))+
+  geom_bar()+
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    x = &quot;Insurance type&quot;,
+    y = &quot;Number of holders&quot;,
+    title = &quot;Number of holders in each insurance type&quot;) + 
+  coord_flip()</code></pre>
+<p><img src="exploration_files/figure-html/my-chunkhaha-1.png" width="90%" /></p>
+<pre class="r"><code>insur_type &lt;- c(&quot;Employer&quot;, &quot;Medicare&quot;, &quot;Milit/CHAMPUS&quot;, &quot;Uninsured&quot;, &quot;Self-purchased&quot;, &quot;Medicaid/Family Health+&quot;, &quot;COBRA/other&quot;)
+
+insur_meaning &lt;- c(&quot;Employer-sponsored health insurance is a health insurance selected and purchased by your employer and offered to eligible employees and their dependents.&quot;,
+                   &quot;Medicare is federal health insurance for people 65 or older, some younger people with disabilities, people with End-Stage Renal Disease&quot;,
+                   &quot;Health Care progam for military&quot;,
+                   &quot;Not insured&quot;,
+                   &quot;Insurance purchased by individual choice&quot;,
+                   &quot;Medicaid/health insurance program for adults who are aged 19 to 64 who have income too high to qualify for Medicaid&quot;,
+                   &quot;Consolidated Omnibus Budget Reconciliation Act, which gives some employees the ability to continue health insurance coverage after leaving employment, or other types of insurance.&quot;)
+
+insur &lt;- data.frame(insur_type, insur_meaning) %&gt;% 
+  dplyr::rename(
+    &quot;Insurance type&quot; = insur_type,
+    &quot;Insurance type meaning&quot; = insur_meaning
+  )
+knitr::kable(insur)</code></pre>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Insurance type</th>
+<th align="left">Insurance type meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Employer</td>
+<td align="left">Employer-sponsored health insurance is a health insurance selected and purchased by your employer and offered to eligible employees and their dependents.</td>
+</tr>
+<tr class="even">
+<td align="left">Medicare</td>
+<td align="left">Medicare is federal health insurance for people 65 or older, some younger people with disabilities, people with End-Stage Renal Disease</td>
+</tr>
+<tr class="odd">
+<td align="left">Milit/CHAMPUS</td>
+<td align="left">Health Care progam for military</td>
+</tr>
+<tr class="even">
+<td align="left">Uninsured</td>
+<td align="left">Not insured</td>
+</tr>
+<tr class="odd">
+<td align="left">Self-purchased</td>
+<td align="left">Insurance purchased by individual choice</td>
+</tr>
+<tr class="even">
+<td align="left">Medicaid/Family Health+</td>
+<td align="left">Medicaid/health insurance program for adults who are aged 19 to 64 who have income too high to qualify for Medicaid</td>
+</tr>
+<tr class="odd">
+<td align="left">COBRA/other</td>
+<td align="left">Consolidated Omnibus Budget Reconciliation Act, which gives some employees the ability to continue health insurance coverage after leaving employment, or other types of insurance.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="knowledge-about-smoker-in-our-dataset" class="section level3 tabset">
+<h3 class="tabset">2. Knowledge about <strong>smoker</strong> in our dataset</h3>
+<div id="age-distribution" class="section level4">
+<h4>Age distribution</h4>
+<div id="plot" class="section level5">
+<h5>Plot</h5>
+<pre class="r"><code>smoke_df %&gt;% 
+  drop_na(agegroup) %&gt;% 
+  group_by(agegroup,smoker) %&gt;% 
+  summarize(
+    count = n(),
+  ) %&gt;% 
+  mutate(smoker = fct_reorder(smoker,count)) %&gt;% 
+  ggplot(aes(x = smoker, y = count, fill = agegroup)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;Number of smokers&#39;,
+      title = &#39;Age distribution among people in different smoking status&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+</div>
+</div>
+<div id="health-self-evaluation" class="section level4">
+<h4>Health self-evaluation</h4>
+<div id="plot-1" class="section level5">
+<h5>Plot</h5>
+<pre class="r"><code>smokegroup_count = smoke_df %&gt;% 
+  drop_na(smoker) %&gt;% 
+  group_by(smoker) %&gt;% 
+  summarize(
+    smokegroup_count = n()) %&gt;% 
+  pull()
+
+smoke_df %&gt;% 
+  drop_na(generalhealth) %&gt;% 
+  group_by(generalhealth,smoker) %&gt;% 
+  summarize(
+    count = n())%&gt;% 
+  mutate(smokegroup_count = smokegroup_count,
+         health_percent = count/smokegroup_count)%&gt;% 
+  ggplot(aes(x = smoker, y = health_percent, fill = generalhealth)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;Health self-evaluation \n(% in each types of smoker)&#39;,
+      title = &#39;Self-evaluation of health conditions among people in different smoking status\n(% in each types of smoker)&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
+</div>
+</div>
+<div id="poverty-status" class="section level4">
+<h4>Poverty status</h4>
+<div id="plot-2" class="section level5">
+<h5>Plot</h5>
+<pre class="r"><code>smoke_df %&gt;% 
+  drop_na(poverty_group) %&gt;% 
+  group_by(poverty_group,smoker) %&gt;% 
+  summarize(
+    count = n(),
+  ) %&gt;% 
+  mutate(
+    smokegroup_count = smokegroup_count,
+    poverty_percent = count/smokegroup_count,
+    smoker = fct_reorder(smoker,count)) %&gt;% 
+  ggplot(aes(x = smoker, y = poverty_percent, fill = poverty_group)) + 
+  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;Poverty groups&#39;,
+      title = &#39;Poverty groups among people in different smoking status&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+</div>
+</div>
+<div id="current-smokers" class="section level4">
+<h4>Current smokers</h4>
+<div id="smoking-intensity-and-frequency" class="section level5">
+<h5>Smoking intensity and frequency</h5>
+<pre class="r"><code>current_smoker %&gt;%
+  ggplot(aes(x = smoker_cat, fill = everyday))+
+  geom_histogram(stat=&quot;count&quot;) +
+    labs(
+      x = &#39;Type of current smokers&#39;,
+      y = &#39;Number of smokers in each type&#39;,
+      title = &#39;Number of current smokers of diffirent types&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-10-1.png" width="90%" /></p>
+<pre class="r"><code>current_smoker %&gt;% 
+  ggplot(aes(x = numberperdaya, fill = everyday)) + 
+  geom_histogram(alpha = .7)+
+  xlim(0,30)+
+  labs(
+    x = &quot;Average number of cigarattes smoked per day&quot;,
+    y = &quot;Number of smokers&quot;,
+    title = &quot;Average number of cigarattes smoked per day by current smokers&quot;
+       )+
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
+</div>
+</div>
+<div id="cost-on-smoke" class="section level4">
+<h4>Cost on smoke</h4>
+<pre class="r"><code>current_smoker %&gt;% 
+  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday))+
+  geom_point(alpha = .5,size = 3) +
+  xlim(0,50)+
+  ylim(0,40)+
+  #facet_grid(.~smoker_cat,scales = &quot;free&quot;) +
+    labs(
+      x = &#39;Number of cigrattes consumed everyday&#39;,
+      y = &#39;Cost of every 20 (one pack) cigrattes&#39;,
+      title = &#39;Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday&#39;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
+<p><br></p>
+</div>
+</div>
+</div>
 <div id="explore-relationship-between-insurance-and-target-variables" class="section level2">
-<h2>1. Explore relationship between <code>insurance</code> and target variables</h2>
+<h2>3. Explore relationship between <code>insurance</code> and target variables</h2>
 <p><br></p>
 <div id="distributions" class="section level3 tabset">
 <h3 class="tabset">Distributions</h3>
@@ -365,7 +555,7 @@ analyse_smoke_insurancetype %&gt;%
       x = &#39;smoking group &#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance in different smoking group &#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="age" class="section level4">
@@ -385,7 +575,7 @@ analyse_agegroup_insurancetype %&gt;%
       x = &#39;agegroup&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance type in differnt agegroup&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="have-children-or-not" class="section level4">
@@ -405,7 +595,7 @@ analyse_children_insurancetype %&gt;%
       x = &#39;child&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance type in groups of people with or without children&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-15-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="bmi" class="section level4">
@@ -428,7 +618,7 @@ analyse_bmi_insurancetype %&gt;%
       y = &#39;bmi&#39;,
       title = &#39;The distribution of bmi in groups having different insurance type&#39;) +
   coord_flip()</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-16-1.png" width="90%" /></p>
 <p><br></p>
 </div>
 </div>
@@ -524,121 +714,9 @@ anova %&gt;%
 <pre class="r"><code>Tukey_comp = TukeyHSD(anova)
 
 plot(Tukey_comp)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-23-1.png" width="90%" /></p>
 <p><br></p>
 </div>
-</div>
-</div>
-<div id="exploration-of-smoking-data" class="section level3 tabset">
-<h3 class="tabset">Exploration of smoking data</h3>
-<div id="age-distribution" class="section level4">
-<h4>Age distribution</h4>
-<div id="plot" class="section level5">
-<h5>Plot</h5>
-<pre class="r"><code>smoke_df %&gt;% 
-  drop_na(agegroup) %&gt;% 
-  group_by(agegroup,smoker) %&gt;% 
-  summarize(
-    count = n(),
-  ) %&gt;% 
-  mutate(smoker = fct_reorder(smoker,count)) %&gt;% 
-  ggplot(aes(x = smoker, y = count, fill = agegroup)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;Smoking status&#39;,
-      y = &#39;Number of smokers&#39;,
-      title = &#39;Age distribution among people in different smoking status&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
-</div>
-</div>
-<div id="health-self-evaluation" class="section level4">
-<h4>Health self-evaluation</h4>
-<div id="plot-1" class="section level5">
-<h5>Plot</h5>
-<pre class="r"><code>smokegroup_count = smoke_df %&gt;% 
-  drop_na(smoker) %&gt;% 
-  group_by(smoker) %&gt;% 
-  summarize(
-    smokegroup_count = n()) %&gt;% 
-  pull()
-
-smoke_df %&gt;% 
-  drop_na(generalhealth) %&gt;% 
-  group_by(generalhealth,smoker) %&gt;% 
-  summarize(
-    count = n())%&gt;% 
-  mutate(smokegroup_count = smokegroup_count,
-         health_percent = count/smokegroup_count)%&gt;% 
-  ggplot(aes(x = smoker, y = health_percent, fill = generalhealth)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;Smoking status&#39;,
-      y = &#39;Health self-evaluation \n(% in each types of smoker)&#39;,
-      title = &#39;Self-evaluation of health conditions among people in different smoking status\n(% in each types of smoker)&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-15-1.png" width="90%" /></p>
-</div>
-</div>
-<div id="poverty-status" class="section level4">
-<h4>Poverty status</h4>
-<div id="plot-2" class="section level5">
-<h5>Plot</h5>
-<pre class="r"><code>smoke_df %&gt;% 
-  drop_na(poverty_group) %&gt;% 
-  group_by(poverty_group,smoker) %&gt;% 
-  summarize(
-    count = n(),
-  ) %&gt;% 
-  mutate(
-    smokegroup_count = smokegroup_count,
-    poverty_percent = count/smokegroup_count,
-    smoker = fct_reorder(smoker,count)) %&gt;% 
-  ggplot(aes(x = smoker, y = poverty_percent, fill = poverty_group)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;Smoking status&#39;,
-      y = &#39;Poverty groups&#39;,
-      title = &#39;Poverty groups among people in different smoking status&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-16-1.png" width="90%" /></p>
-</div>
-</div>
-<div id="current-smokers" class="section level4">
-<h4>Current smokers</h4>
-<div id="smoking-intensity-and-frequency" class="section level5">
-<h5>Smoking intensity and frequency</h5>
-<pre class="r"><code>current_smoker %&gt;%
-  ggplot(aes(x = smoker_cat, fill = everyday))+
-  geom_histogram(stat=&quot;count&quot;) +
-    labs(
-      x = &#39;Type of current smokers&#39;,
-      y = &#39;Number of smokers in each type&#39;,
-      title = &#39;Number of current smokers of diffirent types&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
-<pre class="r"><code>current_smoker %&gt;% 
-  ggplot(aes(x = numberperdaya, fill = everyday)) + 
-  geom_histogram(alpha = .7)+
-  xlim(0,30)+
-  labs(
-    x = &quot;Average number of cigarattes smoked per day&quot;,
-    y = &quot;Number of smokers&quot;,
-    title = &quot;Average number of cigarattes smoked per day by current smokers&quot;
-       )+
-  theme(legend.position = &quot;bottom&quot;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-18-1.png" width="90%" /></p>
-</div>
-</div>
-<div id="cost-on-smoke" class="section level4">
-<h4>Cost on smoke</h4>
-<pre class="r"><code>current_smoker %&gt;% 
-  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday))+
-  geom_point(alpha = .5,size = 3) +
-  xlim(0,50)+
-  ylim(0,40)+
-  #facet_grid(.~smoker_cat,scales = &quot;free&quot;) +
-    labs(
-      x = &#39;Number of cigrattes consumed everyday&#39;,
-      y = &#39;Cost of every 20 (one pack) cigrattes&#39;,
-      title = &#39;Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-19-1.png" width="90%" /></p>
 </div>
 </div>
 </div>
