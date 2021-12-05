@@ -253,8 +253,20 @@ $(document).ready(function () {
         <li>
   <a href="exploration.html">Data exploration</a>
 </li>
-<li>
-  <a href="model-building.html">Model building</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Model building
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="model-building.html">? model building</a>
+    </li>
+    <li>
+      <a href="medical_cost.html">Insurance cost model building</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="analysis.html">Analysis and discussion</a>
@@ -264,6 +276,9 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="report.html">Report</a>
+</li>
+<li>
+  <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Dashboard</a>
 </li>
 <li>
   <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
@@ -300,6 +315,13 @@ $(document).ready(function () {
 
 
 <pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_update.csv&quot;) %&gt;% 
+  mutate(
+         child = factor(child,levels = c(1,2),labels = c(&quot;yes&quot;,&quot;no&quot;)),
+         sex = factor(sex,labels = c(&quot;male&quot;,&quot;female&quot;)),
+         insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c(&quot;Employer&quot;,&quot;Self-purchase&quot;,&quot;Medicare&quot;, &quot;Medicaid/Family Health+&quot;, &quot;Milit/CHAMPUS/Tricare&quot;, &quot;COBRA/Other&quot;, &quot;Uninsured&quot;)),
+         smoker = factor(smoker,levels = c(1,2,3),labels = c(&quot;never&quot;,&quot;current&quot;,&quot;former&quot;)),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c(&quot;18-24yrs&quot;,&quot;25-44yrs&quot;, &quot;45-64yrs&quot;, &quot;65+yrs&quot;))
+         ) %&gt;% 
   select(insure,agegroup,smoker,bmi,child,sex)</code></pre>
 <div id="variables-and-insurance" class="section level3 tabset">
 <h3 class="tabset">Variables and insurance</h3>
@@ -363,20 +385,20 @@ dat %$%
 <td align="center">
 <strong>smoker</strong>
 </td>
-<th colspan="4" align="center"> 1</th>
-<th colspan="4" align="center"> 2</th>
-<th colspan="4" align="center"> 3</th>
-<th colspan="4" align="center"> 4</th>
-<th colspan="4" align="center"> 5</th>
-<th colspan="4" align="center"> 6</th>
-<th colspan="4" align="center"> 7</th>
+<th colspan="4" align="center">Employer</th>
+<th colspan="4" align="center">Self-<br/>purchase</th>
+<th colspan="4" align="center">Medicare</th>
+<th colspan="4" align="center">Medicaid/<br/>Family <br/>Health+</th>
+<th colspan="4" align="center">Milit/<br/>CHAMPUS/<br/>Tricare</th>
+<th colspan="4" align="center">COBRA/Other</th>
+<th colspan="4" align="center">Uninsured</th>
 <th colspan="4" align="center">Total</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>
-<strong align="center"> 1</strong>
+<strong align="center">never</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">7158</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -413,7 +435,7 @@ dat %$%
 </tr>
 <tr>
 <td>
-<strong align="center"> 2</strong>
+<strong align="center">current</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1135</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -450,7 +472,7 @@ dat %$%
 </tr>
 <tr>
 <td>
-<strong align="center"> 3</strong>
+<strong align="center">former</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">2425</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -600,20 +622,20 @@ dat %$%
 <td align="center">
 <strong>agegroup</strong>
 </td>
-<th colspan="4" align="center"> 1</th>
-<th colspan="4" align="center"> 2</th>
-<th colspan="4" align="center"> 3</th>
-<th colspan="4" align="center"> 4</th>
-<th colspan="4" align="center"> 5</th>
-<th colspan="4" align="center"> 6</th>
-<th colspan="4" align="center"> 7</th>
+<th colspan="4" align="center">Employer</th>
+<th colspan="4" align="center">Self-<br/>purchase</th>
+<th colspan="4" align="center">Medicare</th>
+<th colspan="4" align="center">Medicaid/<br/>Family <br/>Health+</th>
+<th colspan="4" align="center">Milit/<br/>CHAMPUS/<br/>Tricare</th>
+<th colspan="4" align="center">COBRA/Other</th>
+<th colspan="4" align="center">Uninsured</th>
 <th colspan="4" align="center">Total</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>
-<strong align="center"> 1</strong>
+<strong align="center">18-24yrs</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">647</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -650,7 +672,7 @@ dat %$%
 </tr>
 <tr>
 <td>
-<strong align="center"> 2</strong>
+<strong align="center">25-44yrs</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3930</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -687,7 +709,7 @@ dat %$%
 </tr>
 <tr>
 <td>
-<strong align="center"> 3</strong>
+<strong align="center">45-64yrs</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">5005</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -724,7 +746,7 @@ dat %$%
 </tr>
 <tr>
 <td>
-<strong align="center"> 4</strong>
+<strong align="center">65+yrs</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1173</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -874,57 +896,20 @@ dat %$%
 <td align="center">
 <strong>child</strong>
 </td>
-<th colspan="4" align="center"> 1</th>
-<th colspan="4" align="center"> 2</th>
-<th colspan="4" align="center"> 3</th>
-<th colspan="4" align="center"> 4</th>
-<th colspan="4" align="center"> 5</th>
-<th colspan="4" align="center"> 6</th>
-<th colspan="4" align="center"> 7</th>
+<th colspan="4" align="center">Employer</th>
+<th colspan="4" align="center">Self-<br/>purchase</th>
+<th colspan="4" align="center">Medicare</th>
+<th colspan="4" align="center">Medicaid/<br/>Family <br/>Health+</th>
+<th colspan="4" align="center">Milit/<br/>CHAMPUS/<br/>Tricare</th>
+<th colspan="4" align="center">COBRA/Other</th>
+<th colspan="4" align="center">Uninsured</th>
 <th colspan="4" align="center">Total</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>
-<strong align="center"> 0</strong>
-</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6610</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">36.6%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1169</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.5%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4940</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">27.4%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3457</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.1%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">127</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.7%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">342</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1416</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.8%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">18061</td>
-<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
-<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
-<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
-</tr>
-<tr>
-<td>
-<strong align="center"> 1</strong>
+<strong align="center">yes</strong>
 </td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4119</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
@@ -955,6 +940,43 @@ dat %$%
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">12.8%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
 <td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">10067</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+</tr>
+<tr>
+<td>
+<strong align="center">no</strong>
+</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">6610</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">36.6%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1169</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">6.5%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">4940</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">27.4%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">3457</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">19.1%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">127</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">0.7%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">342</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">1.9%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">1416</td>
+<td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
+<td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">7.8%</td>
+<td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
+<td align="right" style="padding:0 0 0 15px;border-right:0;text-align:right">18061</td>
 <td align="left" style="padding:0 1px 0 4px;border-left:0;border-right:0;text-align:left">(</td>
 <td align="left" style="padding:0;border-left:0;border-right:0;text-align:right">100.0%</td>
 <td align="left" style="padding:0 15px 0 1px;border-left:0;text-align:right">)</td>
@@ -1011,7 +1033,6 @@ dat %$%
 ) +
   labs(caption = NULL) # remove caption</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<p>According to above chi-square test result We reject the null hypothesis and conclude that there’s at least one helath stutus group’s proportions of insurance type is different from others at 0.05 significant level.</p>
 </div>
 </div>
 <div id="bmi" class="section level4">
@@ -1025,8 +1046,10 @@ dat %$%
   
   
 analyse_bmi_insurancetype %&gt;% 
-  ggplot(aes(x = insure, y = bmi)) + 
-  geom_boxplot() +
+  ggplot(aes(x = insure, y = bmi,fill = insure)) + 
+  geom_boxplot(alpha = 0.3) +
+    theme(legend.position = &quot;none&quot;) +
+    scale_fill_brewer(palette = &quot;BuPu&quot;) +
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
@@ -1034,14 +1057,72 @@ analyse_bmi_insurancetype %&gt;%
       x = &#39;insurance&#39;,
       y = &#39;bmi&#39;,
       title = &#39;The distribution of bmi in groups having different insurance type&#39;)</code></pre>
-<pre><code>## Warning: Continuous x aesthetic -- did you forget aes(group=...)?</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 </div>
-<div id="anova-test-between-insurance-type-and-medical-care-accessibility" class="section level5">
-<h5>ANOVA test between insurance type and medical care accessibility</h5>
-<p><span class="math inline">\(H_0\)</span> : insurance type and bmi are independent, there is no relationship between the two categorical variables.</p>
-<p><span class="math inline">\(H_1\)</span> : insurance type and medical care accessibility are dependent, there is a relationship between the two categorical variables.</p>
+<div id="anova-test-between-insurance-type-and-bmi" class="section level5">
+<h5>ANOVA test between insurance type and BMI</h5>
 <p><em>Test result:</em></p>
+<pre class="r"><code>anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
+summary(anova)</code></pre>
+<pre><code>##                Df  Sum Sq Mean Sq F value   Pr(&gt;F)    
+## insure          6    2435   405.9   10.88 3.88e-12 ***
+## Residuals   26917 1003942    37.3                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>Tukey_comp = TukeyHSD(anova)
+Tukey_comp </code></pre>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = bmi ~ insure, data = analyse_bmi_insurancetype)
+## 
+## $insure
+##                                                      diff         lwr
+## Self-purchase-Employer                        -0.88485587 -1.37035824
+## Medicare-Employer                              0.24105414 -0.06081829
+## Medicaid/Family Health+-Employer               0.40206572  0.11583584
+## Milit/CHAMPUS/Tricare-Employer                 0.31164413 -1.11409717
+## COBRA/Other-Employer                          -0.16406141 -0.98858946
+## Uninsured-Employer                            -0.05805857 -0.45898559
+## Medicare-Self-purchase                         1.12591001  0.61209943
+## Medicaid/Family Health+-Self-purchase          1.28692159  0.78214254
+## Milit/CHAMPUS/Tricare-Self-purchase            1.19650000 -0.28863050
+## COBRA/Other-Self-purchase                      0.72079446 -0.20263440
+## Uninsured-Self-purchase                        0.82679730  0.24920158
+## Medicaid/Family Health+-Medicare               0.16101158 -0.17097684
+## Milit/CHAMPUS/Tricare-Medicare                 0.07058998 -1.36503775
+## COBRA/Other-Medicare                          -0.40511556 -1.24662329
+## Uninsured-Medicare                            -0.29911271 -0.73388994
+## Milit/CHAMPUS/Tricare-Medicaid/Family Health+ -0.09042159 -1.52284178
+## COBRA/Other-Medicaid/Family Health+           -0.56612713 -1.40215096
+## Uninsured-Medicaid/Family Health+             -0.46012429 -0.88419011
+## COBRA/Other-Milit/CHAMPUS/Tricare             -0.47570554 -2.10350975
+## Uninsured-Milit/CHAMPUS/Tricare               -0.36970270 -1.82937475
+## Uninsured-COBRA/Other                          0.10600284 -0.77589895
+##                                                       upr     p adj
+## Self-purchase-Employer                        -0.39935350 0.0000016
+## Medicare-Employer                              0.54292657 0.2183572
+## Medicaid/Family Health+-Employer               0.68829560 0.0006839
+## Milit/CHAMPUS/Tricare-Employer                 1.73738542 0.9953019
+## COBRA/Other-Employer                           0.66046663 0.9972050
+## Uninsured-Employer                             0.34286845 0.9995400
+## Medicare-Self-purchase                         1.63972059 0.0000000
+## Medicaid/Family Health+-Self-purchase          1.79170064 0.0000000
+## Milit/CHAMPUS/Tricare-Self-purchase            2.68163049 0.2090069
+## COBRA/Other-Self-purchase                      1.64422331 0.2431533
+## Uninsured-Self-purchase                        1.40439303 0.0004867
+## Medicaid/Family Health+-Medicare               0.49299999 0.7857101
+## Milit/CHAMPUS/Tricare-Medicare                 1.50621772 0.9999992
+## COBRA/Other-Medicare                           0.43639218 0.7915613
+## Uninsured-Medicare                             0.13566452 0.3965263
+## Milit/CHAMPUS/Tricare-Medicaid/Family Health+  1.34199859 0.9999965
+## COBRA/Other-Medicaid/Family Health+            0.26989670 0.4167846
+## Uninsured-Medicaid/Family Health+             -0.03605847 0.0233438
+## COBRA/Other-Milit/CHAMPUS/Tricare              1.15209867 0.9780791
+## Uninsured-Milit/CHAMPUS/Tricare                1.08996936 0.9895922
+## Uninsured-COBRA/Other                          0.98790464 0.9998440</code></pre>
+<pre class="r"><code>plot(Tukey_comp)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 </div>
 </div>
 </div>
