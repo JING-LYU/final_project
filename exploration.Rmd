@@ -52,7 +52,7 @@ dataset_basic = read_csv("data/dataset_basic.csv") %>%
 
 ##### **Distribution**
 
-```{r message=FALSE}
+```{r message=FALSE} 
 analyse_smoke_insurancetype = 
   dataset_basic %>%
   drop_na(smoker,insure) %>% 
