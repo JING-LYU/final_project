@@ -5,7 +5,7 @@ output:
   html_document
 ---
 ```{r, echo = FALSE, message=FALSE}
-
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(ggpubr)
 library(ggcorrplot)
@@ -298,6 +298,8 @@ summary(model_log) %>%
 Holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
 
 ### Shiny
+
+The [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) is a visualization of the prediction of insurance premium using the dataset "insurance_medical_cost_personal_datasets.csv". By providing the information of age, BMI, smoke or not smoke, with or without children, user could get a general idea of the range of insurance premium.
 
 ## Additional visualization
 
