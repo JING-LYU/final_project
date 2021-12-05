@@ -145,22 +145,35 @@ sex_plot =
   geom_violin() + 
   labs(title = "Gender and charges")
 
-age_plot = 
-  ggplot(cost_df, aes(x = age, y = charges)) + 
-  geom_point(color = "blue", alpha = 0.4) + 
+age_smoker_plot = 
+  ggplot(cost_df, aes(x = age, y = charges, color = smoker)) + 
+  geom_point(alpha = 0.2) + 
   geom_smooth() + 
-  labs(title = "Age and charges")
+  labs(title = "Age and charges by smoking group")
 
-bmi_plot = 
-  ggplot(cost_df, aes(x = bmi, y = charges)) + 
-  geom_point(color = "blue", alpha = 0.4) + 
+age_childgroup_plot = 
+  ggplot(cost_df, aes(x = age, y = charges, color = children_group)) + 
+  geom_point(alpha = 0.2) + 
+  geom_smooth() + 
+  labs(title = "Age and charges by whether having children")
+
+bmi_smoker_plot = 
+  ggplot(cost_df, aes(x = bmi, y = charges, color = smoker)) + 
+  geom_point(alpha = 0.2) + 
   geom_smooth() +
-  labs(title = "BMI and charges") 
-  
+  labs(title = "BMI and charges by smoking group") 
 
-ggarrange(smoker_plot, children_plot, sex_plot, age_plot, bmi_plot + rremove("x.text"),
+bmi_childgroup_plot = 
+  ggplot(cost_df, aes(x = bmi, y = charges, color = children_group)) + 
+  geom_point(alpha = 0.2) + 
+  geom_smooth() + 
+  labs(title = "BMI and charges by whether having children")
+
+ggarrange(smoker_plot, children_plot, sex_plot, age_smoker_plot, 
+          age_childgroup_plot, bmi_smoker_plot, bmi_childgroup_plot
+          + rremove("x.text"),
           #labels = c("smoker", "children_group", "sex","age","bmi"),
-          ncol = 2, nrow = 3)
+          ncol = 2, nrow = 4)
 
 ```
 
@@ -297,7 +310,7 @@ summary(model_log) %>%
 
 Holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
 
-### Shiny
+### Shiny dashboard for predicting insurance charge
 
 The [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) is a visualization of the prediction of insurance premium using the dataset "insurance_medical_cost_personal_datasets.csv". By providing the information of age, BMI, smoke or not smoke, with or without children, user could get a general idea of the range of insurance premium.
 
@@ -420,6 +433,6 @@ leaflet(medicaid) %>%
 ```
 
 
-## Discussion: 
+## Discussion
 What were your findings? Are they what you expect? What insights into the data can you make?
 
