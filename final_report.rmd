@@ -2,7 +2,10 @@
 title: "Final Report"
 authors: "Jing Lyu, Mengfan Luo, Yushan Wang, Yiqun Jin"
 output: 
-  html_document
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
 ---
 ```{r, echo = FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -10,7 +13,7 @@ library(tidyverse)
 library(ggpubr)
 library(ggcorrplot)
 library(olsrr)
-library(MASS) # boxcox
+library(MASS)
 library(plotly)
 library(plyr)
 library(leaflet)
@@ -126,22 +129,6 @@ cost_df = cost_df %>%
     sex = ifelse(sex == "male", 1, 2),
     sex = as.factor(sex),
     children = as.factor(children),
-    age_group = case_when(age < 18 ~ 1, 
-                          age >= 18 & age < 24 ~ 2,
-                          age >= 25 & age < 44 ~ 3,
-                          age >= 45 & age < 64 ~ 4,
-                          age >= 65 ~ 5
-                          ),
-    age_group = as.factor(age_group),
-    
-    bmi_group = case_when(bmi < 20 ~ 1, 
-                          bmi >= 20 & bmi < 30 ~ 2,
-                          bmi >= 30 & bmi < 40 ~ 3,
-                          bmi >= 40 & bmi < 50 ~ 4,
-                          bmi >= 50 ~ 5
-                          ),
-    bmi_group = as.factor(bmi_group),
-    
     children_group = ifelse(children == 0, 0, 1),
     children_group = as.factor(children_group)
      
@@ -150,6 +137,16 @@ cost_df = cost_df %>%
 
 ```
 
+**This dataset includes the following variables**
+
+* `age`: Age
+* `sex`: Sex (male = 1, female = 2)
+* `bmi`: Body Mass Index
+* `children`: number of children the person has
+* `smoker`: smoking status (non-smoker = 0, smoker = 1)
+* `region`: region in th US
+* `charges`: Insurance charges
+* `children_group`: whether or not the person has children (No children = 0, At least one child = 1)
 
 
 ## Exploratory analysis: 
@@ -164,7 +161,7 @@ In order to assists our main research topic, the relationship between smoking an
 
 ### A snapshot of the vairables
 
-#### Variable meanings
+We selected the following variable for modeling. Detailed information are in the table below:
 ```{r}
 var <- c("smoker", "children_group", "sex", "age", "bmi", "charges")
 
