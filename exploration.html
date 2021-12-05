@@ -314,7 +314,7 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_update.csv&quot;) %&gt;% 
+<pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_basic.csv&quot;) %&gt;% 
   mutate(
          child = factor(child,levels = c(1,2),labels = c(&quot;yes&quot;,&quot;no&quot;)),
          sex = factor(sex,labels = c(&quot;male&quot;,&quot;female&quot;)),
@@ -345,7 +345,7 @@ analyse_smoke_insurancetype %&gt;%
       x = &#39;smoking group &#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance in different smoking group &#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
 </div>
 <div id="chi-quare-test-between-insurance-type-and-smoking" class="section level5">
 <h5>Chi-quare test between insurance type and smoking</h5>
@@ -559,7 +559,7 @@ ggbarstats(
   y = insure
 ) +
   labs(caption = NULL) # remove caption</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="age" class="section level4">
@@ -582,7 +582,7 @@ analyse_agegroup_insurancetype %&gt;%
       x = &#39;agegroup&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance type in differnt agegroup&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
 </div>
 <div id="chi-quare-test-between-insurance-type-and-age" class="section level5">
 <h5>Chi-quare test between insurance type and age</h5>
@@ -832,7 +832,7 @@ dat %$%
   y = insure
 ) +
   labs(caption = NULL) # remove caption</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="have-children-or-not" class="section level4">
@@ -855,7 +855,7 @@ analyse_children_insurancetype %&gt;%
       x = &#39;child&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance type in groups of people with or without children&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 </div>
 <div id="chi-quare-test-between-insurance-type-and-children" class="section level5">
 <h5>Chi-quare test between insurance type and children</h5>
@@ -1032,7 +1032,7 @@ dat %$%
   y = insure
 ) +
   labs(caption = NULL) # remove caption</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="bmi" class="section level4">
@@ -1057,7 +1057,7 @@ analyse_bmi_insurancetype %&gt;%
       x = &#39;insurance&#39;,
       y = &#39;bmi&#39;,
       title = &#39;The distribution of bmi in groups having different insurance type&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 </div>
 <div id="anova-test-between-insurance-type-and-bmi" class="section level5">
 <h5>ANOVA test between insurance type and BMI</h5>
@@ -1122,7 +1122,7 @@ Tukey_comp </code></pre>
 ## Uninsured-Milit/CHAMPUS/Tricare                1.08996936 0.9895922
 ## Uninsured-COBRA/Other                          0.98790464 0.9998440</code></pre>
 <pre class="r"><code>plot(Tukey_comp)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 </div>
 </div>
 </div>
