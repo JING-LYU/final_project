@@ -14,9 +14,8 @@ library(tidyverse)
 library(ggpubr)
 library(ggcorrplot)
 library(olsrr)
-library(MASS) # boxcox
-library(plotly)
-library(plyr)
+library(MASS) 
+
 ```
 
 
@@ -97,22 +96,35 @@ sex_plot =
   geom_violin() + 
   labs(title = "Gender and charges")
 
-age_plot = 
-  ggplot(cost_df, aes(x = age, y = charges)) + 
-  geom_point(color = "blue", alpha = 0.4) + 
+age_smoker_plot = 
+  ggplot(cost_df, aes(x = age, y = charges, color = smoker)) + 
+  geom_point(alpha = 0.2) + 
   geom_smooth() + 
-  labs(title = "Age and charges")
+  labs(title = "Age and charges by smoking group")
 
-bmi_plot = 
-  ggplot(cost_df, aes(x = bmi, y = charges)) + 
-  geom_point(color = "blue", alpha = 0.4) + 
+age_childgroup_plot = 
+  ggplot(cost_df, aes(x = age, y = charges, color = children_group)) + 
+  geom_point(alpha = 0.2) + 
+  geom_smooth() + 
+  labs(title = "Age and charges by whether having children")
+
+bmi_smoker_plot = 
+  ggplot(cost_df, aes(x = bmi, y = charges, color = smoker)) + 
+  geom_point(alpha = 0.2) + 
   geom_smooth() +
-  labs(title = "BMI and charges") 
-  
+  labs(title = "BMI and charges by smoking group") 
 
-ggarrange(smoker_plot, children_plot, sex_plot, age_plot, bmi_plot + rremove("x.text"),
+bmi_childgroup_plot = 
+  ggplot(cost_df, aes(x = bmi, y = charges, color = children_group)) + 
+  geom_point(alpha = 0.2) + 
+  geom_smooth() + 
+  labs(title = "BMI and charges by whether having children")
+
+ggarrange(smoker_plot, children_plot, sex_plot, age_smoker_plot, 
+          age_childgroup_plot, bmi_smoker_plot, bmi_childgroup_plot
+          + rremove("x.text"),
           #labels = c("smoker", "children_group", "sex","age","bmi"),
-          ncol = 2, nrow = 3)
+          ncol = 2, nrow = 4)
 
 ```
 
@@ -252,68 +264,5 @@ summary(model_log) %>%
 
 ### Decode the model estimates
 
-<<<<<<< HEAD
 Holding all other variable constant, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
 
-### Prediction
-
-```{r}
-predict_data = tibble(smoker = "0",
-                      children_group = "1",
-                      age = 32,
-                      bmi = 27.7
-                      ) 
-
-
-result = predict(model_log,predict_data,interval = "confidence") %>% 
-  as.tibble() %>% 
-  mutate(
-    fit = exp(fit),
-    lwr = exp(lwr),
-    upr = exp(upr)
-  ) %>% 
-  mutate(x = 1) %>%
-  ggplot(aes(x, fit)) + 
-  ylim(0,60000)+
-  geom_point(shape=21, size=3, fill="white") +
-  geom_errorbar(aes(ymin = lwr, ymax = upr), width=0.2) +
-  labs(
-    title = "Your recommended insurance charge $",
-    x = " ",
-    y = "amount of charge $",
-    caption = "Data from the rnoaa package") +
-  coord_flip()
-
-ggplotly(result)
-
-
-
-
-```
-
-```{r}
-result = predict(model_log,predict_data,interval = "confidence") %>% 
-  as_tibble() %>% 
-  mutate(
-    fit = exp(fit),
-    lwr = exp(lwr),
-    upr = exp(upr)
-  ) %>% 
-  mutate(x = "1") %>%
-  ggplot(aes(fit,x)) + 
-  geom_point(shape = 21, size = 3, fill = "white") +
-  geom_errorbarh(aes(xmin = lwr, xmax = upr)) +
-  xlim(0,60000) +
-  geom_hline(yintercept = "1", size = 1.2) +
-  labs(
-    title = "Your recommended insurance charge $",
-    x = "amount of charge $",
-    y = "") 
-
-
-ggplotly(result)
-```
-
-=======
-Holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
->>>>>>> 0d82435458d31df2f8802bd5d63763735b456a78

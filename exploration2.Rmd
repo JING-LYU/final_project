@@ -16,6 +16,21 @@ library(summarytools)
 library(ggstatsplot)
 library(ggplot2)
 
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
@@ -56,11 +71,11 @@ dataset_basic = dataset_basic %>%
 ```
 
 
-### Variables and insurance {.tabset}
+### Distributions and statistical tests of `target variables` and `insurance` {.tabset}
 
 #### Smoking
 
-##### Plot
+##### **Distribution**
 
 ```{r message=FALSE}
 analyse_smoke_insurancetype = 
@@ -72,16 +87,13 @@ analyse_smoke_insurancetype =
 analyse_smoke_insurancetype %>% 
   ggplot(aes(x =smoker , y = n, fill = insure)) + 
   geom_bar(stat = "identity",position = "dodge") +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
     labs(
       x = 'smoking group ',
       y = 'counts',
       title = 'The distribution of insurance in different smoking group ')
 ```
 
-##### Chi-quare test between insurance type and smoking
+##### **Chi-quare test between insurance type and smoking**
 
 $H_0$ : insurance type and smoking are independent, there is no relationship between the two categorical variables. 
 
@@ -139,9 +151,6 @@ analyse_agegroup_insurancetype =
 analyse_agegroup_insurancetype %>% 
   ggplot(aes(x = agegroup, y = n, fill = insure  )) + 
   geom_bar(stat = "identity",position = "dodge") +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
     labs(
       x = 'agegroup',
       y = 'counts',
@@ -201,9 +210,6 @@ analyse_children_insurancetype =
 analyse_children_insurancetype %>% 
   ggplot(aes(x = child, y = n, fill = insure )) + 
   geom_bar(stat = "identity",position = "dodge") +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
     labs(
       x = 'child',
       y = 'counts',
@@ -264,9 +270,9 @@ analyse_bmi_insurancetype =
   
 analyse_bmi_insurancetype %>% 
   ggplot(aes(x = insure, y = bmi,fill = insure)) + 
-  geom_boxplot(alpha = 0.3) +
-    theme(legend.position = "none") +
-    scale_fill_brewer(palette = "BuPu") +
+  geom_boxplot(alpha=0.6) +
+    theme(legend.position="none") +
+    scale_fill_brewer(palette="Dark2")+
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
@@ -284,7 +290,6 @@ anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
 summary(anova)
 Tukey_comp = TukeyHSD(anova)
 Tukey_comp 
-  
 plot(Tukey_comp)
 ```
 

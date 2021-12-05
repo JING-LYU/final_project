@@ -314,6 +314,7 @@ $(document).ready(function () {
 </div>
 
 
+<<<<<<< HEAD
 <pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_basic.csv&quot;)
 
 smoke_df = dataset_basic %&gt;% 
@@ -335,6 +336,9 @@ smoke_df = dataset_basic %&gt;%
 
 
 dataset_basic = dataset_basic %&gt;% 
+=======
+<pre class="r"><code>dataset_basic = read_csv(&quot;data/dataset_basic.csv&quot;) %&gt;% 
+>>>>>>> 2a010c3c1e8a3b05d73745927ff5ba72adffcc94
   mutate(
          child = factor(child,levels = c(1,2),labels = c(&quot;yes&quot;,&quot;no&quot;)),
          sex = factor(sex,labels = c(&quot;male&quot;,&quot;female&quot;)),
@@ -358,14 +362,11 @@ dataset_basic = dataset_basic %&gt;%
 analyse_smoke_insurancetype %&gt;% 
   ggplot(aes(x =smoker , y = n, fill = insure)) + 
   geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
     labs(
       x = &#39;smoking group &#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance in different smoking group &#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
 </div>
 <div id="chi-quare-test-between-insurance-type-and-smoking" class="section level5">
 <h5>Chi-quare test between insurance type and smoking</h5>
@@ -579,7 +580,7 @@ ggbarstats(
   y = insure
 ) +
   labs(caption = NULL) # remove caption</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="age" class="section level4">
@@ -595,14 +596,11 @@ ggbarstats(
 analyse_agegroup_insurancetype %&gt;% 
   ggplot(aes(x = agegroup, y = n, fill = insure  )) + 
   geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
     labs(
       x = &#39;agegroup&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance type in differnt agegroup&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
 </div>
 <div id="chi-quare-test-between-insurance-type-and-age" class="section level5">
 <h5>Chi-quare test between insurance type and age</h5>
@@ -852,7 +850,7 @@ dat %$%
   y = insure
 ) +
   labs(caption = NULL) # remove caption</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="have-children-or-not" class="section level4">
@@ -868,14 +866,11 @@ dat %$%
 analyse_children_insurancetype %&gt;% 
   ggplot(aes(x = child, y = n, fill = insure )) + 
   geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) +
     labs(
       x = &#39;child&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance type in groups of people with or without children&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 </div>
 <div id="chi-quare-test-between-insurance-type-and-children" class="section level5">
 <h5>Chi-quare test between insurance type and children</h5>
@@ -1052,7 +1047,7 @@ dat %$%
   y = insure
 ) +
   labs(caption = NULL) # remove caption</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 </div>
 </div>
 <div id="bmi" class="section level4">
@@ -1067,9 +1062,9 @@ dat %$%
   
 analyse_bmi_insurancetype %&gt;% 
   ggplot(aes(x = insure, y = bmi,fill = insure)) + 
-  geom_boxplot(alpha = 0.3) +
-    theme(legend.position = &quot;none&quot;) +
-    scale_fill_brewer(palette = &quot;BuPu&quot;) +
+  geom_boxplot(alpha=0.6) +
+    theme(legend.position=&quot;none&quot;) +
+    scale_fill_brewer(palette=&quot;Dark2&quot;)+
   theme(
     axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
   ) +
@@ -1077,7 +1072,7 @@ analyse_bmi_insurancetype %&gt;%
       x = &#39;insurance&#39;,
       y = &#39;bmi&#39;,
       title = &#39;The distribution of bmi in groups having different insurance type&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 </div>
 <div id="anova-test-between-insurance-type-and-bmi" class="section level5">
 <h5>ANOVA test between insurance type and BMI</h5>
@@ -1142,7 +1137,7 @@ Tukey_comp </code></pre>
 ## Uninsured-Milit/CHAMPUS/Tricare                1.08996936 0.9895922
 ## Uninsured-COBRA/Other                          0.98790464 0.9998440</code></pre>
 <pre class="r"><code>plot(Tukey_comp)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 </div>
 </div>
 </div>
