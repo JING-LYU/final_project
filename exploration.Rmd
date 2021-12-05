@@ -75,7 +75,7 @@ current_smoker = smoke_df %>% filter(smoker == "current")
 
 ## 1. Knowledge about **insurance** in our dataset
 
-XXXXXX
+Among 2941 participants in the dataset, 2582(88%) of them are insurance holders, while 359 (12%) of them don't have insurance cover. Most of participants have employer-sponsored health insurance (38%), other types include Medicaid/Family Health+ (24%), Medicare(20%), Uninsured(9%), Self-purchase(6%), COBRA/Other(2%) and Milit/CHAMPUS/Tricare (1%). Detailed introduction on each insurance type is summarized in the below table.
 
 ```{r message=FALSE}
 insurehold = read_csv("data/dataset_basic.csv") %>% 
@@ -136,18 +136,21 @@ knitr::kable(insur)
 
 <br>
 
-### 2. Knowledge about **smoker** in our dataset {.tabset}
+### 2. Knowledge regarding **smoking** in our dataset {.tabset}
+
+Here we conduct some explorations focusing on smoking information in our data. Click on each tab to see different dimensions of smoking data.
+
 #### Age distribution
 
-##### Plot
+##### There are a total 3652(12%) current smokers, 6167(21%) former smokers, and 18693(66%) people never smoked among all the participants.  Most current smokers falls in age 25 to 64 (80%). 84% of the paticipants in age 18-24 filter have never smoked.
 
 ```{r,message=FALSE}
 
 smoke_df %>% 
   drop_na(agegroup) %>% 
   group_by(agegroup,smoker) %>% 
-  summarize(
-    count = n(),
+  dplyr::summarize(
+    count = n()
   ) %>% 
   mutate(smoker = fct_reorder(smoker,count)) %>% 
   ggplot(aes(x = smoker, y = count, fill = agegroup)) + 
@@ -161,25 +164,24 @@ smoke_df %>%
 ```
 
 
-
-
 #### Health self-evaluation
 
-##### Plot
+##### No matter whether smoked, participants' self-evaluation on the health condition follows similar distribution. Smoking may not be a key factor when people self-evaluate their health condition.
 
 ```{r,message=FALSE}
 
+
 smokegroup_count = smoke_df %>% 
   drop_na(smoker) %>% 
-  group_by(smoker) %>% 
-  summarize(
+  dplyr::group_by(smoker) %>% 
+  dplyr::summarize(
     smokegroup_count = n()) %>% 
   pull()
 
 smoke_df %>% 
   drop_na(generalhealth) %>% 
-  group_by(generalhealth,smoker) %>% 
-  summarize(
+  dplyr::group_by(generalhealth,smoker) %>% 
+  dplyr::summarize(
     count = n())%>% 
   mutate(smokegroup_count = smokegroup_count,
          health_percent = count/smokegroup_count)%>% 
@@ -194,14 +196,14 @@ smoke_df %>%
 
 #### Poverty status
 
-##### Plot
+##### For people who are current smokers and who has never smoked, number of people in each poverty group decreace with higher poverty level. However, among former smokers, number of people in different levels of poverty groups are close in quantities.
 
 ```{r,message=FALSE}
 smoke_df %>% 
   drop_na(poverty_group) %>% 
   group_by(poverty_group,smoker) %>% 
-  summarize(
-    count = n(),
+  dplyr::summarize(
+    count = n()
   ) %>% 
   mutate(
     smokegroup_count = smokegroup_count,
@@ -218,7 +220,12 @@ smoke_df %>%
 
 #### Current smokers
 
-##### Smoking intensity and frequency
+##### For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we **focus on the current smokers**.
+
+* Cost and number of daily consumption
+
+
+Smoking intensity and frequency
 
 
 ```{r message=FALSE, warning=FALSE}
