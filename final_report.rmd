@@ -62,18 +62,7 @@ Source, scraping method, cleaning, etc.
 
 ### Data cleaning
 
-
-
-## Exploratory analysis: 
-Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
-
-
-## Additional analysis: 
-If you undertake formal statistical analyses, describe these in detail
-
-In order to assists our main research topic, the relationship between smoking and health insurance, we would like to investigate the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children. A prediction model is build to analyse this question.
-
-```{r, load insurance cost data}
+```{r, clean insurance cost data}
 cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
 
 cost_df = cost_df %>% 
@@ -107,7 +96,15 @@ cost_df = cost_df %>%
 
 ```
 
-**Prediction Model building**
+## Exploratory analysis: 
+Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+
+
+## Additional analysis: 
+If you undertake formal statistical analyses, describe these in detail
+
+In order to assists our main research topic, the relationship between smoking and health insurance, we would like to investigate the amount of insurance price change due to smoking, along with other personal factors such age, sex, weight and whether or not having children. A **prediction model** is build to analyse this question.
+
 
 ### A snapshot of the vairables
 
@@ -316,9 +313,9 @@ The [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) is a visua
 
 ## Additional visualization
 
-### Mapping
+In order to provide reader who are seeking help for signing up insurance and getting advice about health insurance, we provide several maps of health insurance related agencies with location and contact information. Click on the icons on the maps for detailed information.
 
-#### Health center location mapping
+### Health center location mapping
 
 For general public seeking assistance with signing up for health insurance or SNAP (Supplemental Nutrition Assistance Program), here is a mapping of health center locations, where health insurance enrollment and assistance with SNAP benefits (Food Stamps) are offered.
 
@@ -360,7 +357,7 @@ health_center_table = health_center %>%
 rmarkdown::paged_table(health_center_table)
 ```
 
-#### Insurance agency location mapping
+### Insurance agency location mapping
 
 This map shows the locations of major health insurance carriers in NYC.
 
@@ -403,7 +400,7 @@ insurance_agency_table =insurance_agency %>%
 rmarkdown::paged_table(insurance_agency_table)
 ```
 
-#### Medicaid location mapping
+### Medicaid location mapping
 
 Medicaid provides health coverage to low-income people, including eligible low-income adults, children, pregnant women, elderly adults and people with disabilities. Medicaid is one of the largest payers for health care in the United States and is administered by states, according to federal requirements. The program is funded jointly by states and the federal government.
 
@@ -435,4 +432,6 @@ leaflet(medicaid) %>%
 
 ## Discussion
 What were your findings? Are they what you expect? What insights into the data can you make?
+
+During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. This finding confirmed the fact that smokers are charged for higher insurance. In addition, being older, higher body mass index, and having at least 1 children also increase insurance costs. 
 
