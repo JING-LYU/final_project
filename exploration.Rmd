@@ -259,7 +259,6 @@ anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
 summary(anova)
 Tukey_comp = TukeyHSD(anova)
 Tukey_comp 
-  
 plot(Tukey_comp)
 ```
 

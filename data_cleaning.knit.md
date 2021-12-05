@@ -5,21 +5,15 @@ date: "11/11/2021"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-library(rvest)
-library(httr)
-library(haven)
-```
+
 
 
 ## Data loading and crude cleaning
 
 We select year 2014-2016 and variables relating to smoking and insurance. 
 
-```{r}
 
+```r
 chs16 = read_sas("data/chs2016_public.sas7bdat")
 
 chs16_filter = chs16 %>% 
@@ -45,11 +39,11 @@ chs14_filter = chs14 %>%
 
 
 chs_14_16 = bind_rows(chs14_filter,chs15_filter,chs16_filter)
-  
 ```
 
 
-```{r}
+
+```r
 dataset_basic = chs_14_16 %>% 
   select(agegroup,insure,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,imputed_povertygroup,bmi,child,sex) %>% 
   mutate(numberperdaya = round(numberperdaya,1),
