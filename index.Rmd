@@ -2,10 +2,8 @@
 title: <font size="8"> Smoking in NYC </font> 
 subtitle: <font size="5"> Exploration of smoking and health insurance relationship in New York City from 2014 to 2016 </font> 
 output: 
-  html_document:
-    code_folding: hide
-    toc: true
-    toc_float: true
+  html_document
+    
 ---
 
 <br>
