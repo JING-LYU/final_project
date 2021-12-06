@@ -75,7 +75,11 @@ current_smoker = smoke_df %>% filter(smoker == "current")
 
 ## 1. Knowledge about **insurance** in our dataset
 
-Among 2941 participants in the dataset, 2582(88%) of them are insurance holders, while 359 (12%) of them don't have insurance cover. Most of participants have employer-sponsored health insurance (38%), other types include Medicaid/Family Health+ (24%), Medicare(20%), Uninsured(9%), Self-purchase(6%), COBRA/Other(2%) and Milit/CHAMPUS/Tricare (1%). Detailed introduction on each insurance type is summarized in the below table.
+- Among 2941 participants in the dataset: 2582 (88%) of them are insurance holders, while 359 (12%) of them don't have insurance cover. 
+
+- Most of participants have employer-sponsored health insurance (38%), other types include Medicaid/Family Health+ (24%), Medicare (20%), Uninsured (9%), Self-purchase (6%), COBRA/Other (2%) and Milit/CHAMPUS/Tricare (1%). 
+
+- Detailed introduction on each insurance type is summarized in the below table:
 
 ```{r message=FALSE}
 insurehold = read_csv("data/dataset_basic.csv") %>% 
@@ -136,13 +140,14 @@ knitr::kable(insur)
 
 <br>
 
-### 2. Knowledge regarding **smoking** in our dataset {.tabset}
+### 2. Knowledge regarding **smoking** in our dataset
 
 Here we conduct some explorations focusing on smoking information in our data. Click on each tab to see different dimensions of smoking data.
 
-#### Age distribution
+#### Smoking status {.tabset}
 
-##### There are a total 3652(12%) current smokers, 6167(21%) former smokers, and 18693(66%) people never smoked among all the participants.  Most current smokers falls in age 25 to 64 (80%). 84% of the paticipants in age 18-24 filter have never smoked.
+##### Age distribution
+
 
 ```{r,message=FALSE}
 
@@ -163,10 +168,11 @@ smoke_df %>%
 
 ```
 
+There are a total 3652 (12%) current smokers, 6167 (21%) former smokers, and 18693 (66%) people never smoked among all the participants.  Most current smokers falls in age 25 to 64 (80%). 84% of the paticipants in age 18-24 filter have never smoked.
 
-#### Health self-evaluation
+##### Health self-evaluation
 
-##### No matter whether smoked, participants' self-evaluation on the health condition follows similar distribution. Smoking may not be a key factor when people self-evaluate their health condition.
+
 
 ```{r,message=FALSE}
 
@@ -193,10 +199,9 @@ smoke_df %>%
       title = 'Self-evaluation of health conditions among people in different smoking status\n(% in each types of smoker)')
 ```
 
+No matter whether smoked, participants' self-evaluation on the health condition follows similar distribution. Smoking may not be a key factor when people self-evaluate their health condition.
 
-#### Poverty status
-
-##### For people who are current smokers and who has never smoked, number of people in each poverty group decreace with higher poverty level. However, among former smokers, number of people in different levels of poverty groups are close in quantities.
+##### Poverty status
 
 ```{r,message=FALSE}
 smoke_df %>% 
@@ -217,43 +222,48 @@ smoke_df %>%
       title = 'Poverty groups among people in different smoking status')
 ```
 
+For people who are current smokers and who has never smoked, number of people in each poverty group decreace with higher poverty level. However, among former smokers, number of people in different levels of poverty groups are close in quantities.
 
-#### Current smokers
+#### Current smokers {.tabset}
 
-##### For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we **focus on the current smokers**.
+For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we **focus on the current smokers**.
 
-* Cost and number of daily consumption
-
-
-Smoking intensity and frequency
-
+##### Daily consumption
 
 ```{r message=FALSE, warning=FALSE}
-current_smoker %>%
+type = current_smoker %>%
   ggplot(aes(x = smoker_cat, fill = everyday))+
   geom_histogram(stat="count") +
     labs(
       x = 'Type of current smokers',
       y = 'Number of smokers in each type',
-      title = 'Number of current smokers of diffirent types')
+      title = 'Number of current smokers\nof diffirent types')+
+  theme(legend.position = "none")
 ```
 
 
 ```{r message=FALSE, warning=FALSE}
-current_smoker %>% 
+consumption = current_smoker %>% 
   ggplot(aes(x = numberperdaya, fill = everyday)) + 
-  geom_histogram(alpha = .7)+
+  geom_histogram()+
   xlim(0,30)+
   labs(
     x = "Average number of cigarattes smoked per day",
     y = "Number of smokers",
-    title = "Average number of cigarattes smoked per day by current smokers"
+    title = "Average number of cigarattes\nsmoked per day",
+    fill = "Smoking frequency"
        )+
-  theme(legend.position = "bottom")
+  theme(legend.position = "right")
 ```
 
+```{r message=FALSE, warning=FALSE}
+#| my-chunkn, echo = FALSE, fig.width = 8,
+type + consumption
+```
 
-#### Cost on smoke
+Most of the current smokers are light smokers. Among those light smokers, nearly half of them smoke everyday, while normal and heavy smokers are more likely to smoke everyday. Casual smokers tend to consume less cigarette than everyday smokers.
+
+##### Cost on smoke
 
 ```{r message=FALSE, warning=FALSE}
   
@@ -262,32 +272,39 @@ current_smoker %>%
   geom_point(alpha = .5,size = 3) +
   xlim(0,50)+
   ylim(0,40)+
+  theme(plot.title = element_text(hjust = 0.5)) +
   #facet_grid(.~smoker_cat,scales = "free") +
     labs(
       x = 'Number of cigrattes consumed everyday',
       y = 'Cost of every 20 (one pack) cigrattes',
-      title = 'Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday')
+      title = 'Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday',
+      color = "Smoking frequency")
 
 
 ```
 
+Regardless of smoking frequency and smoking intensity, the cost of each pack of cigarette are even distributed within \$0 to \$20
+
 <br>
 
+
+
 ## 3. Explore relationship between `insurance` and target variables
+In this step, we want to explore more about the relationship between insurance and key variables, including smoking, age, have children or not and BMI. We start by plotting distribution graphs to see the pattern between each groups. And then we conduct statistical tests to evaluate the association and similarity between them.
 
 <br>
 
 ### Distributions {.tabset}
 #### Smoking
 
-##### **Distribution**
 
 ```{r message=FALSE}
 analyse_smoke_insurancetype = 
   dataset_basic %>%
   drop_na(smoker,insure) %>% 
   group_by(smoker,insure) %>% 
-  summarize(n = n())
+  summarize(n = n()) %>% 
+  mutate(insure = fct_reorder(insure,n))
   
 analyse_smoke_insurancetype %>% 
   ggplot(aes(x =smoker , y = n, fill = insure)) + 
@@ -299,14 +316,15 @@ analyse_smoke_insurancetype %>%
 ```
 
 #### Age
-##### **Distribution**
+
 
 ```{r message=FALSE}
 analyse_agegroup_insurancetype = 
   dataset_basic %>%
   drop_na(agegroup,insure) %>% 
-  group_by(insure,agegroup) %>% 
-  summarize(n = n())
+  group_by(agegroup,insure) %>% 
+  summarize(n = n()) %>% 
+  mutate(insure = fct_reorder(insure,n))
   
 analyse_agegroup_insurancetype %>% 
   ggplot(aes(x = agegroup, y = n, fill = insure  )) + 
@@ -316,17 +334,20 @@ analyse_agegroup_insurancetype %>%
       y = 'counts',
       title = 'The distribution of insurance type in differnt agegroup')
 ```
+For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get **employer** insurance since they are in working age.
 
+For person older than 65 years old, most of them get **Medicare** since Medicare is only provided for people above 65 years old.
 
 #### Have children or not
-##### **Distribution**
+
 
 ```{r message=FALSE}
 analyse_children_insurancetype = 
   dataset_basic %>%
   drop_na(child,insure)  %>% 
-  group_by(insure,child) %>% 
-  summarize(n = n())
+  group_by(child,insure) %>% 
+  summarize(n = n())%>% 
+  mutate(insure = fct_reorder(insure,n))
   
 analyse_children_insurancetype %>% 
   ggplot(aes(x = child, y = n, fill = insure )) + 
@@ -337,9 +358,10 @@ analyse_children_insurancetype %>%
       title = 'The distribution of insurance type in groups of people with or without children')
 ```
 
+We found that for those without children, a larger proportion of them get **Medicare** comparing to those with children.
 
 #### BMI
-##### **Distribution**
+
 
 ```{r message=FALSE}
 analyse_bmi_insurancetype = 
@@ -360,6 +382,7 @@ analyse_bmi_insurancetype %>%
   coord_flip()
 ```
 
+We did not observe significant difference between each group.
 
 
 <br>
@@ -400,6 +423,7 @@ ggbarstats(
 
 ```
 
+We reject $H_0$ and then conclude that insurance type and smoking are dependent.
 
 
 
@@ -433,6 +457,7 @@ ggbarstats(
 
 ```
 
+We reject $H_0$ and then conclude that insurance type and age are dependent.
 
 #### Have children or not
 ##### **Chi-quare test  between insurance type and children**
@@ -472,20 +497,29 @@ ggbarstats(
   ) 
 ```
 
+We reject $H_0$ and then conclude that insurance type and children are dependent.
 
 #### BMI
 ##### **ANOVA test  between insurance type and BMI**
+$H_0$ : The mean of BMI in each insurance type groups are the same
+
+$H_1$ : At least two means of BMI in all insurance type groups are different
 
 *Test result:*
 ```{r}
+#| my-chunk6, echo = FALSE, fig.width = 10,fig.height = 10
 anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
 anova %>% 
   broom::tidy() %>% 
   knitr::kable()
 Tukey_comp = TukeyHSD(anova)
 
-plot(Tukey_comp)
+par(mar = c(2, 18, 2, 2))
+plot(Tukey_comp,las = 1,
+     cex.axis = 0.8)
 ```
+
+According to the ANOVA test, we reject $H_0$  and conclude At least two means of BMI in all insurance type groups are different. Detailed information of the difference in each group can be seen on the above image. 
 
 <br>
 
