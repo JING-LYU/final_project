@@ -196,7 +196,7 @@ sex_plotly <- sex_plotly %>%
     yaxis = list(
       title = "Insurance charges",
       zeroline = F
-    ),
+    ) ,
     legend=list(title=list(text='<b> Gender </b>'))
   )
 
@@ -215,11 +215,15 @@ age_plotly <- plot_ly(
   cost_df, 
   x = ~age, 
   y = ~charges,
-  color = ~age, 
-  size = ~age
+  color = ~age,
+  size = ~age,
+  name = ""
   ) %>% 
   add_markers(y = ~charges) %>% 
-  add_lines(x = ~age, y = fitted(age_fit))
+  add_lines(x = ~age, y = fitted(age_fit), color = "") %>% 
+  layout(
+   showlegend = FALSE
+  )
 
 
 age_plotly
@@ -238,10 +242,12 @@ bmi_plotly <- plot_ly(
   x = ~bmi, 
   y = ~charges,
   color = ~bmi, 
-  size = ~bmi
+  size = ~bmi,
+  name = ""
   ) %>% 
   add_markers(y = ~charges) %>% 
-  add_lines(x = ~bmi, y = fitted(bmi_fit))
+  add_lines(x = ~bmi, y = fitted(bmi_fit), color = "") %>% 
+  layout(showlegend = FALSE)
 
 
 bmi_plotly
