@@ -16,6 +16,23 @@ library(ggcorrplot)
 library(olsrr)
 library(MASS) 
 
+#knitr::opts_chunk$set(
+  #fig.width = 8,
+  #fig.asp = .6,
+  #out.width = "90%"
+  
+#)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+
 ```
 
 
@@ -151,12 +168,18 @@ The model building result shows that sex is not a significant variable with p-va
 
 ### Stepwise regression
 
+```{r, results="hide"}
+step = step(model, direction='both')
+```
+
 ```{r}
-step(model, direction='both')
+summary(step)%>% 
+  broom::tidy() %>% 
+  knitr::kable()
 
 ```
 
-The stepwise regression process confirm that sex is not significant variable.
+The stepwise regression process confirms that sex is not significant variable. Therefore we remove sex variable and retain all other variables for prediction model.
 
 <br>
 
@@ -210,7 +233,7 @@ The outliers are rows 544, 578, 1301. Following model building will use dataset 
 
 ```{r}
 
-summary(cost_df_out)
+#summary(cost_df_out)
 cost_df_log = cost_df_out %>% 
   mutate(
     Lncharges = log(charges)
@@ -218,8 +241,13 @@ cost_df_log = cost_df_out %>%
 
 # fit multivariate model with log transform
 model_log = lm(Lncharges ~ smoker + children_group + age + bmi, data = cost_df_log) 
-model_log
+summary(model_log) %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+
 ```
+
+Above table shows the estimates for each variables when charges is transformed to In(charges).
 
 <br>
 
@@ -250,7 +278,9 @@ summary(model_log) %>%
 
 Holding all other variable constant, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
 
+<br>
+
 ## Predict your insurance premium
 
-Want to know your insurance cost according to our model? Access our [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) and find out!
+Want to know your insurance cost according to our model? Go to our [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) and find out!
 

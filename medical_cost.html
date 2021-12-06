@@ -496,37 +496,55 @@ div.tocify {
 </div>
 <div id="stepwise-regression" class="section level3">
 <h3>Stepwise regression</h3>
-<pre><code>## Start:  AIC=23319.92
-## charges ~ smoker + children_group + sex + age + bmi
-## 
-##                  Df  Sum of Sq        RSS   AIC
-## - sex             1 5.0700e+06 4.9192e+10 23318
-## &lt;none&gt;                         4.9187e+10 23320
-## - children_group  1 3.2205e+08 4.9509e+10 23327
-## - bmi             1 5.0879e+09 5.4275e+10 23450
-## - age             1 1.7276e+10 6.6464e+10 23721
-## - smoker          1 1.2285e+11 1.7204e+11 24993
-## 
-## Step:  AIC=23318.06
-## charges ~ smoker + children_group + age + bmi
-## 
-##                  Df  Sum of Sq        RSS   AIC
-## &lt;none&gt;                         4.9192e+10 23318
-## + sex             1 5.0700e+06 4.9187e+10 23320
-## - children_group  1 3.2093e+08 4.9513e+10 23325
-## - bmi             1 5.0843e+09 5.4277e+10 23448
-## - age             1 1.7302e+10 6.6494e+10 23719
-## - smoker          1 1.2344e+11 1.7263e+11 24996</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = charges ~ smoker + children_group + age + bmi, data = cost_df)
-## 
-## Coefficients:
-##     (Intercept)          smoker1  children_group1              age  
-##        -12149.6          23810.8            990.7            257.9  
-##             bmi  
-##           321.7</code></pre>
-<p>The stepwise regression process confirm that sex is not significant variable.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-12149.6071</td>
+<td align="right">948.52261</td>
+<td align="right">-12.808980</td>
+<td align="right">0.000000</td>
+</tr>
+<tr class="even">
+<td align="left">smoker1</td>
+<td align="right">23810.7572</td>
+<td align="right">411.70416</td>
+<td align="right">57.834629</td>
+<td align="right">0.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">children_group1</td>
+<td align="right">990.7412</td>
+<td align="right">335.96313</td>
+<td align="right">2.948958</td>
+<td align="right">0.003244</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">257.9366</td>
+<td align="right">11.91243</td>
+<td align="right">21.652729</td>
+<td align="right">0.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">bmi</td>
+<td align="right">321.7303</td>
+<td align="right">27.41011</td>
+<td align="right">11.737652</td>
+<td align="right">0.000000</td>
+</tr>
+</tbody>
+</table>
+<p>The stepwise regression process confirms that sex is not significant variable. Therefore we remove sex variable and retain all other variables for prediction model.</p>
 <p><br></p>
 </div>
 <div id="final-model-with-significant-variables" class="section level3">
@@ -584,7 +602,7 @@ div.tocify {
 </div>
 <div id="model-diagnostic" class="section level2">
 <h2>Model diagnostic</h2>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>The graph above did not show homoscedasticity of residual. Therefore, we need to transform the model.</p>
 <p><br></p>
 </div>
@@ -592,43 +610,68 @@ div.tocify {
 <h2>Model transformation</h2>
 <div id="box-cox-transformation" class="section level3">
 <h3>Box-Cox Transformation</h3>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <p>Since lamda = 0, try natural log transformation.</p>
 <p><br></p>
 <p><strong>Before transformation, remove outliers first</strong></p>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 <p>The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.</p>
 <p><br></p>
 <p><strong>Transform charges to ln(charges)</strong></p>
-<pre><code>##       age       sex          bmi        children smoker      region         
-##  Min.   :18.0   1:675   Min.   :15.96   0:572    0:1064   Length:1335       
-##  1st Qu.:26.5   2:660   1st Qu.:26.25   1:323    1: 271   Class :character  
-##  Median :39.0           Median :30.40   2:240             Mode  :character  
-##  Mean   :39.2           Mean   :30.65   3:157                               
-##  3rd Qu.:51.0           3rd Qu.:34.64   4: 25                               
-##  Max.   :64.0           Max.   :53.13   5: 18                               
-##     charges      children_group
-##  Min.   : 1122   0:572         
-##  1st Qu.: 4729   1:763         
-##  Median : 9361                 
-##  Mean   :13162                 
-##  3rd Qu.:16517                 
-##  Max.   :60021</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = Lncharges ~ smoker + children_group + age + bmi, 
-##     data = cost_df_log)
-## 
-## Coefficients:
-##     (Intercept)          smoker1  children_group1              age  
-##         6.97097          1.53706          0.22631          0.03478  
-##             bmi  
-##         0.01040</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">6.9709701</td>
+<td align="right">0.0706776</td>
+<td align="right">98.630532</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">smoker1</td>
+<td align="right">1.5370576</td>
+<td align="right">0.0307293</td>
+<td align="right">50.019359</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">children_group1</td>
+<td align="right">0.2263090</td>
+<td align="right">0.0250004</td>
+<td align="right">9.052215</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="even">
+<td align="left">age</td>
+<td align="right">0.0347807</td>
+<td align="right">0.0008857</td>
+<td align="right">39.268460</td>
+<td align="right">0e+00</td>
+</tr>
+<tr class="odd">
+<td align="left">bmi</td>
+<td align="right">0.0103985</td>
+<td align="right">0.0020435</td>
+<td align="right">5.088614</td>
+<td align="right">4e-07</td>
+</tr>
+</tbody>
+</table>
+<p>Above table shows the estimates for each variables when charges is transformed to In(charges).</p>
 <p><br></p>
 </div>
 <div id="diagnostic-for-transformed-model" class="section level3">
 <h3>Diagnostic for transformed model</h3>
-<p><img src="medical_cost_files/figure-html/unnamed-chunk-13-1.png" width="672" /><img src="medical_cost_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<p><img src="medical_cost_files/figure-html/unnamed-chunk-14-1.png" width="672" /><img src="medical_cost_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
 <p>Lamda is near 1 now, and the residual distribution improved from un-transformed data. We conclude this model is acceptable.</p>
 <p><br></p>
 </div>
@@ -687,11 +730,12 @@ div.tocify {
 <div id="decode-the-model-estimates" class="section level3">
 <h3>Decode the model estimates</h3>
 <p>Holding all other variable constant, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.</p>
+<p><br></p>
 </div>
 </div>
 <div id="predict-your-insurance-premium" class="section level2">
 <h2>Predict your insurance premium</h2>
-<p>Want to know your insurance cost according to our model? Access our <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Shiny dashboard</a> and find out!</p>
+<p>Want to know your insurance cost according to our model? Go to our <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Shiny dashboard</a> and find out!</p>
 </div>
 
 
