@@ -250,3 +250,7 @@ summary(model_log) %>%
 
 Holding all other variable constant, smoking is associated with a 155% increase in insurance charges than non-smokers. Being older, higher body mass index, and having at least 1 children also increase insurance charges.
 
+## Predict your insurance premium
+
+Want to know your insurance cost according to our model? Access our [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) and find out!
+
