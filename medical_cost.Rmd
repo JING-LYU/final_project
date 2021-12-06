@@ -12,9 +12,11 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 library(tidyverse)
 library(ggpubr)
+library(plotly)
 library(ggcorrplot)
 library(olsrr)
 library(MASS) 
+
 
 #knitr::opts_chunk$set(
   #fig.width = 8,
@@ -37,20 +39,12 @@ scale_fill_discrete = scale_fill_viridis_d
 
 
 ```{r}
-cost_df = read.csv("data/insurance_medical_cost_personal_datasets.csv")
-
-cost_df = cost_df %>% 
+cost_df = read.csv("data/medical_cost_clean.csv") %>% 
   mutate(
-    smoker = ifelse(smoker == "yes", 1, 0),
-    smoker = as.factor(smoker),
-    sex = ifelse(sex == "male", 1, 2),
     sex = as.factor(sex),
-    children = as.factor(children),
-    children_group = ifelse(children == 0, 0, 1),
+    smoker = as.factor(smoker),
     children_group = as.factor(children_group)
-     
-    ) %>% 
-    na.omit()
+  )
 
 ```
 
@@ -78,58 +72,186 @@ knitr::kable(var_info)
 
 <br>
 
-### Relationship between each variables and charge of insurance
+### Relationship between each variables and charge of insurance {.tabset}
 
-```{r, fig.width=12,fig.height=15}
+#### Smoker and insurance charges
 
-smoker_plot = 
-  ggplot(cost_df, aes(x = smoker, y = charges, fill = smoker)) + 
-  geom_violin() + 
-  labs(title = "Smoker and charges") 
+```{r}
 
-children_plot = 
-  ggplot(cost_df, aes(x = children_group, y = charges, fill = children_group)) + 
-  geom_violin() + 
-  labs(title = "Having children and charges")
+cost_df_smoker = 
+  cost_df %>%
+  mutate(
+    smoker = fct_recode(
+      smoker,
+      "Smoker" = "1",
+      "Non smoker" = "0"
+      ))
+    
+smoker_plotly <- cost_df_smoker %>% 
+  plot_ly(
+    x = ~smoker,
+    y = ~charges,
+    split = ~smoker,
+    type = 'violin',
+    box = list(
+      visible = T
+    ),
+    meanline = list(
+      visible = T
+    )
+  ) 
 
-sex_plot = 
-  ggplot(cost_df, aes(x = sex, y = charges, fill = sex)) + 
-  geom_violin() + 
-  labs(title = "Gender and charges")
+smoker_plotly <- smoker_plotly %>%
+  layout(
+    xaxis = list(
+      title = "smokeing status"
+    ),
+    yaxis = list(
+      title = "Insurance charges",
+      zeroline = F
+    ),
+    legend=list(title=list(text='<b> Smokering Status </b>'))
+  )
 
-age_smoker_plot = 
-  ggplot(cost_df, aes(x = age, y = charges, color = smoker)) + 
-  geom_point(alpha = 0.2) + 
-  geom_smooth() + 
-  labs(title = "Age and charges by smoking group")
-
-age_childgroup_plot = 
-  ggplot(cost_df, aes(x = age, y = charges, color = children_group)) + 
-  geom_point(alpha = 0.2) + 
-  geom_smooth() + 
-  labs(title = "Age and charges by whether having children")
-
-bmi_smoker_plot = 
-  ggplot(cost_df, aes(x = bmi, y = charges, color = smoker)) + 
-  geom_point(alpha = 0.2) + 
-  geom_smooth() +
-  labs(title = "BMI and charges by smoking group") 
-
-bmi_childgroup_plot = 
-  ggplot(cost_df, aes(x = bmi, y = charges, color = children_group)) + 
-  geom_point(alpha = 0.2) + 
-  geom_smooth() + 
-  labs(title = "BMI and charges by whether having children")
-
-ggarrange(smoker_plot, children_plot, sex_plot, age_smoker_plot, 
-          age_childgroup_plot, bmi_smoker_plot, bmi_childgroup_plot
-          + rremove("x.text"),
-          #labels = c("smoker", "children_group", "sex","age","bmi"),
-          ncol = 2, nrow = 4)
-
+smoker_plotly
 ```
 
-At first glance, we can tell that smoking, age, and bmi significantly affect charge of insurance. The relationship between sex, having children and charge is unclear.
+<br>
+
+#### Having children and insurance charges
+
+```{r}
+cost_df_child = 
+  cost_df %>%
+  mutate(
+    children_group = fct_recode(
+      children_group,
+      "Having at least one child" = "1",
+      "No children" = "0"
+      ))
+    
+child_plotly <- cost_df_child %>% 
+  plot_ly(
+    x = ~children_group,
+    y = ~charges,
+    split = ~children_group,
+    type = 'violin',
+    box = list(
+      visible = T
+    ),
+    meanline = list(
+      visible = T
+    )
+  ) 
+
+child_plotly <- child_plotly %>%
+  layout(
+    xaxis = list(
+      title = "Whether or not having children"
+    ),
+    yaxis = list(
+      title = "Insurance charges",
+      zeroline = F
+    ),
+    legend=list(title=list(text='<b> Whether or not having children </b>'))
+  )
+
+child_plotly
+```
+
+
+<br>
+
+#### Gender and insurance charges
+
+```{r}
+cost_df_sex = 
+  cost_df %>%
+  mutate(
+    sex = fct_recode(
+      sex,
+      "Male" = "1",
+      "Female" = "2"
+      ))
+    
+sex_plotly <- cost_df_sex %>% 
+  plot_ly(
+    x = ~sex,
+    y = ~charges,
+    split = ~sex,
+    type = 'violin',
+    box = list(
+      visible = T
+    ),
+    meanline = list(
+      visible = T
+    )
+  ) 
+
+sex_plotly <- sex_plotly %>%
+  layout(
+    xaxis = list(
+      title = "Gender"
+    ),
+    yaxis = list(
+      title = "Insurance charges",
+      zeroline = F
+    ),
+    legend=list(title=list(text='<b> Gender </b>'))
+  )
+
+sex_plotly
+```
+
+<br>
+
+#### Age and insurance charges
+
+```{r}
+age_fit <- lm(charges ~ age, data = cost_df)
+
+
+age_plotly <- plot_ly(
+  cost_df, 
+  x = ~age, 
+  y = ~charges,
+  color = ~age, 
+  size = ~age
+  ) %>% 
+  add_markers(y = ~charges) %>% 
+  add_lines(x = ~age, y = fitted(age_fit))
+
+
+age_plotly
+```
+
+<br>
+
+#### BMI and insurance charges
+
+```{r}
+bmi_fit <- lm(charges ~ bmi, data = cost_df)
+
+
+bmi_plotly <- plot_ly(
+  cost_df, 
+  x = ~bmi, 
+  y = ~charges,
+  color = ~bmi, 
+  size = ~bmi
+  ) %>% 
+  add_markers(y = ~charges) %>% 
+  add_lines(x = ~bmi, y = fitted(bmi_fit))
+
+
+bmi_plotly
+```
+
+<br>
+
+###
+
+From the five plots above, we can tell that smoking, age, and bmi significantly affect charge of insurance. The relationship between charges and gender or having children is unclear. Further analysis will be carried below to illustrate their relationships.
 
 <br>
 
