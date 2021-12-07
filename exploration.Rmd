@@ -388,7 +388,7 @@ analyse_smoke_insurancetype =
   )
 
 uninsure = analyse_smoke_insurancetype %>% 
-  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insure"))
+  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insured"))
   
   
 
@@ -424,9 +424,8 @@ Regardless of the smoking status, most people tend to get employer insurance. Fo
 
 ##### Age
 
-
 ```{r message=FALSE}
-
+#| my-chunkn2, echo = FALSE, fig.width = 10,
 analyse_agegroup_sum = 
   dataset_basic %>%
   drop_na(agegroup,insure) %>% 
@@ -453,15 +452,31 @@ analyse_agegroup_insurancetype =
     freq = n/sum
   )
 
-analyse_agegroup_insurancetype %>% 
+uninsure = analyse_agegroup_insurancetype %>% 
+  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insuredd"))
+  
+  
+
+agegroup_plot1 = analyse_agegroup_insurancetype %>% 
   ggplot(aes(x = agegroup, y = freq, fill = insure  )) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'agegroup',
       y = 'proportion',
-      title = 'The distribution of insurance type in differnt age groups')
-```
+      title = 'The distribution of insurance type in differnt age groups') +
+  theme(legend.position = "right")
 
+agegroup_plot2 = uninsure %>% 
+  ggplot(aes(x =agegroup , y = freq, fill = insure)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'agegroup',
+      y = 'proportion',
+      title = 'The proportion of insurance\nin different age group ',
+      fill = "Insurance status")
+
+agegroup_plot2 + agegroup_plot1
+```
 For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get **employer** insurance since they are in working age.
 
 For person older than 65 years old, most of them get **Medicare** since Medicare is only provided for people above 65 years old.
@@ -470,11 +485,9 @@ For person older than 65 years old, most of them get **Medicare** since Medicare
 
 ##### Have children or not
 
-
 ```{r message=FALSE}
-
-
-analyse_children_sum = 
+#| my-chunkn3, echo = FALSE, fig.width = 10,
+analyse_child_sum = 
   dataset_basic %>%
   drop_na(child,insure) %>% 
   group_by(child,insure) %>% 
@@ -485,29 +498,45 @@ analyse_children_sum =
   summarize(sum = sum(n)) %>% 
   pull()
 
-analyse_children_insurancetype = dataset_basic %>%
+analyse_child_insurancetype = dataset_basic %>%
   drop_na(child,insure) %>% 
   group_by(child,insure) %>% 
   summarize(n = n()) %>% 
   mutate(insure = fct_reorder(insure,n)
          ) 
 
-analyse_children_insurancetype$sum = rep(analyse_children_sum, each = 7)
+analyse_child_insurancetype$sum = rep(analyse_child_sum, each = 7)
 
-analyse_children_insurancetype =
-  analyse_children_insurancetype %>% 
+analyse_child_insurancetype =
+  analyse_child_insurancetype %>% 
   mutate(
     freq = n/sum
   )
 
+uninsure = analyse_child_insurancetype %>% 
+  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insured"))
+  
+  
 
-analyse_children_insurancetype %>% 
-  ggplot(aes(x = child, y = freq, fill = insure )) + 
+child_plot1 = analyse_child_insurancetype %>% 
+  ggplot(aes(x = child, y = freq, fill = insure  )) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
-      x = 'child',
+      x = 'have children or not',
       y = 'proportion',
-      title = 'The distribution of insurance type in groups of people with or without children')
+      title = 'Distribution of insurance type in groups\nof people with or without children') +
+  theme(legend.position = "right")
+
+child_plot2 = uninsure %>% 
+  ggplot(aes(x =child , y = freq, fill = insure)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'have children or not',
+      y = 'proportion',
+      title = 'Proportion of insurance in groups\nof people with or without children',
+      fill = "Insurance status")
+
+child_plot2 + child_plot1
 ```
 
 We found that for those without children, a larger proportion of them get **Medicare** comparing to those with children.
@@ -522,18 +551,35 @@ analyse_bmi_insurancetype =
   dataset_basic %>%
   drop_na(bmi,insure) 
   
+uninsure = analyse_bmi_insurancetype %>% 
+  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insuredd"))
   
-  
-analyse_bmi_insurancetype %>% 
+bmi_plot1 = 
+  analyse_bmi_insurancetype %>% 
   ggplot(aes(x = insure, y = bmi,fill = insure)) + 
-  geom_boxplot(alpha=0.6) +
-    theme(legend.position="none") +
-    scale_fill_brewer(palette="Dark2")+
+  geom_boxplot(alpha = 0.6) +
+    theme(legend.position = "none") +
+    scale_fill_brewer(palette = "Dark2") +
     labs(
       x = 'insurance',
       y = 'bmi',
-      title = 'The distribution of bmi in groups having different insurance type') +
+      title = 'The distribution of bmi in groups\nhaving different insurance type') +
   coord_flip()
+
+
+bmi_plot2 = 
+  uninsure %>% 
+  ggplot(aes(x = insure , y = bmi, fill = insure)) + 
+  geom_boxplot(alpha = 0.6) +
+    theme(legend.position = "none") +
+    scale_fill_brewer(palette = "Dark2") +
+    labs(
+      x = 'have insurance or not',
+      y = 'bmi',
+      title = 'The distribution of bmi in groups\nhaving insurance or not') +
+  coord_flip()
+
+bmi_plot2 + bmi_plot1
 ```
 
 We did not observe significant difference between each group.
@@ -625,7 +671,7 @@ $H_1$ : insurance type and have children or not are dependent, there is a relati
 ```{r}
 #test_data_smoke_insurancetype = analyse_smoke_insurancetype %>% 
 #  pivot_wider(
-#  names_from = "insure", 
+#  names_from = "Insured", 
 #  values_from = "n")
 
 #test_data_smoke_insurancetype %>% knitr::kable()
