@@ -49,14 +49,14 @@ dataset_basic = read_csv("data/dataset_basic.csv") %>%
          smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
          agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs"))
          ) %>% 
-  select(insure,agegroup,smoker,bmi,child,sex)
+  dplyr::select(insure,agegroup,smoker,bmi,child,sex)
 ```
 
 
 ```{r message=FALSE}
 
 smoke_df = read_csv("data/dataset_basic.csv") %>% 
-  select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,poverty_group = imputed_povertygroup,bmi,child,sex) %>% 
+  dplyr::select(agegroup,smoker,everyday,numberperdaya,cost20cigarettes,generalhealth,poverty_group = imputed_povertygroup,bmi,child,sex) %>% 
   drop_na(smoker) %>% 
   mutate(
          smoker_cat = case_when(
