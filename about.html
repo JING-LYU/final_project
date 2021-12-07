@@ -11,7 +11,7 @@
 
 
 
-<title>index.knit</title>
+<title>About this project and website</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -217,7 +221,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -227,6 +297,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -304,42 +384,66 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
-<h1 class="title toc-ignore"><font size="8">
-<center>
-Smoking in NYC
-</center>
-</font></h1>
-<h3 class="subtitle"><font size="5">
-<center>
-Exploring relationship between smoking and health insurance in New York City
-</center>
-</font></h3>
+
+<h1 class="title toc-ignore">About this project and website</h1>
 
 </div>
 
 
-<center>
-<div id="section" class="section level2">
-<h2></h2>
-<p><img src="images/smoke_pic.webp" style="width:75%"></p>
-<p><font size="1"> image source: <a href="https://www.waldenu.edu/online-bachelors-programs/bs-in-public-health/resource/ten-benefits-of-smoke-free-workplaces" class="uri">https://www.waldenu.edu/online-bachelors-programs/bs-in-public-health/resource/ten-benefits-of-smoke-free-workplaces</a></font></p>
+<p><br></p>
+<div id="website-overview" class="section level2">
+<h2>Website overview</h2>
+<p>In this website, you will find:</p>
+<ul>
+<li><p><a href="data-exploration1.html">Data exploration</a> of our targeted datasets.</p></li>
+<li><p><a href="model_building.html">Model</a> build using cleaned datasets.</p></li>
+<li><p><a href=".html">Analysis and discussion</a> of our finding.</p></li>
+<li><p><a href="mapping.html">Mapping</a> of health consulting centers and health insurance carriers locations in NYC, along with their contact information and operation hours.</p></li>
+<li><p><a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Shiny</a> dashboard for prediction of insurance price. User may enter their age, bmi, whether or not smoking and having children, and the interactive page will give a predicted health insurance price and price range for user.</p></li>
+<li><p>Final formatted <a href="report.html">Report</a> of our research</p></li>
+</ul>
+<p>You can also reach to us by clicking the email icon on top right corner of the website. Our github page can also be found be clicking the github icon.</p>
 <p><br></p>
 </div>
-<div id="motivation-and-research-question" class="section level2">
-<h2>Motivation and Research Question</h2>
-<p>It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance.</p>
-<p><img src="images/tweet.jpeg" style="width:100%"></p>
-<p>Image below shows the portrait of the New York medical insurance. We noticed that there are very large amount of New-Yorkers who are not insured.</p>
-<p><img src="images/nyc_insurance_stat.png" style="width:100%"> <font size="1">Image source: <a href="https://www.ehealthinsurance.com/new-york-health-insurance" class="uri">https://www.ehealthinsurance.com/new-york-health-insurance</a></font></p>
-<p>Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, <strong>our research topic can be divided into three research questions. We would like to investigate if smokers in NYC tend to get insurance, what type of insurance they prefer, and the factors that affect insurance cost.</strong></p>
-<p>Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.</p>
+<div id="datasets" class="section level2">
+<h2>Datasets</h2>
+<p><strong>Datasets for analysis:</strong></p>
+<ul>
+<li><p><a href="https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page">Community Health Survey Public Use Data</a>. This dataset contains survey questions regarding smoking and health insurance. We extracted related questions from the survey for analysis.</p></li>
+<li><p><a href="https://www.kaggle.com/mirichoi0218/insurance">Medical Cost Personal Dataset</a>. This dataset sheds lights on insurance charges for different personal characteristics, such as smoking, age, bmi, region, etc.</p></li>
+</ul>
+<p><strong>Datasets for mapping:</strong></p>
+<ul>
+<li><p><a href="https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h">Primary Care Access and Planning - Health Insurance Enrollment</a>. This dataset is used for mapping of health consulting centers in NYC.</p></li>
+<li><p><a href="https://health.data.ny.gov/Health/Medicaid-Enrolled-Provider-Listing/keti-qx5t">Medicaid Enrolled Provider Listing</a>: This dataset is used for mapping of Medicaid provide locations in NYC.</p></li>
+<li><p>In addition, locations of major health insurance carriers in NYC is collected manually and used to create interactive mapping of these carriers.</p></li>
+</ul>
 <p><br></p>
+</div>
+<div id="collaborators" class="section level2">
+<h2>Collaborators</h2>
+<ul>
+<li>Jing Lyu</li>
+<li>Mengfan Luo</li>
+<li>Yushan Wang</li>
+<li>Yiqun Jin</li>
+</ul>
+<p>We are Biostatistics students from Columbia University Mailman School of Public Health. This is a project for the course P8105 Data Science.</p>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -371,7 +475,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

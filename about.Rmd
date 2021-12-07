@@ -1,0 +1,66 @@
+---
+title: About this project and website
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+    
+---
+
+<br>
+
+## Website overview
+
+In this website, you will find:
+
+* [Data exploration](data-exploration1.html) of our targeted datasets.
+
+* [Model](model_building.html) build using cleaned datasets.
+
+* [Analysis and discussion](.html) of our finding.
+
+* [Mapping](mapping.html) of health consulting centers and health insurance carriers locations in NYC, along with their contact information and operation hours.
+
+* [Shiny](https://yiqunjin.shinyapps.io/shiny_dashboard/) dashboard for prediction of insurance price. User may enter their age, bmi, whether or not smoking and having children, and the interactive page will give a predicted health insurance price and price range for user.
+
+* Final formatted [Report](report.html) of our research
+
+You can also reach to us by clicking the email icon on top right corner of the website. Our github page can also be found be clicking the github icon.
+
+
+<br>
+
+## Datasets
+
+**Datasets for analysis:**
+
+* [Community Health Survey Public Use Data](https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page). This dataset contains survey questions regarding smoking and health insurance. We extracted related questions from the survey for analysis.
+
+* [Medical Cost Personal Dataset](https://www.kaggle.com/mirichoi0218/insurance). This dataset sheds lights on insurance charges for different personal characteristics, such as smoking, age, bmi, region, etc.
+
+**Datasets for mapping:**
+
+* [Primary Care Access and Planning - Health Insurance Enrollment](https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h). This dataset is used for mapping of health consulting centers in NYC. 
+
+* [Medicaid Enrolled Provider Listing](https://health.data.ny.gov/Health/Medicaid-Enrolled-Provider-Listing/keti-qx5t): This dataset is used for mapping of Medicaid provide locations in NYC.
+
+* In addition, locations of major health insurance carriers in NYC is collected manually and used to create interactive mapping of these carriers.
+
+
+<br>
+
+
+## Collaborators
+
+* Jing Lyu
+* Mengfan Luo
+* Yushan Wang
+* Yiqun Jin
+
+We are Biostatistics students from Columbia University Mailman School of Public Health. This is a project for the course P8105 Data Science.
+
+
+
+
+

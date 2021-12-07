@@ -3,18 +3,24 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "Data exploration"
-      href: exploration.html
-    - text: "Model building"
-      href: medical_cost.html
+    - text: "About"
+      href: about.html
+    - text: "Analysis"
+      menu:
+      - text: "Data exploration"
+        href: exploration.html
+      - text: "Model building"
+        href: medical_cost.html
     - text: "Discussion"
       href: discussion.html
-    - text: "Mapping"
-      href: mapping.html
+    - text: "Interactive tools"
+      menu:
+      - text: "Mapping"
+        href: mapping.html
+      - text: "Shiny Dashboard"
+        href: https://yiqunjin.shinyapps.io/shiny_dashboard/
     - text: "Report"
-      href: report.html
-    - text: "Shiny Dashboard"
-      href: https://yiqunjin.shinyapps.io/shiny_dashboard/
+      href: final_report.html
     - icon: fa-envelope fa-lg
       href: mailto:<yw3772@cumc.columbia.com>
     - icon: fa-github fa-lg

@@ -13,8 +13,8 @@
 
 <title>Data exploration</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -29,6 +29,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
@@ -224,6 +227,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -231,6 +297,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -251,22 +327,43 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="exploration.html">Data exploration</a>
+  <a href="about.html">About</a>
 </li>
-<li>
-  <a href="medical_cost.html">Model building</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exploration.html">Data exploration</a>
+    </li>
+    <li>
+      <a href="medical_cost.html">Model building</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="discussion.html">Discussion</a>
 </li>
-<li>
-  <a href="mapping.html">Mapping</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Interactive tools
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="mapping.html">Mapping</a>
+    </li>
+    <li>
+      <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Shiny Dashboard</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="report.html">Report</a>
-</li>
-<li>
-  <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Shiny Dashboard</a>
+  <a href="final_report.html">Report</a>
 </li>
 <li>
   <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
@@ -361,7 +458,9 @@ current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)</code></p
     y = &quot;Number of holders&quot;,
     title = &quot;Number of holders\nin each insurance type&quot;) + 
   coord_flip()</code></pre>
-<p><img src="exploration_files/figure-html/my-chunkhaha-1.png" width="90%" /></p>
+<pre class="r"><code>#| my-chunkhaha, echo = FALSE, fig.width = 8,
+insurehold + insuretype</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
 <pre class="r"><code>insur_type &lt;- c(&quot;Employer&quot;, &quot;Medicare&quot;, &quot;Milit/CHAMPUS&quot;, &quot;Uninsured&quot;, &quot;Self-purchased&quot;, &quot;Medicaid/Family Health+&quot;, &quot;COBRA/other&quot;)
 
 insur_meaning &lt;- c(&quot;Employer-sponsored health insurance is a health insurance selected and purchased by your employer and offered to eligible employees and their dependents.&quot;,
@@ -523,7 +622,9 @@ smoke_df %&gt;%
     fill = &quot;Smoking frequency&quot;
        )+
   theme(legend.position = &quot;right&quot;)</code></pre>
-<p><img src="exploration_files/figure-html/my-chunkn-1.png" width="90%" /></p>
+<pre class="r"><code>#| my-chunkn, echo = FALSE, fig.width = 8,
+type + consumption</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
 <p>Most of the current smokers are light smokers. Among those light smokers, nearly half of them smoke everyday, while normal and heavy smokers are more likely to smoke everyday. Casual smokers tend to consume less cigarette than everyday smokers.</p>
 <p><br></p>
 </div>
@@ -548,7 +649,7 @@ smoke_df %&gt;%
 </div>
 </div>
 <div id="explore-relationship-between-insurance-and-target-variables" class="section level3">
-<h3>3. Explore relationship between <code>insurance</code> and target variables</h3>
+<h3>3. Explore relationship between <strong>insurance</strong> and target variables</h3>
 <p>In this step, we want to explore more about the relationship between insurance and key variables, including smoking, age, have children or not and BMI. We start by plotting distribution graphs to see the pattern between each groups. And then we conduct statistical tests to evaluate the association and similarity between them.</p>
 <p><br></p>
 <div id="distributions" class="section level4 tabset">
@@ -669,7 +770,20 @@ analyse_bmi_insurancetype %&gt;%
 <pre class="r"><code>dat = 
   dataset_basic %&gt;%
   drop_na(smoker,insure) </code></pre>
-<p><img src="exploration_files/figure-html/my-chunk1-1.png" width="90%" /></p>
+<pre class="r"><code>#| my-chunk1, echo = FALSE, fig.width = 8,
+
+# plot
+ggbarstats(
+  data = dat,
+  x = smoker,
+  y = insure,
+  title = &quot;Chi-quare test between insurance type and smoking&quot;
+) +
+  labs(caption = NULL) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) </code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-19-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and smoking are dependent.</p>
 </div>
 </div>
@@ -683,7 +797,18 @@ analyse_bmi_insurancetype %&gt;%
 <pre class="r"><code>dat = 
   dataset_basic %&gt;%
   drop_na(agegroup,insure) </code></pre>
-<p><img src="exploration_files/figure-html/my-chunk2-1.png" width="90%" /></p>
+<pre class="r"><code>#| my-chunk2, echo = FALSE, fig.width = 8,
+ggbarstats(
+  data = dat,
+  x = smoker,
+  y = insure,
+  title = &quot;Chi-quare test result between insurance type and age&quot;
+) +
+  labs(caption = NULL) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) </code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-21-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and age are dependent.</p>
 </div>
 </div>
@@ -705,7 +830,19 @@ analyse_bmi_insurancetype %&gt;%
 dat = 
   dataset_basic %&gt;%
   drop_na(child,insure)</code></pre>
-<p><img src="exploration_files/figure-html/my-chunk3-1.png" width="90%" /></p>
+<pre class="r"><code>#| my-chunk3, echo = FALSE, fig.width = 8,
+
+ggbarstats(
+  data = dat,
+  x = child,
+  y = insure,
+  title = &quot;Chi-quare test between insurance type and children&quot;
+) +
+  labs(caption = NULL) +
+  theme(
+    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
+  ) </code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-23-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and children are dependent.</p>
 </div>
 </div>
@@ -716,6 +853,11 @@ dat =
 <p><span class="math inline">\(H_0\)</span> : The mean of BMI in each insurance type groups are the same</p>
 <p><span class="math inline">\(H_1\)</span> : At least two means of BMI in all insurance type groups are different</p>
 <p><em>Test result:</em></p>
+<pre class="r"><code>#| my-chunk6, echo = FALSE, fig.width = 10,fig.height = 8
+anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
+anova %&gt;% 
+  broom::tidy() %&gt;% 
+  knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -746,7 +888,12 @@ dat =
 </tr>
 </tbody>
 </table>
-<p><img src="exploration_files/figure-html/my-chunk6-1.png" width="90%" /></p>
+<pre class="r"><code>Tukey_comp = TukeyHSD(anova)
+
+par(mar = c(2, 18, 2, 2))
+plot(Tukey_comp,las = 1,
+     cex.axis = 0.8)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-24-1.png" width="90%" /></p>
 <p>According to the ANOVA test, we reject <span class="math inline">\(H_0\)</span> and conclude At least two means of BMI in all insurance type groups are different. Detailed information of the difference in each group can be seen on the above image.</p>
 <p><br></p>
 </div>
@@ -756,6 +903,8 @@ dat =
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -793,6 +942,35 @@ $(document).ready(function () {
 });
 </script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

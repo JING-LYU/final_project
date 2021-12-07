@@ -1,10 +1,15 @@
 ---
-title: "Mapping of NYC health consulting center and insurance agency locations"
+title: "Mapping of NYC health consulting center and insurance provider locations"
 output: 
   html_document:
     code_folding: hide
   
 ---
+
+<br>
+
+The three interactive maps below provide location information about agencies that provide services related to health insurance. Click on each tabs to find out more about their address, contact numbers, and more.
+
 
 ## {.tabset}
 
@@ -69,7 +74,7 @@ Search for "insurance" after enter the website
 
 ### Insurance agency location mapping
 
-This map shows the locations of major health insurance carriers in NYC.
+For those who are interested in purchasing insurance, this map shows the locations of major health insurance carriers in NYC.
 
 <img src="images/insurance_agency.jpeg" style="width:70%">
 

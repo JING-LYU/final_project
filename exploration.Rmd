@@ -3,6 +3,8 @@ title: "Data exploration"
 output: 
   html_document:
     code_folding: hide
+    toc: true
+    toc_float: true    
   
 ---
 
@@ -308,7 +310,7 @@ Regardless of smoking frequency and smoking intensity, the cost of each pack of 
 
 
 
-### 3. Explore relationship between `insurance` and target variables
+### 3. Explore relationship between **insurance** and target variables
 In this step, we want to explore more about the relationship between insurance and key variables, including smoking, age, have children or not and BMI. We start by plotting distribution graphs to see the pattern between each groups. And then we conduct statistical tests to evaluate the association and similarity between them.
 
 <br>
