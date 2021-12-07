@@ -62,7 +62,7 @@ var <- c("smoker", "children_group", "sex", "age", "bmi", "charges")
 var_meaning <- c("0 = non-smoker, 1 = smoker", "0 = No children, 1 = Have at least 1 child", "1 = male, 2 = female", "Age range from 18 to 63", "Body mass index range from 15.96 to 53.13", "Cost of health insurance")
 
 var_info <- data.frame(var, var_meaning) %>% 
-  rename(
+  dplyr::rename(
     "Variable name" = var,
     "Variable information" = var_meaning
   )
