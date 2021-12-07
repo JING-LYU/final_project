@@ -289,7 +289,7 @@ summary(model)%>%
   knitr::kable()
 ```
 
-The model building result shows that sex is not a significant variable with p-valur > 0.05. Therefore, when we do the stepwise regression, we would likely to remove the variable of sex.
+The model building result shows that sex is not a significant variable with p-value < 0.05. Therefore, when we do the stepwise regression, we would likely to remove the variable of sex.
 
 <br>
 

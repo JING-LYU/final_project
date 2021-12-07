@@ -55,7 +55,8 @@ In the first part, insurance preferences, we first explore people's insurance pr
 The second part, Insurance charges, assists our main research topic, since we can use the factors (age, bmi, smoker, etc) to not only explain what kind of personal characteristics would affect insurance cost, but also build a prediction model for health insurance charges. By doing such, we would gain better insights to the underlying relationship between health insurance and smoking, along with other important variables that contributes to the cost variation of insurance.
 
 ## Data
-Source, scraping method, cleaning, etc.
+
+<br>
 
 ### Data source
 
@@ -179,13 +180,13 @@ cost_df = read.csv("data/medical_cost_clean.csv") %>%
 **This dataset includes the following variables**
 
 * `age`: Age
-* `sex`: Sex (male = 1, female = 2)
+* `sex`: Sex (1 = male, 2 = female)
 * `bmi`: Body Mass Index
 * `children`: number of children the person has
-* `smoker`: smoking status (non-smoker = 0, smoker = 1)
+* `smoker`: smoking status (0 = non-smoker, 1 = smoker)
 * `region`: region in th US
 * `charges`: Insurance charges
-* `children_group`: whether or not the person has children (No children = 0, At least one child = 1)
+* `children_group`: whether or not the person has children (0 = No children, 1 = At least one child)
 
 
 ## Exploratory analysis
@@ -431,7 +432,7 @@ summary(model)%>%
   knitr::kable()
 ```
 
-The model building result shows that sex is not a significant variable with p-valur > 0.05. Therefore, when we do the stepwise regression, we would likely to remove the variable of sex.
+The model building result shows that sex is not a significant variable with p-value < 0.05. Therefore, when we do the stepwise regression, we would likely to remove the variable of sex.
 
 
 #### Stepwise regression
@@ -544,7 +545,7 @@ Holding all other variable fixed, smoking is associated with a 155% increase in 
 
 ### Shiny dashboard for predicting insurance charge
 
-The [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) is a visualization of the prediction of insurance premium using the dataset "insurance_medical_cost_personal_datasets.csv". By providing the information of age, BMI, smoke or not smoke, with or without children, user could get a general idea of the range of insurance premium.
+The [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) is a visualization of the prediction of insurance premium. By providing the information of age, BMI, smoke or not smoke, with or without children, user could get a general idea of the range of insurance premium.
 
 ## Additional visualization
 
@@ -569,6 +570,7 @@ leaflet(health_center) %>%
 ```
 
 <br>
+
 **Time of operation and walk-in:**
 ```{r}
 health_center_table = health_center %>% 
@@ -614,6 +616,7 @@ leaflet(insurance_agency) %>%
 ```
 
 <br>
+
 **Time of operation and walk-in:**
 ```{r}
 insurance_agency_table =insurance_agency %>% 
