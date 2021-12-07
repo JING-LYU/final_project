@@ -241,20 +241,41 @@ For people who are current smokers and who has never smoked, number of people in
 
 <br>
 
+
+##### BMI
+
+
+```{r,message=FALSE}
+
+smoke_df %>% 
+  drop_na(bmi,smoker) %>% 
+  ggplot(aes(x = smoker, y = bmi,fill = smoker)) + 
+  geom_boxplot() +
+    labs(
+      x = 'Smoking status',
+      y = 'BMI (kg/m^2)',
+      title = 'The distribution of bmi among people in different smoking status') 
+```
+
+There's no significant difference of participants BMI in different smoking status.
+
+
+<br>
+
 #### Current smokers {.tabset}
 
-For `never` and `former` smokers, no data for variables `everyday`, `numberperdaya`, `cost20cigarettes`, so next we **focus on the current smokers**.
+Next, we focus on the **current smokers** and look at there smoking intensity, frequency and cost, as well as their BMI index.
 
-##### Daily consumption
+##### Smoking intensity and frequency
 
 ```{r message=FALSE, warning=FALSE}
 type = current_smoker %>%
   ggplot(aes(x = smoker_cat, fill = everyday))+
   geom_histogram(stat="count") +
     labs(
-      x = 'Type of current smokers',
-      y = 'Number of smokers in each type',
-      title = 'Number of current smokers\nof diffirent types')+
+      x = 'Smoking intensity',
+      y = 'Number of current smokers',
+      title = 'Smoking intensity of current smokers')+
   theme(legend.position = "none")
 ```
 
@@ -266,7 +287,7 @@ consumption = current_smoker %>%
   xlim(0,30)+
   labs(
     x = "Average number of cigarattes smoked per day",
-    y = "Number of smokers",
+    y = "Number of current smokers",
     title = "Average number of cigarattes\nsmoked per day",
     fill = "Smoking frequency"
        )+
@@ -282,6 +303,28 @@ Most of the current smokers are light smokers. Among those light smokers, nearly
 
 
 <br>
+
+##### BMI
+
+```{r message=FALSE, warning=FALSE}
+  
+current_smoker %>% 
+  ggplot(aes(x = smoker_cat, y = bmi, fill = smoker_cat))+
+  geom_boxplot() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #facet_grid(.~smoker_cat,scales = "free") +
+    labs(
+      x = 'Smoking intensity',
+      y = 'BMI (kg/m^2)',
+      title = 'BMI among current smokers with different smoking intensity',
+      color = "Smoking intensity")
+
+```
+
+There's no significant difference between current smokers with different smoking intensity.
+
+<br>
+
 
 ##### Cost on smoke
 
@@ -307,6 +350,7 @@ Regardless of smoking frequency and smoking intensity, the cost of each pack of 
 
 
 <br>
+
 
 
 

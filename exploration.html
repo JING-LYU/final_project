@@ -458,9 +458,7 @@ current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)</code></p
     y = &quot;Number of holders&quot;,
     title = &quot;Number of holders\nin each insurance type&quot;) + 
   coord_flip()</code></pre>
-<pre class="r"><code>#| my-chunkhaha, echo = FALSE, fig.width = 8,
-insurehold + insuretype</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunkhaha-1.png" width="90%" /></p>
 <pre class="r"><code>insur_type &lt;- c(&quot;Employer&quot;, &quot;Medicare&quot;, &quot;Milit/CHAMPUS&quot;, &quot;Uninsured&quot;, &quot;Self-purchased&quot;, &quot;Medicaid/Family Health+&quot;, &quot;COBRA/other&quot;)
 
 insur_meaning &lt;- c(&quot;Employer-sponsored health insurance is a health insurance selected and purchased by your employer and offered to eligible employees and their dependents.&quot;,
@@ -597,19 +595,33 @@ smoke_df %&gt;%
 <p>For people who are current smokers and who has never smoked, number of people in each poverty group decreace with higher poverty level. However, among former smokers, number of people in different levels of poverty groups are close in quantities.</p>
 <p><br></p>
 </div>
+<div id="bmi" class="section level5">
+<h5>BMI</h5>
+<pre class="r"><code>smoke_df %&gt;% 
+  drop_na(bmi,smoker) %&gt;% 
+  ggplot(aes(x = smoker, y = bmi,fill = smoker)) + 
+  geom_boxplot() +
+    labs(
+      x = &#39;Smoking status&#39;,
+      y = &#39;BMI (kg/m^2)&#39;,
+      title = &#39;The distribution of bmi among people in different smoking status&#39;) </code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-10-1.png" width="90%" /></p>
+<p>There’s no significant difference of participants BMI in different smoking status.</p>
+<p><br></p>
+</div>
 </div>
 <div id="current-smokers" class="section level4 tabset">
 <h4 class="tabset">Current smokers</h4>
-<p>For <code>never</code> and <code>former</code> smokers, no data for variables <code>everyday</code>, <code>numberperdaya</code>, <code>cost20cigarettes</code>, so next we <strong>focus on the current smokers</strong>.</p>
-<div id="daily-consumption" class="section level5">
-<h5>Daily consumption</h5>
+<p>Next, we focus on the <strong>current smokers</strong> and look at there smoking intensity, frequency and cost, as well as their BMI index.</p>
+<div id="smoking-intensity-and-frequency" class="section level5">
+<h5>Smoking intensity and frequency</h5>
 <pre class="r"><code>type = current_smoker %&gt;%
   ggplot(aes(x = smoker_cat, fill = everyday))+
   geom_histogram(stat=&quot;count&quot;) +
     labs(
-      x = &#39;Type of current smokers&#39;,
-      y = &#39;Number of smokers in each type&#39;,
-      title = &#39;Number of current smokers\nof diffirent types&#39;)+
+      x = &#39;Smoking intensity&#39;,
+      y = &#39;Number of current smokers&#39;,
+      title = &#39;Smoking intensity of current smokers&#39;)+
   theme(legend.position = &quot;none&quot;)</code></pre>
 <pre class="r"><code>consumption = current_smoker %&gt;% 
   ggplot(aes(x = numberperdaya, fill = everyday)) + 
@@ -617,15 +629,29 @@ smoke_df %&gt;%
   xlim(0,30)+
   labs(
     x = &quot;Average number of cigarattes smoked per day&quot;,
-    y = &quot;Number of smokers&quot;,
+    y = &quot;Number of current smokers&quot;,
     title = &quot;Average number of cigarattes\nsmoked per day&quot;,
     fill = &quot;Smoking frequency&quot;
        )+
   theme(legend.position = &quot;right&quot;)</code></pre>
-<pre class="r"><code>#| my-chunkn, echo = FALSE, fig.width = 8,
-type + consumption</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunkn-1.png" width="90%" /></p>
 <p>Most of the current smokers are light smokers. Among those light smokers, nearly half of them smoke everyday, while normal and heavy smokers are more likely to smoke everyday. Casual smokers tend to consume less cigarette than everyday smokers.</p>
+<p><br></p>
+</div>
+<div id="bmi-1" class="section level5">
+<h5>BMI</h5>
+<pre class="r"><code>current_smoker %&gt;% 
+  ggplot(aes(x = smoker_cat, y = bmi, fill = smoker_cat))+
+  geom_boxplot() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  #facet_grid(.~smoker_cat,scales = &quot;free&quot;) +
+    labs(
+      x = &#39;Smoking intensity&#39;,
+      y = &#39;BMI (kg/m^2)&#39;,
+      title = &#39;BMI among current smokers with different smoking intensity&#39;,
+      color = &quot;Smoking intensity&quot;)</code></pre>
+<p><img src="exploration_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
+<p>There’s no significant difference between current smokers with different smoking intensity.</p>
 <p><br></p>
 </div>
 <div id="cost-on-smoke" class="section level5">
@@ -642,7 +668,7 @@ type + consumption</code></pre>
       y = &#39;Cost of every 20 (one pack) cigrattes&#39;,
       title = &#39;Cost of every 20 (one pack) cigrattes\nfor number of cigrattes consumed everyday&#39;,
       color = &quot;Smoking frequency&quot;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-15-1.png" width="90%" /></p>
 <p>Regardless of smoking frequency and smoking intensity, the cost of each pack of cigarette are even distributed within $0 to $20</p>
 <p><br></p>
 </div>
@@ -690,7 +716,7 @@ analyse_smoke_insurancetype %&gt;%
       y = &#39;proportion&#39;,
       title = &#39;The proportion of insurance in different smoking group &#39;,
       fill = &quot;Insurance type&quot;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-16-1.png" width="90%" /></p>
 <p>We found that, regardless of the smoking status, most people tend to get employer insurance. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.</p>
 <p><br></p>
 </div>
@@ -710,7 +736,7 @@ analyse_agegroup_insurancetype %&gt;%
       x = &#39;agegroup&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance type in differnt agegroup&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-15-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
 <p>For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get <strong>employer</strong> insurance since they are in working age.</p>
 <p>For person older than 65 years old, most of them get <strong>Medicare</strong> since Medicare is only provided for people above 65 years old.</p>
 <p><br></p>
@@ -731,11 +757,11 @@ analyse_children_insurancetype %&gt;%
       x = &#39;child&#39;,
       y = &#39;counts&#39;,
       title = &#39;The distribution of insurance type in groups of people with or without children&#39;)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-16-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-18-1.png" width="90%" /></p>
 <p>We found that for those without children, a larger proportion of them get <strong>Medicare</strong> comparing to those with children.</p>
 <p><br></p>
 </div>
-<div id="bmi" class="section level5">
+<div id="bmi-2" class="section level5">
 <h5>BMI</h5>
 <pre class="r"><code>analyse_bmi_insurancetype = 
   dataset_basic %&gt;%
@@ -753,7 +779,7 @@ analyse_bmi_insurancetype %&gt;%
       y = &#39;bmi&#39;,
       title = &#39;The distribution of bmi in groups having different insurance type&#39;) +
   coord_flip()</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-17-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/unnamed-chunk-19-1.png" width="90%" /></p>
 <p>We did not observe significant difference between each group.</p>
 <p><br></p>
 </div>
@@ -770,20 +796,7 @@ analyse_bmi_insurancetype %&gt;%
 <pre class="r"><code>dat = 
   dataset_basic %&gt;%
   drop_na(smoker,insure) </code></pre>
-<pre class="r"><code>#| my-chunk1, echo = FALSE, fig.width = 8,
-
-# plot
-ggbarstats(
-  data = dat,
-  x = smoker,
-  y = insure,
-  title = &quot;Chi-quare test between insurance type and smoking&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-19-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunk1-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and smoking are dependent.</p>
 </div>
 </div>
@@ -797,18 +810,7 @@ ggbarstats(
 <pre class="r"><code>dat = 
   dataset_basic %&gt;%
   drop_na(agegroup,insure) </code></pre>
-<pre class="r"><code>#| my-chunk2, echo = FALSE, fig.width = 8,
-ggbarstats(
-  data = dat,
-  x = smoker,
-  y = insure,
-  title = &quot;Chi-quare test result between insurance type and age&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-21-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunk2-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and age are dependent.</p>
 </div>
 </div>
@@ -830,34 +832,17 @@ ggbarstats(
 dat = 
   dataset_basic %&gt;%
   drop_na(child,insure)</code></pre>
-<pre class="r"><code>#| my-chunk3, echo = FALSE, fig.width = 8,
-
-ggbarstats(
-  data = dat,
-  x = child,
-  y = insure,
-  title = &quot;Chi-quare test between insurance type and children&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-23-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunk3-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and children are dependent.</p>
 </div>
 </div>
-<div id="bmi-1" class="section level5">
+<div id="bmi-3" class="section level5">
 <h5>BMI</h5>
 <div id="anova-test-between-insurance-type-and-bmi" class="section level6">
 <h6><strong>ANOVA test between insurance type and BMI</strong></h6>
 <p><span class="math inline">\(H_0\)</span> : The mean of BMI in each insurance type groups are the same</p>
 <p><span class="math inline">\(H_1\)</span> : At least two means of BMI in all insurance type groups are different</p>
 <p><em>Test result:</em></p>
-<pre class="r"><code>#| my-chunk6, echo = FALSE, fig.width = 10,fig.height = 8
-anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
-anova %&gt;% 
-  broom::tidy() %&gt;% 
-  knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -888,12 +873,7 @@ anova %&gt;%
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>Tukey_comp = TukeyHSD(anova)
-
-par(mar = c(2, 18, 2, 2))
-plot(Tukey_comp,las = 1,
-     cex.axis = 0.8)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-24-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunk6-1.png" width="90%" /></p>
 <p>According to the ANOVA test, we reject <span class="math inline">\(H_0\)</span> and conclude At least two means of BMI in all insurance type groups are different. Detailed information of the difference in each group can be seen on the above image.</p>
 <p><br></p>
 </div>
