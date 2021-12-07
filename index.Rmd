@@ -16,19 +16,21 @@ output:
 
 ## Motivation and Research Question
 
-It is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. Intuitively, we think that as price increase, the smoker would less likely to purchase health insurance. 
+We notice that a lot of smokers complain about their insurance charges. In fact, it is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. 
 
 <img src="images/tweet.jpeg" style="width:80%">
 
-Image below shows the portrait of the New York medical insurance. We noticed that there are very large amount of New-Yorkers who are not insured. 
+<br>
+
+Image below shows the portrait of the New York medical insurance. 
+We noticed that there are very large amount of New-Yorkers who are not insured. 
 
 <img src="images/nyc_insurance_stat.PNG" style="width:80%">
 <font size="1">Image source: https://www.ehealthinsurance.com/new-york-health-insurance</font> 
 
+<br>
 
-Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, **our research topic can be divided into three research questions. We would like to investigate if smokers in NYC tend to get insurance, what type of insurance they prefer, and the factors that affect insurance cost.**
 
-Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
-
+Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance.
 
 <br>

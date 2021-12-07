@@ -14,15 +14,15 @@ output:
 
 In this website, you will find:
 
-* [Data exploration](data-exploration1.html) of our targeted datasets.
+* [Analysis - Smokers' Insurance Preference](data-exploration1.html): Investigation of association between smoking and health insurance.
 
-* [Model](model_building.html) build using cleaned datasets.
+* [Analysis - Insurance Charge Predication](model_building.html): Prediction model building for health insurance premiums.
 
-* [Analysis and discussion](.html) of our finding.
+* [Discussion](discussion.html): Finding of our research.
 
-* [Mapping](mapping.html) of health consulting centers and health insurance carriers locations in NYC, along with their contact information and operation hours.
+* [Interactive tools - Mapping](mapping.html): Location map and information about agencies that provide services related to health insurance.
 
-* [Shiny](https://yiqunjin.shinyapps.io/shiny_dashboard/) dashboard for prediction of insurance price. User may enter their age, bmi, whether or not smoking and having children, and the interactive page will give a predicted health insurance price and price range for user.
+* [Interactive tools - Shiny](https://yiqunjin.shinyapps.io/shiny_dashboard/): dashboard for prediction of insurance price. User may enter their age, bmi, whether or not smoking and having children, and the interactive page will give a predicted health insurance price and price range for user.
 
 * Final formatted [Report](report.html) of our research
 
