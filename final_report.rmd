@@ -47,10 +47,10 @@ These facts inspired us to look deep into the relationship between smoking and h
 
 We divide our main research topic, the relationship between smoking and health insurance, into two parts: 
 
-* Smoker insurance preferences: If smokers tend to get insurance and what type of insurance they prefer;
+* Smoker insurance preferences: If smokers tend to get insurance and what type of insurance they prefer
 * Insurance charges prediction: personal factors that affect insurance cost. 
 
-In the first part, insurance preferences, we first explore people's insurance preferences and their smoking status in order to investigate if there is potential association between smoking and insurance.
+In the first part, insurance preferences, we first explore people's insurance preferences and their smoking status in order to investigate if there is potential association between smoking and insurance. We also investigate some other variables that could be potential confounders or interaction factors between the relationship of smoking and insurance.
 
 The second part, Insurance charges, assists our main research topic, since we can use the factors (age, bmi, smoker, etc) to not only explain what kind of personal characteristics would affect insurance cost, but also build a prediction model for health insurance charges. By doing such, we would gain better insights to the underlying relationship between health insurance and smoking, along with other important variables that contributes to the cost variation of insurance.
 
@@ -669,9 +669,16 @@ leaflet(medicaid) %>%
 
 
 ## Discussion
-What were your findings? Are they what you expect? What insights into the data can you make?
+* Smoker insurance preferences: If smokers tend to get insurance and what type of insurance they prefer;
+* Insurance charges prediction: personal factors that affect insurance cost. 
+
+
+For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get employer insurance since they are in working age.
+For person older than 65 years old, most of them get Medicare since Medicare is only provided for people above 65 years old.
 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. This finding confirmed the fact that smokers are charged for higher insurance. In addition, being older, higher body mass index, and having at least 1 children also increase insurance costs. 
+
+For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, economy, and social behavior.
 
 ## Citation
 
