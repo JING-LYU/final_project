@@ -39,7 +39,7 @@ scale_fill_discrete = scale_fill_viridis_d
 
 
 ```{r message=FALSE}
-ataset_basic = read_csv("data/dataset_basic.csv")
+dataset_basic = read_csv("data/dataset_basic.csv")
 
 dataset_basic = read_csv("data/dataset_basic.csv") %>% 
   mutate(
