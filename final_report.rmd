@@ -22,6 +22,8 @@ library(haven)
 
 ```
 
+<br>
+
 ## Motivation
 
 We notice that a lot of smokers complain about their insurance charges. In fact, it is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. 
@@ -34,6 +36,8 @@ Since health insurance is vital for people’s well-being, and the cost is the m
 
 Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
 
+<br>
+
 
 ## Related work 
 
@@ -42,6 +46,9 @@ The [Health Market website](https://www.healthmarkets.com/content/smoking-and-he
 In addition, there are many tweets on twitter that discuss the relationship between smoking and health insurance. We have read that smokers lose access to many health resources due to higher cost of insurance, and insurance won't approve as many treatments for smokers as non-smokers.
 
 These facts inspired us to look deep into the relationship between smoking and health insurance.
+
+<br>
+
 
 ## Initial questions
 
@@ -54,9 +61,11 @@ In the first part, insurance preferences, we first explore people's insurance pr
 
 The second part, Insurance charges, assists our main research topic, since we can use the factors (age, bmi, smoker, etc) to not only explain what kind of personal characteristics would affect insurance cost, but also build a prediction model for health insurance charges. By doing such, we would gain better insights to the underlying relationship between health insurance and smoking, along with other important variables that contributes to the cost variation of insurance.
 
+<br>
+
+
 ## Data
 
-<br>
 
 ### Data source
 
@@ -189,8 +198,13 @@ cost_df = read.csv("data/medical_cost_clean.csv") %>%
 * `children_group`: whether or not the person has children (0 = No children, 1 = At least one child)
 
 
+<br>
+
+
 ## Exploratory analysis
 Visualizations, summaries, and exploratory statistical analyses. Justify the steps you took, and show any major changes to your ideas.
+
+<br>
 
 
 ## Additional analysis
@@ -462,7 +476,7 @@ summary(model1) %>%
 
 
 ### Model diagnostic
-```{r}
+```{r, fig.width = 7, fig.height = 5}
 par(mfrow = c(2,2))
 plot(model1)
 ```
@@ -475,24 +489,30 @@ The graph above did not show homoscedasticity of residual. Therefore, we need to
 
 #### Box-Cox Transformation
 
-```{r}
+```{r, fig.width = 7, fig.height = 3.5}
+
+par(mfrow = c(1,2))
+
 boxcox(model1, lambda = seq(-3, 3, by = 0.25)) 
+
+plot(model1, which = 4) # remove 544, 578, 1301
+
 ```
 
-Since lamda = 0, try natural log transformation.
-
-
-
-**Before transformation, remove outliers first**
-
 ```{r}
-plot(model1, which = 4) # remove 544, 578, 1301
 
 cost_df_out = cost_df[-c(544,578, 1301),]
 
 ```
 
+
+Since lamda = 0, try natural log transformation.
+
+**Before transformation, remove outliers first**
+
 The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.
+
+
 
 
 
@@ -516,16 +536,25 @@ summary(model_log) %>%
 
 Above table shows the estimates for each variables when charges is transformed to In(charges).
 
+
+
 #### Diagnostic for transformed model
 
-```{r}
-boxcox(model_log)
 
+
+```{r, fig.width = 5, fig.height = 3}
+
+boxcox(model_log)
+```
+
+```{r, fig.width = 7, fig.height = 5}
 par(mfrow = c(2,2))
 plot(model_log)
 ```
 
 Lamda is near 1 now, and the residual distribution improved from un-transformed data. We conclude this model is acceptable.
+
+<br>
 
 
 
@@ -547,7 +576,10 @@ Holding all other variable fixed, smoking is associated with a 155% increase in 
 
 The [Shiny dashboard](https://yiqunjin.shinyapps.io/shiny_dashboard/) is a visualization of the prediction of insurance premium. By providing the information of age, BMI, smoke or not smoke, with or without children, user could get a general idea of the range of insurance premium.
 
-## Additional visualization
+<br>
+
+
+## Additional visualization {.tabset}
 
 In order to provide reader who are seeking help for signing up insurance and getting advice about health insurance, we provide several maps of health insurance related agencies with location and contact information. Click on the icons on the maps for detailed information.
 
@@ -594,9 +626,11 @@ health_center_table = health_center %>%
 rmarkdown::paged_table(health_center_table)
 ```
 
+<br>
+
 ### Insurance agency location mapping
 
-This map shows the locations of major health insurance carriers in NYC.
+For those who are interested in purchasing insurance, this map shows the locations of major health insurance carriers in NYC.
 
 <img src="images/insurance_agency.jpeg" style="width:70%">
 
@@ -638,6 +672,8 @@ insurance_agency_table =insurance_agency %>%
 rmarkdown::paged_table(insurance_agency_table)
 ```
 
+<br>
+
 ### Medicaid location mapping
 
 Medicaid provides health coverage to low-income people, including eligible low-income adults, children, pregnant women, elderly adults and people with disabilities. Medicaid is one of the largest payers for health care in the United States and is administered by states, according to federal requirements. The program is funded jointly by states and the federal government.
@@ -667,6 +703,8 @@ leaflet(medicaid) %>%
              clusterOptions = markerClusterOptions())
 ```
 
+<br>
+
 
 ## Discussion
 * Smoker insurance preferences: If smokers tend to get insurance and what type of insurance they prefer;
@@ -679,6 +717,9 @@ For person older than 65 years old, most of them get Medicare since Medicare is 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. This finding confirmed the fact that smokers are charged for higher insurance. In addition, being older, higher body mass index, and having at least 1 children also increase insurance costs. 
 
 For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, economy, and social behavior.
+
+<br>
+
 
 ## Citation
 

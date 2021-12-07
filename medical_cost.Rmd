@@ -15,7 +15,7 @@ library(plotly)
 library(ggcorrplot)
 library(olsrr)
 library(MASS) 
-
+library(patchwork)
 
 #knitr::opts_chunk$set(
   #fig.width = 8,
@@ -322,7 +322,7 @@ summary(model1) %>%
 <br>
 
 ## Model diagnostic
-```{r}
+```{r, fig.width = 7, fig.height = 5}
 par(mfrow = c(2,2))
 plot(model1)
 ```
@@ -335,24 +335,30 @@ The graph above did not show homoscedasticity of residual. Therefore, we need to
 
 ### Box-Cox Transformation
 
-```{r}
+```{r, fig.width = 7, fig.height = 3.5}
+
+par(mfrow = c(1,2))
+
 boxcox(model1, lambda = seq(-3, 3, by = 0.25)) 
+
+plot(model1, which = 4) # remove 544, 578, 1301
+
 ```
 
-Since lamda = 0, try natural log transformation.
-
-<br>
-
-**Before transformation, remove outliers first**
-
 ```{r}
-plot(model1, which = 4) # remove 544, 578, 1301
 
 cost_df_out = cost_df[-c(544,578, 1301),]
 
 ```
 
+
+Since lamda = 0, try natural log transformation.
+
+**Before transformation, remove outliers first**
+
 The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.
+
+
 
 <br>
 
@@ -380,9 +386,14 @@ Above table shows the estimates for each variables when charges is transformed t
 
 ### Diagnostic for transformed model
 
-```{r}
-boxcox(model_log)
 
+
+```{r, fig.width = 5, fig.height = 3}
+
+boxcox(model_log)
+```
+
+```{r, fig.width = 7, fig.height = 5}
 par(mfrow = c(2,2))
 plot(model_log)
 ```
