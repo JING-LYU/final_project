@@ -707,15 +707,27 @@ leaflet(medicaid) %>%
 
 
 ## Discussion
-* Smoker insurance preferences: If smokers tend to get insurance and what type of insurance they prefer;
-* Insurance charges prediction: personal factors that affect insurance cost. 
 
-The uninsured rate for current smokers is 44.4% higher than people who currently do not smoke.
+1. Knowledge about insurance in our dataset
+
+Among 2941 participants in the dataset: 2582 (88%) of them are insurance holders, while 359 (12%) of them don't have insurance cover. 
+
+Most of participants have employer-sponsored health insurance (38%), other types include Medicaid/Family Health+ (24%), Medicare (20%), Uninsured (9%), Self-purchase (6%), COBRA/Other (2%) and Milit/CHAMPUS/Tricare (1%). 
+
+2. Do smoker tend to get insurance?
+
+No. The uninsured rate for current smokers is 44.4% higher than people who currently do not smoke.
+
+3. What type of insurance do people tend to get?
 
 For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get employer insurance since they are in working age.
 For person older than 65 years old, most of them get Medicare since Medicare is only provided for people above 65 years old.
 
+4. How does personal factors affect insurance premiums?
+
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. This finding confirmed the fact that smokers are charged for higher insurance. In addition, being older, higher body mass index, and having at least 1 children also increase insurance costs. 
+
+5. Future progression
 
 For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, economy, and social behavior.
 
