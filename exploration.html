@@ -13,8 +13,8 @@
 
 <title>Smokers’ Insurance Preference</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -459,9 +459,7 @@ current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)</code></p
     y = &quot;Number of holders&quot;,
     title = &quot;Number of holders\nin each insurance type&quot;) + 
   coord_flip()</code></pre>
-<pre class="r"><code>#| my-chunkhaha, echo = FALSE, fig.width = 8,
-insurehold + insuretype</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunkhaha-1.png" width="90%" /></p>
 <pre class="r"><code>insur_type &lt;- c(&quot;Employer&quot;, &quot;Medicare&quot;, &quot;Milit/CHAMPUS&quot;, &quot;Uninsured&quot;, &quot;Self-purchased&quot;, &quot;Medicaid/Family Health+&quot;, &quot;COBRA/other&quot;)
 
 insur_meaning &lt;- c(&quot;Employer-sponsored health insurance is a health insurance selected and purchased by your employer and offered to eligible employees and their dependents.&quot;,
@@ -637,9 +635,7 @@ smoke_df %&gt;%
     fill = &quot;Smoking frequency&quot;
        )+
   theme(legend.position = &quot;right&quot;)</code></pre>
-<pre class="r"><code>#| my-chunkn1, echo = FALSE, fig.width = 8,
-type + consumption</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-13-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunkn1-1.png" width="90%" /></p>
 <p>Most of the current smokers are light smokers. Among those light smokers, nearly half of them smoke everyday, while normal and heavy smokers are more likely to smoke everyday. Casual smokers tend to consume less cigarette than everyday smokers.</p>
 <p><br></p>
 </div>
@@ -688,174 +684,20 @@ type + consumption</code></pre>
 <h4 class="tabset">Distributions</h4>
 <div id="smoking" class="section level5">
 <h5>Smoking</h5>
-<pre class="r"><code>#| my-chunkn, echo = FALSE, fig.width = 10,
-analyse_smoke_sum = 
-  dataset_basic %&gt;%
-  drop_na(smoker,insure) %&gt;% 
-  group_by(smoker,insure) %&gt;% 
-  summarize(n = n()) %&gt;% 
-  mutate(insure = fct_reorder(insure,n)) %&gt;% 
-  ungroup() %&gt;% 
-  group_by(smoker) %&gt;% 
-  summarize(sum = sum(n)) %&gt;% 
-  pull()
-
-analyse_smoke_insurancetype = dataset_basic %&gt;%
-  drop_na(smoker,insure) %&gt;% 
-  group_by(smoker,insure) %&gt;% 
-  summarize(n = n()) %&gt;% 
-  mutate(insure = fct_reorder(insure,n)
-         ) 
-
-analyse_smoke_insurancetype$sum = rep(analyse_smoke_sum, each = 7)
-
-analyse_smoke_insurancetype =
-  analyse_smoke_insurancetype %&gt;% 
-  mutate(
-    freq = n/sum
-  )
-
-uninsure = analyse_smoke_insurancetype %&gt;% 
-  mutate(insure = ifelse(insure == &quot;Uninsured&quot;, &quot;Uninsured&quot;, &quot;Insured&quot;))
-  
-  
-
-smoke_plot1 = analyse_smoke_insurancetype %&gt;% 
-  ggplot(aes(x =smoker , y = freq, fill = insure)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;smoking status &#39;,
-      y = &#39;proportion&#39;,
-      title = &#39;The proportion of insurance in different smoking group &#39;,
-      fill = &quot;Insurance type&quot;)+
-  theme(legend.position = &quot;right&quot;)
-
-smoke_plot2 = uninsure %&gt;% 
-  ggplot(aes(x =smoker , y = freq, fill = insure)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;smoking status &#39;,
-      y = &#39;proportion&#39;,
-      title = &#39;The proportion of insurance\nin different smoking group &#39;,
-      fill = &quot;Insurance status&quot;)
-
-smoke_plot2 + smoke_plot1</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-16-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunkn-1.png" width="90%" /></p>
 <p>We found that, current smokers have the highest uninsured proportion comparing to other groups.</p>
 <p>Regardless of the smoking status, most people tend to get employer insurance. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.</p>
 <p><br></p>
 </div>
 <div id="age" class="section level5">
 <h5>Age</h5>
-<pre class="r"><code>#| my-chunkn2, echo = FALSE, fig.width = 10,
-analyse_agegroup_sum = 
-  dataset_basic %&gt;%
-  drop_na(agegroup,insure) %&gt;% 
-  group_by(agegroup,insure) %&gt;% 
-  summarize(n = n()) %&gt;% 
-  mutate(insure = fct_reorder(insure,n)) %&gt;% 
-  ungroup() %&gt;% 
-  group_by(agegroup) %&gt;% 
-  summarize(sum = sum(n)) %&gt;% 
-  pull()
-
-analyse_agegroup_insurancetype = dataset_basic %&gt;%
-  drop_na(agegroup,insure) %&gt;% 
-  group_by(agegroup,insure) %&gt;% 
-  summarize(n = n()) %&gt;% 
-  mutate(insure = fct_reorder(insure,n)
-         ) 
-
-analyse_agegroup_insurancetype$sum = rep(analyse_agegroup_sum, each = 7)
-
-analyse_agegroup_insurancetype =
-  analyse_agegroup_insurancetype %&gt;% 
-  mutate(
-    freq = n/sum
-  )
-
-uninsure = analyse_agegroup_insurancetype %&gt;% 
-  mutate(insure = ifelse(insure == &quot;Uninsured&quot;, &quot;Uninsured&quot;, &quot;Insuredd&quot;))
-  
-  
-
-agegroup_plot1 = analyse_agegroup_insurancetype %&gt;% 
-  ggplot(aes(x = agegroup, y = freq, fill = insure  )) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;agegroup&#39;,
-      y = &#39;proportion&#39;,
-      title = &#39;The distribution of insurance type in differnt age groups&#39;) +
-  theme(legend.position = &quot;right&quot;)
-
-agegroup_plot2 = uninsure %&gt;% 
-  ggplot(aes(x =agegroup , y = freq, fill = insure)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;agegroup&#39;,
-      y = &#39;proportion&#39;,
-      title = &#39;The proportion of insurance\nin different age group &#39;,
-      fill = &quot;Insurance status&quot;)
-
-agegroup_plot2 + agegroup_plot1</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-17-1.png" width="90%" /> For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get <strong>employer</strong> insurance since they are in working age.</p>
+<p><img src="exploration_files/figure-html/my-chunkn2-1.png" width="90%" /> For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get <strong>employer</strong> insurance since they are in working age.</p>
 <p>For person older than 65 years old, most of them get <strong>Medicare</strong> since Medicare is only provided for people above 65 years old.</p>
 <p><br></p>
 </div>
 <div id="have-children-or-not" class="section level5">
 <h5>Have children or not</h5>
-<pre class="r"><code>#| my-chunkn3, echo = FALSE, fig.width = 10,
-analyse_child_sum = 
-  dataset_basic %&gt;%
-  drop_na(child,insure) %&gt;% 
-  group_by(child,insure) %&gt;% 
-  summarize(n = n()) %&gt;% 
-  mutate(insure = fct_reorder(insure,n)) %&gt;% 
-  ungroup() %&gt;% 
-  group_by(child) %&gt;% 
-  summarize(sum = sum(n)) %&gt;% 
-  pull()
-
-analyse_child_insurancetype = dataset_basic %&gt;%
-  drop_na(child,insure) %&gt;% 
-  group_by(child,insure) %&gt;% 
-  summarize(n = n()) %&gt;% 
-  mutate(insure = fct_reorder(insure,n)
-         ) 
-
-analyse_child_insurancetype$sum = rep(analyse_child_sum, each = 7)
-
-analyse_child_insurancetype =
-  analyse_child_insurancetype %&gt;% 
-  mutate(
-    freq = n/sum
-  )
-
-uninsure = analyse_child_insurancetype %&gt;% 
-  mutate(insure = ifelse(insure == &quot;Uninsured&quot;, &quot;Uninsured&quot;, &quot;Insured&quot;))
-  
-  
-
-child_plot1 = analyse_child_insurancetype %&gt;% 
-  ggplot(aes(x = child, y = freq, fill = insure  )) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;have children or not&#39;,
-      y = &#39;proportion&#39;,
-      title = &#39;Distribution of insurance type in groups\nof people with or without children&#39;) +
-  theme(legend.position = &quot;right&quot;)
-
-child_plot2 = uninsure %&gt;% 
-  ggplot(aes(x =child , y = freq, fill = insure)) + 
-  geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
-    labs(
-      x = &#39;have children or not&#39;,
-      y = &#39;proportion&#39;,
-      title = &#39;Proportion of insurance in groups\nof people with or without children&#39;,
-      fill = &quot;Insurance status&quot;)
-
-child_plot2 + child_plot1</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-18-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunkn3-1.png" width="90%" /></p>
 <p>We found that for those without children, a larger proportion of them get <strong>Medicare</strong> comparing to those with children.</p>
 <p><br></p>
 </div>
@@ -901,7 +743,7 @@ bmi_plot2 + bmi_plot1</code></pre>
 </div>
 <div id="statistical-test" class="section level4 tabset">
 <h4 class="tabset">Statistical test</h4>
-<p>From the plots, we could find out many patterns about the relations between <code>insurance status</code> and <code>smoking</code> <code>age</code> and <code>have children or not</code>. To further validate the association between <code>insurance type</code> and other key factors as well as between <code>insurance status</code> and <code>BMI</code>.</p>
+<p>From the plots, we could find out many patterns about the relations between <code>insurance status</code> and <code>smoking</code> <code>age</code> and <code>have children or not</code>. To further validate the uncertain association between <code>insurance type</code> and other key factors as well as between <code>insurance status</code> and <code>BMI</code>, we conduct several statistical tests as follows.</p>
 <div id="smoking-1" class="section level5">
 <h5>Smoking</h5>
 <div id="chi-quare-test-between-insurance-type-and-smoking" class="section level6">
@@ -912,20 +754,7 @@ bmi_plot2 + bmi_plot1</code></pre>
 <pre class="r"><code>dat = 
   dataset_basic %&gt;%
   drop_na(smoker,insure) </code></pre>
-<pre class="r"><code>#| my-chunk1, echo = FALSE, fig.width = 8,
-
-# plot
-ggbarstats(
-  data = dat,
-  x = smoker,
-  y = insure,
-  title = &quot;Chi-quare test between insurance type and smoking&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-21-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunk1-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and smoking are dependent.</p>
 </div>
 </div>
@@ -939,18 +768,7 @@ ggbarstats(
 <pre class="r"><code>dat = 
   dataset_basic %&gt;%
   drop_na(agegroup,insure) </code></pre>
-<pre class="r"><code>#| my-chunk2, echo = FALSE, fig.width = 8,
-ggbarstats(
-  data = dat,
-  x = smoker,
-  y = insure,
-  title = &quot;Chi-quare test result between insurance type and age&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-23-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunk2-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and age are dependent.</p>
 </div>
 </div>
@@ -972,81 +790,17 @@ ggbarstats(
 dat = 
   dataset_basic %&gt;%
   drop_na(child,insure)</code></pre>
-<pre class="r"><code>#| my-chunk3, echo = FALSE, fig.width = 8,
-
-ggbarstats(
-  data = dat,
-  x = child,
-  y = insure,
-  title = &quot;Chi-quare test between insurance type and children&quot;
-) +
-  labs(caption = NULL) +
-  theme(
-    axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1)
-  ) </code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-25-1.png" width="90%" /></p>
+<p><img src="exploration_files/figure-html/my-chunk3-1.png" width="90%" /></p>
 <p>We reject <span class="math inline">\(H_0\)</span> and then conclude that insurance type and children are dependent.</p>
 </div>
 </div>
 <div id="bmi-3" class="section level5">
 <h5>BMI</h5>
-<div id="anova-test-between-insurance-type-and-bmi" class="section level6">
-<h6><strong>ANOVA test between insurance type and BMI</strong></h6>
-<p><span class="math inline">\(H_0\)</span> : The mean of BMI in each insurance type groups are the same</p>
-<p><span class="math inline">\(H_1\)</span> : At least two means of BMI in all insurance type groups are different</p>
-<p><em>Test result:</em></p>
-<pre class="r"><code>#| my-chunk62, echo = FALSE, fig.width = 10,fig.height = 8
-anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
-anova %&gt;% 
-  broom::tidy() %&gt;% 
-  knitr::kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">df</th>
-<th align="right">sumsq</th>
-<th align="right">meansq</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">insure</td>
-<td align="right">6</td>
-<td align="right">2435.492</td>
-<td align="right">405.9154</td>
-<td align="right">10.88312</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="left">Residuals</td>
-<td align="right">26917</td>
-<td align="right">1003942.322</td>
-<td align="right">37.2977</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-</tbody>
-</table>
-<pre class="r"><code>Tukey_comp = TukeyHSD(anova)
-
-par(mar = c(2, 18, 2, 2))
-plot(Tukey_comp,las = 1,
-     cex.axis = 0.8)</code></pre>
-<p><img src="exploration_files/figure-html/unnamed-chunk-26-1.png" width="90%" /></p>
-</div>
 <div id="anova-test-between-insurance-status-and-bmi" class="section level6">
 <h6><strong>ANOVA test between insurance status and BMI</strong></h6>
 <p><span class="math inline">\(H_0\)</span> : The mean of BMI in groups with or without insurance are the same</p>
 <p><span class="math inline">\(H_1\)</span> : The means of BMI in groups with or without insurance are different</p>
 <p><em>Test result:</em></p>
-<pre class="r"><code>#| my-chunk61, echo = FALSE, fig.width = 10,fig.height = 8
-anova = aov( bmi ~insure, data = uninsure_bmi)
-anova %&gt;% 
-  broom::tidy() %&gt;% 
-  knitr::kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -1078,6 +832,44 @@ anova %&gt;%
 </tbody>
 </table>
 <p>According to the ANOVA test, we can not reject <span class="math inline">\(H_0\)</span> and conclude the mean of BMI in each insurance type groups are the same.</p>
+<p><br></p>
+</div>
+<div id="anova-test-between-insurance-type-and-bmi" class="section level6">
+<h6><strong>ANOVA test between insurance type and BMI</strong></h6>
+<p><span class="math inline">\(H_0\)</span> : The mean of BMI in each insurance type groups are the same</p>
+<p><span class="math inline">\(H_1\)</span> : At least two means of BMI in all insurance type groups are different</p>
+<p><em>Test result:</em></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">df</th>
+<th align="right">sumsq</th>
+<th align="right">meansq</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">insure</td>
+<td align="right">6</td>
+<td align="right">2435.492</td>
+<td align="right">405.9154</td>
+<td align="right">10.88312</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Residuals</td>
+<td align="right">26917</td>
+<td align="right">1003942.322</td>
+<td align="right">37.2977</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<p><img src="exploration_files/figure-html/my-chunk62-1.png" width="90%" /></p>
 <p><br></p>
 </div>
 </div>

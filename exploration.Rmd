@@ -704,6 +704,28 @@ We reject $H_0$ and then conclude that insurance type and children are dependent
 
 ##### BMI
 
+###### **ANOVA test  between insurance status and BMI**
+
+$H_0$ : The mean of BMI in groups with or without insurance are the same
+
+$H_1$ : The means of BMI in groups with or without insurance are different
+
+*Test result:*
+```{r}
+#| my-chunk61, echo = FALSE, fig.width = 10,fig.height = 8
+anova = aov( bmi ~insure, data = uninsure_bmi)
+anova %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+
+```
+
+According to the ANOVA test, we can not reject $H_0$  and conclude the mean of BMI in each insurance type groups are the same.
+
+
+<br>
+
+
 ###### **ANOVA test  between insurance type and BMI**
 
 $H_0$ : The mean of BMI in each insurance type groups are the same
@@ -724,23 +746,7 @@ plot(Tukey_comp,las = 1,
      cex.axis = 0.8)
 ```
 
-###### **ANOVA test  between insurance status and BMI**
 
-$H_0$ : The mean of BMI in groups with or without insurance are the same
-
-$H_1$ : The means of BMI in groups with or without insurance are different
-
-*Test result:*
-```{r}
-#| my-chunk61, echo = FALSE, fig.width = 10,fig.height = 8
-anova = aov( bmi ~insure, data = uninsure_bmi)
-anova %>% 
-  broom::tidy() %>% 
-  knitr::kable()
-
-```
-
-According to the ANOVA test, we can not reject $H_0$  and conclude the mean of BMI in each insurance type groups are the same.
 
 <br>
 
