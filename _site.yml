@@ -7,9 +7,9 @@ navbar:
       href: about.html
     - text: "Analysis"
       menu:
-      - text: "Data exploration"
+      - text: "Insurance Chooses"
         href: exploration.html
-      - text: "Model building"
+      - text: "Insurance Charge Predication"
         href: medical_cost.html
     - text: "Discussion"
       href: discussion.html
