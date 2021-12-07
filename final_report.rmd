@@ -710,6 +710,7 @@ leaflet(medicaid) %>%
 * Smoker insurance preferences: If smokers tend to get insurance and what type of insurance they prefer;
 * Insurance charges prediction: personal factors that affect insurance cost. 
 
+The uninsured rate for current smokers is 44.4% higher than people who currently do not smoke.
 
 For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get employer insurance since they are in working age.
 For person older than 65 years old, most of them get Medicare since Medicare is only provided for people above 65 years old.

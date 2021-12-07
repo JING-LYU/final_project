@@ -402,6 +402,12 @@ analyse_smoke_insurancetype %>%
 
 We found that, regardless of the smoking status, most people tend to get employer insurance. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.
 
+For current smokers, the uninsured rate is `r pull(analyse_smoke_insurancetype,freq)[14]`.
+
+For former smokers and people who never smokes, the uninsured rate is `r (379+1858)/(18368+6090)`
+
+The uninsured rate for current smokers is 44.4% higher than people who currently do not smoke.
+
 <br>
 
 
