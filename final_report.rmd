@@ -786,7 +786,7 @@ We did not observe significant difference between each group.
 
 #### Statistical test {.tabset}
 
-From the plots, we could find out many patterns about the relations between `insurance status` and `smoking` `age` and `have children or not`. To further validate the association between `insurance type` and other key factors as well as between `insurance status` and `BMI`.
+From the plots, we could find out many patterns about the relations between `insurance status` and `smoking` `age` and `have children or not`. To further validate the uncertain association between `insurance type` and other key factors as well as between `insurance status` and `BMI`, we conduct several statistical tests as follows.
 
 ##### Smoking
 
