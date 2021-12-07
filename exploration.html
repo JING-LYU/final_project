@@ -546,7 +546,7 @@ smoke_df %&gt;%
   geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
     labs(
       x = &#39;Smoking status&#39;,
-      y = &#39;Proportion within each types of smoker&#39;,
+      y = &#39;Proportion&#39;,
       title = &#39;Age distribution among people in different smoking status&#39;,
       fill = &quot;Age Group&quot; )</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
@@ -583,13 +583,12 @@ smoke_df %&gt;%
   ) %&gt;% 
   mutate(
     smokegroup_count = smokegroup_count,
-    poverty_percent = count/smokegroup_count,
-    smoker = fct_reorder(smoker,count)) %&gt;% 
+    poverty_percent = count/smokegroup_count) %&gt;% 
   ggplot(aes(x = smoker, y = poverty_percent, fill = poverty_group)) + 
   geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
     labs(
       x = &#39;Smoking status&#39;,
-      y = &#39;Poverty groups&#39;,
+      y = &#39;Poverty groups\n(% in each types of smoker)&#39;,
       title = &#39;Poverty groups\n(% in each types of smoker)&#39;,
       fill = &quot;Poverty Group&quot; )</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
@@ -602,10 +601,12 @@ smoke_df %&gt;%
   drop_na(bmi,smoker) %&gt;% 
   ggplot(aes(x = smoker, y = bmi,fill = smoker)) + 
   geom_boxplot() +
+  ylim(0,50)+
     labs(
       x = &#39;Smoking status&#39;,
       y = &#39;BMI (kg/m^2)&#39;,
       title = &#39;The distribution of bmi among people in different smoking status&#39;) </code></pre>
+<pre><code>## Warning: Removed 162 rows containing non-finite values (stat_boxplot).</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-10-1.png" width="90%" /></p>
 <p>There’s no significant difference of participants BMI in different smoking status.</p>
 <p><br></p>
@@ -645,6 +646,7 @@ smoke_df %&gt;%
   ggplot(aes(x = smoker_cat, y = bmi, fill = smoker_cat))+
   geom_boxplot() +
   theme(plot.title = element_text(hjust = 0.5)) +
+  ylim(0,50)+
   #facet_grid(.~smoker_cat,scales = &quot;free&quot;) +
     labs(
       x = &#39;Smoking intensity&#39;,
@@ -652,7 +654,7 @@ smoke_df %&gt;%
       title = &#39;BMI among current smokers with different smoking intensity&#39;,
       color = &quot;Smoking intensity&quot;)</code></pre>
 <p><img src="exploration_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
-<p>There’s no significant difference between current smokers with different smoking intensity.</p>
+<p>For heavy smokers, their BMI are slightly higher than light smokers and normal smokers.</p>
 <p><br></p>
 </div>
 <div id="cost-on-smoke" class="section level5">
