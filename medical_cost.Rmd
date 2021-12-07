@@ -71,9 +71,9 @@ knitr::kable(var_info)
 
 <br>
 
-### Relationship between each variables and charge of insurance {.tabset}
+## 1. Relationship between each variables and charge of insurance {.tabset}
 
-#### Smoker and insurance charges
+### Smoker and insurance charges
 
 ```{r}
 
@@ -117,7 +117,7 @@ smoker_plotly
 
 <br>
 
-#### Having children and insurance charges
+### Having children and insurance charges
 
 ```{r}
 cost_df_child = 
@@ -161,7 +161,7 @@ child_plotly
 
 <br>
 
-#### Gender and insurance charges
+### Gender and insurance charges
 
 ```{r}
 cost_df_sex = 
@@ -204,7 +204,7 @@ sex_plotly
 
 <br>
 
-#### Age and insurance charges
+### Age and insurance charges
 
 ```{r}
 age_fit <- lm(charges ~ age, data = cost_df)
@@ -230,7 +230,7 @@ age_plotly
 
 <br>
 
-#### BMI and insurance charges
+### BMI and insurance charges
 
 ```{r}
 bmi_fit <- lm(charges ~ bmi, data = cost_df)
@@ -260,7 +260,7 @@ From the five plots above, we can tell that smoking, age, and bmi significantly 
 
 <br>
 
-## Model selection
+## 2. Model selection
 
 ### Correlation plot
 
@@ -321,7 +321,7 @@ summary(model1) %>%
 
 <br>
 
-## Model diagnostic
+## 3. Model diagnostic
 ```{r, fig.width = 7, fig.height = 5}
 par(mfrow = c(2,2))
 plot(model1)
@@ -331,7 +331,7 @@ The graph above did not show homoscedasticity of residual. Therefore, we need to
 
 <br>
 
-## Model transformation
+## 4. Model transformation
 
 ### Box-Cox Transformation
 
