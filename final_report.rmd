@@ -205,7 +205,7 @@ knitr::kable(var_info)
 ```
 
 
-### Relationship between each variables and charge of insurance 
+### Relationship between each variables and charge of insurance {.tabset}
 
 #### Smoker and insurance charges
 
@@ -249,6 +249,8 @@ smoker_plotly <- smoker_plotly %>%
 smoker_plotly
 ```
 
+<br>
+
 #### Having children and insurance charges
 
 ```{r}
@@ -291,6 +293,8 @@ child_plotly
 ```
 
 
+<br>
+
 #### Gender and insurance charges
 
 ```{r}
@@ -332,6 +336,7 @@ sex_plotly <- sex_plotly %>%
 sex_plotly
 ```
 
+<br>
 
 #### Age and insurance charges
 
@@ -357,6 +362,7 @@ age_plotly <- plot_ly(
 age_plotly
 ```
 
+<br>
 
 #### BMI and insurance charges
 
@@ -380,8 +386,13 @@ bmi_plotly <- plot_ly(
 bmi_plotly
 ```
 
+<br>
+
+###
 
 From the five plots above, we can tell that smoking, age, and bmi significantly affect charge of insurance. The relationship between charges and gender or having children is unclear. Further analysis will be carried below to illustrate their relationships.
+
+
 
 ### Model selection
 
