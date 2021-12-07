@@ -217,7 +217,7 @@ Compare with other groups, current smokers have lowest proportion of excellent h
 ```{r,message=FALSE}
 smoke_df %>% 
   drop_na(poverty_group) %>% 
-  group_by(poverty_group,smoker) %>% 
+  dplyr::group_by(poverty_group,smoker) %>% 
   dplyr::summarize(
     count = n()
   ) %>% 
@@ -229,11 +229,10 @@ smoke_df %>%
     labs(
       x = 'Smoking status',
       y = 'Poverty groups\n(% in each types of smoker)',
-      title = 'Poverty groups\n(% in each types of smoker)',
+      title = 'Poverty groups (% in each types of smoker)',
       fill = "Poverty Group" )
 ```
-
-For people who are current smokers and who has never smoked, number of people in each poverty group decreace with higher poverty level. However, among former smokers, number of people in different levels of poverty groups are close in quantities.
+Comparing to other groups, current smokers have the largest proportion of people who are <100% FPL, which means unsatisfactory financial status. They also have the least proportion of people who are >600 FPL, indicating atisfactory financial status.
 
 <br>
 
@@ -292,7 +291,7 @@ consumption = current_smoker %>%
 ```
 
 ```{r message=FALSE, warning=FALSE}
-#| my-chunkn, echo = FALSE, fig.width = 8,
+#| my-chunkn1, echo = FALSE, fig.width = 8,
 type + consumption
 ```
 
@@ -351,7 +350,6 @@ Regardless of smoking frequency and smoking intensity, the cost of each pack of 
 
 
 
-
 ### 3. Explore relationship between **insurance** and target variables
 In this step, we want to explore more about the relationship between insurance and key variables, including smoking, age, have children or not and BMI. We start by plotting distribution graphs to see the pattern between each groups. And then we conduct statistical tests to evaluate the association and similarity between them.
 
@@ -362,6 +360,7 @@ In this step, we want to explore more about the relationship between insurance a
 
 
 ```{r message=FALSE}
+#| my-chunkn, echo = FALSE, fig.width = 10,
 analyse_smoke_sum = 
   dataset_basic %>%
   drop_na(smoker,insure) %>% 
@@ -387,24 +386,38 @@ analyse_smoke_insurancetype =
   mutate(
     freq = n/sum
   )
+
+uninsure = analyse_smoke_insurancetype %>% 
+  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insure"))
   
-analyse_smoke_insurancetype %>% 
+  
+
+smoke_plot1 = analyse_smoke_insurancetype %>% 
   ggplot(aes(x =smoker , y = freq, fill = insure)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'smoking status ',
       y = 'proportion',
       title = 'The proportion of insurance in different smoking group ',
-      fill = "Insurance type")
+      fill = "Insurance type")+
+  theme(legend.position = "right")
+
+smoke_plot2 = uninsure %>% 
+  ggplot(aes(x =smoker , y = freq, fill = insure)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'smoking status ',
+      y = 'proportion',
+      title = 'The proportion of insurance in different smoking group ',
+      fill = "Insurance status")
+
+smoke_plot2 + smoke_plot1
 ```
 
-We found that, regardless of the smoking status, most people tend to get employer insurance. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.
+We found that, current smokers have the highest uninsured proportion comparing to other groups.
 
-For current smokers, the uninsured rate is `r pull(analyse_smoke_insurancetype,freq)[14]`.
+Regardless of the smoking status, most people tend to get employer insurance. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.
 
-For former smokers and people who never smokes, the uninsured rate is `r (379+1858)/(18368+6090)`
-
-The uninsured rate for current smokers is 44.4% higher than people who currently do not smoke.
 
 <br>
 
@@ -413,20 +426,40 @@ The uninsured rate for current smokers is 44.4% higher than people who currently
 
 
 ```{r message=FALSE}
-analyse_agegroup_insurancetype = 
+
+analyse_agegroup_sum = 
   dataset_basic %>%
   drop_na(agegroup,insure) %>% 
   group_by(agegroup,insure) %>% 
   summarize(n = n()) %>% 
-  mutate(insure = fct_reorder(insure,n))
-  
+  mutate(insure = fct_reorder(insure,n)) %>% 
+  ungroup() %>% 
+  group_by(agegroup) %>% 
+  summarize(sum = sum(n)) %>% 
+  pull()
+
+analyse_agegroup_insurancetype = dataset_basic %>%
+  drop_na(agegroup,insure) %>% 
+  group_by(agegroup,insure) %>% 
+  summarize(n = n()) %>% 
+  mutate(insure = fct_reorder(insure,n)
+         ) 
+
+analyse_agegroup_insurancetype$sum = rep(analyse_agegroup_sum, each = 7)
+
+analyse_agegroup_insurancetype =
+  analyse_agegroup_insurancetype %>% 
+  mutate(
+    freq = n/sum
+  )
+
 analyse_agegroup_insurancetype %>% 
-  ggplot(aes(x = agegroup, y = n, fill = insure  )) + 
+  ggplot(aes(x = agegroup, y = freq, fill = insure  )) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'agegroup',
-      y = 'counts',
-      title = 'The distribution of insurance type in differnt agegroup')
+      y = 'proportion',
+      title = 'The distribution of insurance type in differnt age groups')
 ```
 
 For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get **employer** insurance since they are in working age.
@@ -439,19 +472,41 @@ For person older than 65 years old, most of them get **Medicare** since Medicare
 
 
 ```{r message=FALSE}
-analyse_children_insurancetype = 
+
+
+analyse_children_sum = 
   dataset_basic %>%
-  drop_na(child,insure)  %>% 
+  drop_na(child,insure) %>% 
   group_by(child,insure) %>% 
-  summarize(n = n())%>% 
-  mutate(insure = fct_reorder(insure,n))
-  
+  summarize(n = n()) %>% 
+  mutate(insure = fct_reorder(insure,n)) %>% 
+  ungroup() %>% 
+  group_by(child) %>% 
+  summarize(sum = sum(n)) %>% 
+  pull()
+
+analyse_children_insurancetype = dataset_basic %>%
+  drop_na(child,insure) %>% 
+  group_by(child,insure) %>% 
+  summarize(n = n()) %>% 
+  mutate(insure = fct_reorder(insure,n)
+         ) 
+
+analyse_children_insurancetype$sum = rep(analyse_children_sum, each = 7)
+
+analyse_children_insurancetype =
+  analyse_children_insurancetype %>% 
+  mutate(
+    freq = n/sum
+  )
+
+
 analyse_children_insurancetype %>% 
-  ggplot(aes(x = child, y = n, fill = insure )) + 
+  ggplot(aes(x = child, y = freq, fill = insure )) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'child',
-      y = 'counts',
+      y = 'proportion',
       title = 'The distribution of insurance type in groups of people with or without children')
 ```
 
@@ -621,5 +676,7 @@ plot(Tukey_comp,las = 1,
 According to the ANOVA test, we reject $H_0$  and conclude At least two means of BMI in all insurance type groups are different. Detailed information of the difference in each group can be seen on the above image. 
 
 <br>
+
+
 
 
