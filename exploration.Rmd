@@ -210,7 +210,7 @@ smoke_df %>%
       fill = "Health status" )
 ```
 
-No matter whether smoked, participants' self-evaluation on the health condition follows similar distribution. Smoking may not be a key factor when people self-evaluate their health condition.
+Compare with other groups, current smokers have lowest proportion of excellent health status(self-evaluated).
 
 <br>
 
