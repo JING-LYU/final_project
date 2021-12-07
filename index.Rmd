@@ -1,16 +1,16 @@
 ---
-title: <font size="8"> Smoking in NYC </font> 
-subtitle: <font size="5"> Exploration of smoking and health insurance relationship in New York City from 2014 to 2016 </font> 
+title: <font size="8"> <center>Smoking in NYC</center> </font> 
+subtitle: <font size="5"><center> Exploring relationship between smoking and health insurance in New York City </center></font> 
 output: 
   html_document
     
 ---
 
-<br>
+<center>##
 
-<img src="images/smoke_sign.PNG" style="width:65%">
+<img src="images/smoke_pic.webp" style="width:75%">
 
-<font size="1"> A shot of non-smoking sign in the Columbia University Irving Medical Center </font> 
+<font size="1"> image source: https://www.waldenu.edu/online-bachelors-programs/bs-in-public-health/resource/ten-benefits-of-smoke-free-workplaces</font> 
 
 <br>
 
@@ -31,8 +31,10 @@ Since health insurance is vital for people’s well-being, and the cost is the m
 Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
 
 
-
 <br>
+<br>
+
+# Stuff below move to somewhere else?
 
 ## Datasets
 
