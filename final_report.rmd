@@ -9,12 +9,12 @@ output:
 ---
 ```{r, echo = FALSE, message=FALSE}
 knitr::opts_chunk$set(warning = FALSE)
-library(tidyverse)
+
 library(ggcorrplot)
 library(olsrr)
 library(MASS)
 library(plotly)
-library(plyr)
+#library(plyr)
 library(leaflet)
 library(rvest)
 library(httr)
@@ -23,6 +23,7 @@ library(httr)
 library(summarytools)
 library(ggstatsplot)
 library(patchwork)
+library(tidyverse)
 
 knitr::opts_chunk$set(
   fig.width = 8,
@@ -257,14 +258,17 @@ smoke_df = read_csv("data/dataset_basic.csv") %>%
            (numberperdaya > 10) & (numberperdaya <= 20) ~2,
            numberperdaya > 20 ~ 3),
          smoker_cat = factor(smoker_cat,levels = c(1,2,3),labels = c("light","normal","heavy")),
+
          smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
-         smoker = fct_infreq(smoker),
          agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs")),
          generalhealth = factor(generalhealth,levels = c(5,4,3,2,1), labels = c("Poor","Fair","Good","Very good","Excellent")),
          poverty_group = factor(poverty_group,levels = c(1,2,3,4,5),labels = c("<100% FPL","100 - <200% FPL","200 - <400% FPL","400 - <600% FPL",">600% FPL")),
          everyday = factor(everyday, levels = c(1,2), labels = c("everyday smoker", "casual smoker"))
          
-         )
+         ) %>% 
+  mutate(         
+    smoker = fct_infreq(smoker)
+)
 
 current_smoker = smoke_df %>% filter(smoker == "current")
 ```
@@ -363,7 +367,7 @@ smoke_df %>%
   dplyr::summarize(
     age_count = n()) %>% 
   mutate(smokegroup_count = smokegroup_count,
-         age_percent = age_count/smokegroup_count)%>% 
+         age_percent = age_count/smokegroup_count) %>% 
   ggplot(aes(x = smoker, y = age_percent, fill = agegroup)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
