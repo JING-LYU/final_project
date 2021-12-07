@@ -7,7 +7,7 @@ navbar:
       href: about.html
     - text: "Analysis"
       menu:
-      - text: "Insurance preference"
+      - text: "Smokers' Insurance Preference"
         href: exploration.html
       - text: "Insurance Charge Predication"
         href: medical_cost.html
@@ -17,7 +17,7 @@ navbar:
       menu:
       - text: "Mapping"
         href: mapping.html
-      - text: "Shiny Dashboard"
+      - text: "Shiny Dashboard - Predicet your insurance Charge!"
         href: https://yiqunjin.shinyapps.io/shiny_dashboard/
     - text: "Report"
       href: final_report.html
