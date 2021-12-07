@@ -738,9 +738,13 @@ heavy smoker have slightly higher bmi compare to other people
 
 We did not find any correlation between bmi and insurance from the survey.
 
+
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. In addition, being older, higher body mass index, and having at least 1 children also increase insurance premiums. 
 
 4. Future progression
+
+For people older than 65, they will have access to medicare insurance, which is significantly cheaper than private/self-purchased insurance. Since our prediction model is focused on private insurance, we suggest people older than 65 years old to be mindful when using our prediction interactive page.
+
 
 For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, economy, and social behavior.
 
