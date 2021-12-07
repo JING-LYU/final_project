@@ -49,7 +49,7 @@ health_center_table = health_center %>%
     health_center, days_of_operation, hours_of_operation, accept_walk_ins,
     street_address, telephone_number
     ) %>% 
-  rename(
+  dplyr::rename(
     "Health Center name" = health_center,
     "Street address" = street_address,
     "Telephone number" = telephone_number,
@@ -100,7 +100,7 @@ insurance_agency_table =insurance_agency %>%
     insurance_agency, days_of_operation, hours_of_operation, accept_walk_ins,
     street_address, telephone_number
     ) %>% 
-  rename(
+  dplyr::rename(
     "Insurance agency name" = insurance_agency,
     "Street address" = street_address,
     "Telephone number" = telephone_number,

@@ -13,8 +13,8 @@
 
 <title>Insurance cost model building</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -329,23 +329,11 @@ div.tocify {
         <li>
   <a href="exploration.html">Data exploration</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Model building
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="model-building.html">? model building</a>
-    </li>
-    <li>
-      <a href="medical_cost.html">Insurance cost model building</a>
-    </li>
-  </ul>
+<li>
+  <a href="medical_cost.html">Model building</a>
 </li>
 <li>
-  <a href="analysis.html">Analysis and discussion</a>
+  <a href="discussion.html">Discussion</a>
 </li>
 <li>
   <a href="mapping.html">Mapping</a>
@@ -354,7 +342,7 @@ div.tocify {
   <a href="report.html">Report</a>
 </li>
 <li>
-  <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Dashboard</a>
+  <a href="https://yiqunjin.shinyapps.io/shiny_dashboard/">Shiny Dashboard</a>
 </li>
 <li>
   <a href="mailto:&lt;yw3772@cumc.columbia.com&gt;">
@@ -461,44 +449,30 @@ div.tocify {
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-12307.8163</td>
-<td align="right">995.84054</td>
-<td align="right">-12.3592240</td>
-<td align="right">0.0000000</td>
+<td align="right">-6999.7519</td>
+<td align="right">1768.35915</td>
+<td align="right">-3.958332</td>
+<td align="right">0.0000795</td>
 </tr>
 <tr class="even">
-<td align="left">smoker1</td>
-<td align="right">23685.9237</td>
-<td align="right">425.11537</td>
-<td align="right">55.7164601</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">children_group1</td>
-<td align="right">949.4232</td>
-<td align="right">344.79196</td>
-<td align="right">2.7536118</td>
-<td align="right">0.0059792</td>
-</tr>
-<tr class="even">
-<td align="left">sex2</td>
-<td align="right">170.0998</td>
-<td align="right">341.74401</td>
-<td align="right">0.4977403</td>
-<td align="right">0.6187543</td>
+<td align="left">children_group</td>
+<td align="right">1197.6286</td>
+<td align="right">629.08881</td>
+<td align="right">1.903751</td>
+<td align="right">0.0571576</td>
 </tr>
 <tr class="odd">
 <td align="left">age</td>
-<td align="right">260.0221</td>
-<td align="right">12.32652</td>
-<td align="right">21.0945321</td>
+<td align="right">239.9951</td>
+<td align="right">22.29965</td>
+<td align="right">10.762281</td>
 <td align="right">0.0000000</td>
 </tr>
 <tr class="even">
 <td align="left">bmi</td>
-<td align="right">321.0280</td>
-<td align="right">27.97673</td>
-<td align="right">11.4748220</td>
+<td align="right">331.8887</td>
+<td align="right">51.32710</td>
+<td align="right">6.466149</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -508,36 +482,29 @@ div.tocify {
 </div>
 <div id="stepwise-regression" class="section level3">
 <h3>Stepwise regression</h3>
-<pre><code>## Start:  AIC=21962.9
+<pre><code>## Start:  AIC=24995.79
 ## charges ~ smoker + children_group + sex + age + bmi
 ## 
-##                  Df  Sum of Sq        RSS   AIC
-## - sex             1 9.0380e+06 4.5793e+10 21961
-## &lt;none&gt;                         4.5784e+10 21963
-## - children_group  1 2.7661e+08 4.6060e+10 21968
-## - bmi             1 4.8035e+09 5.0587e+10 22087
-## - age             1 1.6233e+10 6.2017e+10 22344
-## - smoker          1 1.1325e+11 1.5903e+11 23531
 ## 
-## Step:  AIC=21961.15
+## Step:  AIC=24995.79
 ## charges ~ smoker + children_group + age + bmi
 ## 
+## 
+## Step:  AIC=24995.79
+## charges ~ children_group + age + bmi
+## 
 ##                  Df  Sum of Sq        RSS   AIC
-## &lt;none&gt;                         4.5793e+10 21961
-## + sex             1 9.0380e+06 4.5784e+10 21963
-## - children_group  1 2.7576e+08 4.6068e+10 21967
-## - bmi             1 4.7946e+09 5.0587e+10 22085
-## - age             1 1.6261e+10 6.2054e+10 22342
-## - smoker          1 1.1378e+11 1.5957e+11 23533</code></pre>
+## &lt;none&gt;                         1.7263e+11 24996
+## - children_group  1 4.6900e+08 1.7310e+11 24997
+## - bmi             1 5.4106e+09 1.7804e+11 25035
+## - age             1 1.4989e+10 1.8762e+11 25105</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = charges ~ smoker + children_group + age + bmi, data = cost_df)
+## lm(formula = charges ~ children_group + age + bmi, data = cost_df)
 ## 
 ## Coefficients:
-##     (Intercept)          smoker1  children_group1              age  
-##        -12204.7          23669.4            947.9            260.2  
-##             bmi  
-##           320.4</code></pre>
+##    (Intercept)  children_group             age             bmi  
+##        -6999.8          1197.6           240.0           331.9</code></pre>
 <p>The stepwise regression process confirm that sex is not significant variable.</p>
 <p><br></p>
 </div>
@@ -556,37 +523,30 @@ div.tocify {
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">-12204.7408</td>
-<td align="right">973.77880</td>
-<td align="right">-12.533381</td>
-<td align="right">0.0000000</td>
+<td align="right">-6999.7519</td>
+<td align="right">1768.35915</td>
+<td align="right">-3.958332</td>
+<td align="right">0.0000795</td>
 </tr>
 <tr class="even">
-<td align="left">smoker1</td>
-<td align="right">23669.4400</td>
-<td align="right">423.69654</td>
-<td align="right">55.864133</td>
-<td align="right">0.0000000</td>
+<td align="left">children_group</td>
+<td align="right">1197.6286</td>
+<td align="right">629.08881</td>
+<td align="right">1.903751</td>
+<td align="right">0.0571576</td>
 </tr>
 <tr class="odd">
-<td align="left">children_group1</td>
-<td align="right">947.9286</td>
-<td align="right">344.67562</td>
-<td align="right">2.750205</td>
-<td align="right">0.0060413</td>
-</tr>
-<tr class="even">
 <td align="left">age</td>
-<td align="right">260.1708</td>
-<td align="right">12.31921</td>
-<td align="right">21.119120</td>
+<td align="right">239.9951</td>
+<td align="right">22.29965</td>
+<td align="right">10.762281</td>
 <td align="right">0.0000000</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">bmi</td>
-<td align="right">320.3547</td>
-<td align="right">27.93564</td>
-<td align="right">11.467599</td>
+<td align="right">331.8887</td>
+<td align="right">51.32710</td>
+<td align="right">6.466149</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -612,30 +572,28 @@ div.tocify {
 <p>The outliers are rows 544, 578, 1301. Following model building will use dataset without these outliers.</p>
 <p><br></p>
 <p><strong>Transform charges to ln(charges)</strong></p>
-<pre><code>##       age     sex          bmi        children smoker      region         
-##  Min.   :18   1:637   Min.   :15.96   0:532    0:1004   Length:1259       
-##  1st Qu.:27   2:622   1st Qu.:26.30   1:309    1: 255   Class :character  
-##  Median :39           Median :30.40   2:225             Mode  :character  
-##  Mean   :39           Mean   :30.66   3:151                               
-##  3rd Qu.:51           3rd Qu.:34.69   4: 24                               
-##  Max.   :63           Max.   :53.13   5: 18                               
-##     charges      age_group bmi_group children_group
-##  Min.   : 1122   2:250     1: 40     0:532         
-##  1st Qu.: 4720   3:503     2:554     1:727         
-##  Median : 9361   4:506     3:577                   
-##  Mean   :13106             4: 85                   
-##  3rd Qu.:16436             5:  3                   
-##  Max.   :63770</code></pre>
+<pre><code>##       age            sex         bmi        children     smoker 
+##  Min.   :18.0   Min.   :2   Min.   :15.96   0:572    Min.   :0  
+##  1st Qu.:26.5   1st Qu.:2   1st Qu.:26.25   1:323    1st Qu.:0  
+##  Median :39.0   Median :2   Median :30.40   2:240    Median :0  
+##  Mean   :39.2   Mean   :2   Mean   :30.65   3:157    Mean   :0  
+##  3rd Qu.:51.0   3rd Qu.:2   3rd Qu.:34.64   4: 25    3rd Qu.:0  
+##  Max.   :64.0   Max.   :2   Max.   :53.13   5: 18    Max.   :0  
+##     region             charges      children_group  
+##  Length:1335        Min.   : 1122   Min.   :0.0000  
+##  Class :character   1st Qu.: 4729   1st Qu.:0.0000  
+##  Mode  :character   Median : 9361   Median :1.0000  
+##                     Mean   :13162   Mean   :0.5715  
+##                     3rd Qu.:16517   3rd Qu.:1.0000  
+##                     Max.   :60021   Max.   :1.0000</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = Lncharges ~ smoker + children_group + age + bmi, 
 ##     data = cost_df_log)
 ## 
 ## Coefficients:
-##     (Intercept)          smoker1  children_group1              age  
-##         6.93388          1.55018          0.22609          0.03551  
-##             bmi  
-##         0.01059</code></pre>
+##    (Intercept)          smoker  children_group             age             bmi  
+##        7.31847              NA         0.24259         0.03359         0.01047</code></pre>
 <p><br></p>
 </div>
 <div id="diagnostic-for-transformed-model" class="section level3">
@@ -660,38 +618,31 @@ div.tocify {
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="right">6.9338823</td>
-<td align="right">0.0721953</td>
-<td align="right">96.043415</td>
-<td align="right">0e+00</td>
+<td align="right">7.3184689</td>
+<td align="right">0.1193421</td>
+<td align="right">61.323446</td>
+<td align="right">0.0000000</td>
 </tr>
 <tr class="even">
-<td align="left">smoker1</td>
-<td align="right">1.5501799</td>
-<td align="right">0.0313774</td>
-<td align="right">49.404289</td>
-<td align="right">0e+00</td>
+<td align="left">children_group</td>
+<td align="right">0.2425909</td>
+<td align="right">0.0424161</td>
+<td align="right">5.719318</td>
+<td align="right">0.0000000</td>
 </tr>
 <tr class="odd">
-<td align="left">children_group1</td>
-<td align="right">0.2260899</td>
-<td align="right">0.0255357</td>
-<td align="right">8.853886</td>
-<td align="right">0e+00</td>
-</tr>
-<tr class="even">
 <td align="left">age</td>
-<td align="right">0.0355121</td>
-<td align="right">0.0009124</td>
-<td align="right">38.919881</td>
-<td align="right">0e+00</td>
+<td align="right">0.0335858</td>
+<td align="right">0.0015023</td>
+<td align="right">22.356253</td>
+<td align="right">0.0000000</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">bmi</td>
-<td align="right">0.0105884</td>
-<td align="right">0.0020714</td>
-<td align="right">5.111788</td>
-<td align="right">4e-07</td>
+<td align="right">0.0104654</td>
+<td align="right">0.0034673</td>
+<td align="right">3.018316</td>
+<td align="right">0.0025902</td>
 </tr>
 </tbody>
 </table>
