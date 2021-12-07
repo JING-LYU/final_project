@@ -1,6 +1,6 @@
 ---
-title: <font size="8"> <center>???</center> </font> 
-subtitle: <font size="5"><center> Exploring relationship between smoking and health insurance </center></font> 
+title: <font size="8"> <center>Smoking and Health Insurance</center> </font> 
+#subtitle: <font size="5"><center> Exploring relationship between smoking and health insurance</center></font> 
 output: 
   html_document
     
@@ -8,7 +8,9 @@ output:
 
 <center>##
 
-<img src="images/smoke_pic.webp" style="width:75%">
+<br>
+
+<img src="images/smoke_pic.webp" style="width:90%">
 
 <font size="1"> image source: https://www.waldenu.edu/online-bachelors-programs/bs-in-public-health/resource/ten-benefits-of-smoke-free-workplaces</font> 
 
@@ -26,6 +28,7 @@ Image below shows the portrait of the New York medical insurance.
 We noticed that there are very large amount of New-Yorkers who are not insured. 
 
 <img src="images/nyc_insurance_stat.PNG" style="width:80%">
+
 <font size="1">Image source: https://www.ehealthinsurance.com/new-york-health-insurance</font> 
 
 <br>
