@@ -95,7 +95,7 @@ The second part, Insurance charges, assists our main research topic, since we ca
 
 * [Community Health Survey Public Use Data](https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page). This dataset contains survey questions regarding smoking and health insurance. We extracted related questions from the survey for analysis.
 
-* [Medical Cost Personal Dataset](https://www.kaggle.com/mirichoi0218/insurance). This dataset sheds lights on insurance charges for different personal characteristics, such as smoking, age, bmi, region, etc.
+* [Medical Cost Personal Dataset](https://www.kaggle.com/mirichoi0218/insurance). This dataset sheds lights on insurance charges for different personal characteristics, such as smoking, age, Bmi, region, etc.
 
 #### Datasets for mapping
 
@@ -115,12 +115,12 @@ For **Community Health Survey Public Use Data**, we select year 2014-2016 and va
 
 * `insure`: Type of health insurance coverage 
 
-(1=Employer, 2=Self-purchase,3=Medicare,4=Medicaid/Family Health+,5=Milit/CHAMPUS/Tricare,6=COBRA/Other,7=Uninsured)
+(1 = Employer, 2 = Self-purchase,3 = Medicare, 4 = Medicaid/Family Health+, 5 = Milit/CHAMPUS/Tricare, 6 = COBRA/Other, 7 = Uninsured)
 
 
 **Smoking related**
 
-* `smoker`: Smoking status (1= Never, 2= Current, 3= Former)
+* `smoker`: Smoking status (1 = Never, 2 = Current, 3 = Former)
 
 * `everyday`: Smoking frequency (1 = everyday smoker, 2 = casual smoker)
 
@@ -130,21 +130,21 @@ For **Community Health Survey Public Use Data**, we select year 2014-2016 and va
 
 **Health and economic status**
 
-* `agegroup`: Age groups (1=18-24yrs,2=25-44 yrs,3=45-64 yrs,4=65+ yrs)
+* `agegroup`: Age groups (1 = 18-24 yrs, 2 = 25-44 yrs, 3 = 45-64 yrs, 4 = 65+ yrs)
 
 * `generalhealth`: Self-evaluated general health status 
  
- (1=Excellent,2=Very good,3=Good,4=Fair,5=Poor)
+ (1 = Excellent, 2 = Very good, 3 = Good, 4 = Fair, 5 = Poor)
 
-* `sex`: Participant's sex (1= male, 2= female)
+* `sex`: Participant's sex (1 = male, 2 = female)
 
 * `bmi`: Participant's BMI ($kg/m^2$)
 
-* `child`: Number of children the participant have: (1= yes, 0= no)
+* `child`: Number of children the participant have: (1 = yes, 0 = no)
 
 * `imputed_povertygroup`: Federal poverty level(FPL) for the household 
 
-(1= <100% FPL, 2=100 - <200% FPL, 3=200 - <400% FPL, 4=400 - <600% FPL, 5= >600% FPL)
+(1 = <100% FPL, 2 = 100 - <200% FPL, 3 = 200 - <400% FPL, 4 = 400 - <600% FPL, 5 = >600% FPL)
 
 
 ```{r}
@@ -900,6 +900,26 @@ We reject $H_0$ and then conclude that insurance type and children are dependent
 
 ##### BMI
 
+###### **ANOVA test  between insurance status and BMI**
+
+$H_0$ : The mean of BMI in groups with or without insurance are the same
+
+$H_1$ : The means of BMI in groups with or without insurance are different
+
+*Test result:*
+```{r}
+#| my-chunk61, echo = FALSE, fig.width = 10,fig.height = 8
+anova = aov( bmi ~insure, data = uninsure_bmi)
+anova %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+
+```
+
+According to the ANOVA test, we can not reject $H_0$  and conclude the mean of BMI in each insurance type groups are the same.
+
+<br>
+
 ###### **ANOVA test  between insurance type and BMI**
 
 $H_0$ : The mean of BMI in each insurance type groups are the same
@@ -920,23 +940,7 @@ plot(Tukey_comp,las = 1,
      cex.axis = 0.8)
 ```
 
-###### **ANOVA test  between insurance status and BMI**
 
-$H_0$ : The mean of BMI in groups with or without insurance are the same
-
-$H_1$ : The means of BMI in groups with or without insurance are different
-
-*Test result:*
-```{r}
-#| my-chunk61, echo = FALSE, fig.width = 10,fig.height = 8
-anova = aov( bmi ~insure, data = uninsure_bmi)
-anova %>% 
-  broom::tidy() %>% 
-  knitr::kable()
-
-```
-
-According to the ANOVA test, we can not reject $H_0$  and conclude the mean of BMI in each insurance type groups are the same.
 
 
 <br>
@@ -964,7 +968,7 @@ knitr::kable(var_info)
 ```
 
 
-### Relationship between each variables and charge of insurance {.tabset}
+### 1. Relationship between each variables and charge of insurance {.tabset}
 
 #### Smoker and insurance charges
 
@@ -1153,7 +1157,7 @@ From the five plots above, we can tell that smoking, age, and bmi significantly 
 
 
 
-### Model selection
+### 2. Model selection
 
 #### Correlation plot
 
@@ -1210,7 +1214,7 @@ summary(model1) %>%
 
 
 
-### Model diagnostic
+### 3. Model diagnostic
 ```{r, fig.width = 7, fig.height = 5}
 par(mfrow = c(2,2))
 plot(model1)
@@ -1220,7 +1224,7 @@ The graph above did not show homoscedasticity of residual. Therefore, we need to
 
 
 
-### Model transformation
+### 4. Model transformation
 
 #### Box-Cox Transformation
 
@@ -1443,19 +1447,19 @@ leaflet(medicaid) %>%
 
 ## Discussion
 
-1. Do smoker tend to get insurance?
+1. Is insured rate differed by smoking status?
 
-No. The uninsured rate for current smokers is 44.4% higher than people who currently do not smoke.
+Yes. The uninsured rate for current smokers is 44.4% higher than people who currently do not smoke.
 
 2. What type of insurance do people tend to get?
 
-For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get employer insurance since they are in working age.
+For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, most of them get employer insurance since they are in working age.
 
 For person older than 65 years old, most of them get Medicare since Medicare is only provided for people above 65 years old.
 
-3. How does personal factors(age, having children, smoking, bmi) affect insurance purchasing and premiums?
+3. How does smoking and other personal factors(age, having children, BMI) affect insurance purchasing and premiums?
 
-During exploration stage, we found that smoker have lower insured rate than non-smokers. Moreover, smokers tend to have more unsatisfactory financial status compare to non-smokers. Being in poor financial status may prevent people from spending on insurance. We also found that as people age increase, the proportion of people holding insurance also increase. In addition, people who have at least one child have higher insured rate compare to people who do not have children. We could not found association between bmi and insurance from this survey.
+During exploration stage, we found that smoker have lower insured rate than non-smokers. Moreover, smokers tend to have more unsatisfactory financial status compare to non-smokers. Being in poor financial status may prevent people from purchasing insurance. We also found that as people age increase, the proportion of people holding insurance increase. In addition, people who have at least one child have higher insured rate compare to people who do not have children. We could not found association between BMI and insurance from this survey.
 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. In addition, being older, higher body mass index, and having at least 1 children also increase insurance premiums. 
 
@@ -1463,8 +1467,7 @@ During the prediction model building process, we found that when holding all oth
 
 For people older than 65, they will have access to medicare insurance, which is significantly cheaper than private/self-purchased insurance. Since our prediction model is focused on private insurance, we suggest people older than 65 years old to be mindful when using our prediction interactive page.
 
-
-For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, economy, and social behavior.
+For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, social-economic status.
 
 <br>
 
