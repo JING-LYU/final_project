@@ -725,7 +725,7 @@ For person younger than 65 years old, people tend to get insurance as age increa
 
 For person older than 65 years old, most of them get Medicare since Medicare is only provided for people above 65 years old.
 
-3. How does personal factors(age, having children, smoking, bmi) affect insurance preferences and premiums?
+3. How does personal factors(age, having children, smoking, bmi) affect insurance purchasing and premiums?
 
 
 During exploration stage, we found that smokers tend to be poorer compare to non-smokers. Being in poor personal financial status may prevent people from spending on insurance. 
@@ -734,7 +734,7 @@ Higher proportion of smokers also rated themselves as not in excellent health st
 
 We also found that people tend to get insurance as age increase. 
 
-heavy smoker have slightly higher bmi compare to other people
+Heavy smoker have slightly higher bmi compare to other people
 
 We did not find any correlation between bmi and insurance from the survey.
 
