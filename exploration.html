@@ -707,8 +707,8 @@ smoke_df %&gt;%
   dataset_basic %&gt;%
   drop_na(bmi,insure) 
   
-uninsure = analyse_bmi_insurancetype %&gt;% 
-  mutate(insure = ifelse(insure == &quot;Uninsured&quot;, &quot;Uninsured&quot;, &quot;Insuredd&quot;))
+uninsure_bmi = analyse_bmi_insurancetype %&gt;% 
+  mutate(insure = ifelse(insure == &quot;Uninsured&quot;, &quot;Uninsured&quot;, &quot;Insured&quot;))
   
 bmi_plot1 = 
   analyse_bmi_insurancetype %&gt;% 
@@ -724,7 +724,7 @@ bmi_plot1 =
 
 
 bmi_plot2 = 
-  uninsure %&gt;% 
+  uninsure_bmi %&gt;% 
   ggplot(aes(x = insure , y = bmi, fill = insure)) + 
   geom_boxplot(alpha = 0.6) +
     theme(legend.position = &quot;none&quot;) +
@@ -743,6 +743,7 @@ bmi_plot2 + bmi_plot1</code></pre>
 </div>
 <div id="statistical-test" class="section level4 tabset">
 <h4 class="tabset">Statistical test</h4>
+<p>From the plots, we could find out many patterns about the relations between <code>insurance status</code> and <code>smoking</code> <code>age</code> and <code>have children or not</code>. To further validate the association between <code>insurance type</code> and other key factors as well as between <code>insurance status</code> and <code>BMI</code>.</p>
 <div id="smoking-1" class="section level5">
 <h5>Smoking</h5>
 <div id="chi-quare-test-between-insurance-type-and-smoking" class="section level6">
@@ -830,8 +831,44 @@ dat =
 </tr>
 </tbody>
 </table>
-<p><img src="exploration_files/figure-html/my-chunk6-1.png" width="90%" /></p>
-<p>According to the ANOVA test, we reject <span class="math inline">\(H_0\)</span> and conclude At least two means of BMI in all insurance type groups are different. Detailed information of the difference in each group can be seen on the above image.</p>
+<p><img src="exploration_files/figure-html/my-chunk62-1.png" width="90%" /></p>
+</div>
+<div id="anova-test-between-insurance-status-and-bmi" class="section level6">
+<h6><strong>ANOVA test between insurance status and BMI</strong></h6>
+<p><span class="math inline">\(H_0\)</span> : The mean of BMI in groups with or without insurance are the same</p>
+<p><span class="math inline">\(H_1\)</span> : The means of BMI in groups with or without insurance are different</p>
+<p><em>Test result:</em></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">df</th>
+<th align="right">sumsq</th>
+<th align="right">meansq</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">insure</td>
+<td align="right">1</td>
+<td align="right">5.716116e+01</td>
+<td align="right">57.16116</td>
+<td align="right">1.529227</td>
+<td align="right">0.2162393</td>
+</tr>
+<tr class="even">
+<td align="left">Residuals</td>
+<td align="right">26922</td>
+<td align="right">1.006321e+06</td>
+<td align="right">37.37912</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+</tbody>
+</table>
+<p>According to the ANOVA test, we can not reject <span class="math inline">\(H_0\)</span> and conclude the mean of BMI in each insurance type groups are the same.</p>
 <p><br></p>
 </div>
 </div>

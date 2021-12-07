@@ -408,7 +408,7 @@ smoke_plot2 = uninsure %>%
     labs(
       x = 'smoking status ',
       y = 'proportion',
-      title = 'The proportion of insurance in different smoking group ',
+      title = 'The proportion of insurance\nin different smoking group ',
       fill = "Insurance status")
 
 smoke_plot2 + smoke_plot1
@@ -551,8 +551,8 @@ analyse_bmi_insurancetype =
   dataset_basic %>%
   drop_na(bmi,insure) 
   
-uninsure = analyse_bmi_insurancetype %>% 
-  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insuredd"))
+uninsure_bmi = analyse_bmi_insurancetype %>% 
+  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insured"))
   
 bmi_plot1 = 
   analyse_bmi_insurancetype %>% 
@@ -568,7 +568,7 @@ bmi_plot1 =
 
 
 bmi_plot2 = 
-  uninsure %>% 
+  uninsure_bmi %>% 
   ggplot(aes(x = insure , y = bmi, fill = insure)) + 
   geom_boxplot(alpha = 0.6) +
     theme(legend.position = "none") +
@@ -588,6 +588,8 @@ We did not observe significant difference between each group.
 <br>
 
 #### Statistical test {.tabset}
+
+From the plots, we could find out many patterns about the relations between `insurance status` and `smoking` `age` and `have children or not`. To further validate the association between `insurance type` and other key factors as well as between `insurance status` and `BMI`.
 
 ##### Smoking
 
@@ -700,14 +702,16 @@ ggbarstats(
 We reject $H_0$ and then conclude that insurance type and children are dependent.
 
 ##### BMI
+
 ###### **ANOVA test  between insurance type and BMI**
+
 $H_0$ : The mean of BMI in each insurance type groups are the same
 
 $H_1$ : At least two means of BMI in all insurance type groups are different
 
 *Test result:*
 ```{r}
-#| my-chunk6, echo = FALSE, fig.width = 10,fig.height = 8
+#| my-chunk62, echo = FALSE, fig.width = 10,fig.height = 8
 anova = aov( bmi ~insure, data = analyse_bmi_insurancetype)
 anova %>% 
   broom::tidy() %>% 
@@ -719,7 +723,23 @@ plot(Tukey_comp,las = 1,
      cex.axis = 0.8)
 ```
 
-According to the ANOVA test, we reject $H_0$  and conclude At least two means of BMI in all insurance type groups are different. Detailed information of the difference in each group can be seen on the above image. 
+###### **ANOVA test  between insurance status and BMI**
+
+$H_0$ : The mean of BMI in groups with or without insurance are the same
+
+$H_1$ : The means of BMI in groups with or without insurance are different
+
+*Test result:*
+```{r}
+#| my-chunk61, echo = FALSE, fig.width = 10,fig.height = 8
+anova = aov( bmi ~insure, data = uninsure_bmi)
+anova %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+
+```
+
+According to the ANOVA test, we can not reject $H_0$  and conclude the mean of BMI in each insurance type groups are the same.
 
 <br>
 
