@@ -715,10 +715,6 @@ leaflet(medicaid) %>%
 
 ## Discussion
 
-bmi, age, smoke, children - buy insurance?
-
-smoker poor, un excellent health
-
 
 1. Do smoker tend to get insurance?
 
@@ -729,7 +725,12 @@ No. The uninsured rate for current smokers is 44.4% higher than people who curre
 For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, high proportion of them get employer insurance since they are in working age.
 For person older than 65 years old, most of them get Medicare since Medicare is only provided for people above 65 years old.
 
-3. How does personal factors affect insurance premiums?
+3. How does personal factors(age, having children, smoking, bmi) affect insurance preferences and premiums?
+
+bmi, age, smoke, children - buy insurance?
+
+
+During exploration stage, we found that smokers tend to be poorer compare to non-smokers. Higher proportion of them also rated themselves as not in excellent health status compare to non-smokers. 
 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. This finding confirmed the fact that smokers are charged for higher insurance. In addition, being older, higher body mass index, and having at least 1 children also increase insurance costs. 
 
