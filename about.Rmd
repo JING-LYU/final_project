@@ -1,28 +1,12 @@
 ---
-title: About This project and website
+title: About this project and website
 output: 
-  html_document
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
     
 ---
-
-<br>
-
-## Datasets
-
-**Datasets for analysis:**
-
-* [Community Health Survey Public Use Data](https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page). This dataset contains survey questions regarding smoking and health insurance. We extracted related questions from the survey for analysis.
-
-* [Medical Cost Personal Dataset](https://www.kaggle.com/mirichoi0218/insurance). This dataset sheds lights on insurance charges for different personal characteristics, such as smoking, age, bmi, region, etc.
-
-**Datasets for mapping:**
-
-* [Primary Care Access and Planning - Health Insurance Enrollment](https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h). This dataset is used for mapping of health consulting centers in NYC. 
-
-* [Medicaid Enrolled Provider Listing](https://health.data.ny.gov/Health/Medicaid-Enrolled-Provider-Listing/keti-qx5t): This dataset is used for mapping of Medicaid provide locations in NYC.
-
-* In addition, locations of major health insurance carriers in NYC is collected manually and used to create interactive mapping of these carriers.
-<br>
 
 <br>
 
@@ -43,6 +27,25 @@ In this website, you will find:
 * Final formatted [Report](report.html) of our research
 
 You can also reach to us by clicking the email icon on top right corner of the website. Our github page can also be found be clicking the github icon.
+
+
+<br>
+
+## Datasets
+
+**Datasets for analysis:**
+
+* [Community Health Survey Public Use Data](https://www1.nyc.gov/site/doh/data/data-sets/community-health-survey-public-use-data.page). This dataset contains survey questions regarding smoking and health insurance. We extracted related questions from the survey for analysis.
+
+* [Medical Cost Personal Dataset](https://www.kaggle.com/mirichoi0218/insurance). This dataset sheds lights on insurance charges for different personal characteristics, such as smoking, age, bmi, region, etc.
+
+**Datasets for mapping:**
+
+* [Primary Care Access and Planning - Health Insurance Enrollment](https://data.cityofnewyork.us/Health/Primary-Care-Access-and-Planning-Health-Insurance-/gfej-by6h). This dataset is used for mapping of health consulting centers in NYC. 
+
+* [Medicaid Enrolled Provider Listing](https://health.data.ny.gov/Health/Medicaid-Enrolled-Provider-Listing/keti-qx5t): This dataset is used for mapping of Medicaid provide locations in NYC.
+
+* In addition, locations of major health insurance carriers in NYC is collected manually and used to create interactive mapping of these carriers.
 
 
 <br>
