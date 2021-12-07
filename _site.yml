@@ -7,7 +7,7 @@ navbar:
       href: about.html
     - text: "Analysis"
       menu:
-      - text: "Insurance Chooses"
+      - text: "Insurance preference"
         href: exploration.html
       - text: "Insurance Charge Predication"
         href: medical_cost.html
