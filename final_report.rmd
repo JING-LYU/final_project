@@ -731,6 +731,7 @@ bmi, age, smoke, children - buy insurance?
 
 During exploration stage, we found that smokers tend to be poorer compare to non-smokers. Being in poor personal financial status may prevent people from spending on insurance. 
 Higher proportion of smokers also rated themselves as not in excellent health status compare to non-smokers. Being in unsatisfactory health status should motivate people to get insurance. 
+We also found that people tend to get insurance as age increase. 
 We did not find any correlation between bmi and insurance from the survey.
 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. In addition, being older, higher body mass index, and having at least 1 children also increase insurance premiums. 
