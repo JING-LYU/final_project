@@ -11,11 +11,11 @@ navbar:
         href: exploration.html
       - text: "Insurance Charge Predication"
         href: medical_cost.html
-    - text: "Discussion"
+    - text: "Conclusion and discussion"
       href: discussion.html
     - text: "Interactive tools"
       menu:
-      - text: "Mapping"
+      - text: "Mapping - Find your insurance conselting location"
         href: mapping.html
       - text: "Shiny Dashboard - Predicet your insurance Charge!"
         href: https://yiqunjin.shinyapps.io/shiny_dashboard/

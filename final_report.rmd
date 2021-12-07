@@ -189,12 +189,19 @@ cost_df = read.csv("data/medical_cost_clean.csv") %>%
 **This dataset includes the following variables**
 
 * `age`: Age
+
 * `sex`: Sex (1 = male, 2 = female)
+
 * `bmi`: Body Mass Index
+
 * `children`: number of children the person has
+
 * `smoker`: smoking status (0 = non-smoker, 1 = smoker)
+
 * `region`: region in th US
+
 * `charges`: Insurance charges
+
 * `children_group`: whether or not the person has children (0 = No children, 1 = At least one child)
 
 
