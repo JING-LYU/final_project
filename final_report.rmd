@@ -727,9 +727,7 @@ For person older than 65 years old, most of them get Medicare since Medicare is 
 
 3. How does personal factors(age, having children, smoking, bmi) affect insurance purchasing and premiums?
 
-
-During exploration stage, we found that smokers tend to be poorer compare to non-smokers. Being in poor personal financial status may prevent people from spending on insurance. We also found that as people age increase, the proportion of people holding insurance also increase. In addtion,
-
+During exploration stage, we found that smoker have lower insured rate than non-smokers. Moreover, smokers tend to have more unsatisfactory financial status compare to non-smokers. Being in poor financial status may prevent people from spending on insurance. We also found that as people age increase, the proportion of people holding insurance also increase. In addition, people who have at least one child have higher insured rate compare to people who do not have children. We could not found association between bmi and insurance from this survey.
 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. In addition, being older, higher body mass index, and having at least 1 children also increase insurance premiums. 
 
