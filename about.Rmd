@@ -31,6 +31,19 @@ You can also reach to us by clicking the email icon on top right corner of the w
 
 <br>
 
+## Research question
+
+We divide our main research topic, the relationship between smoking and health insurance, into two parts: 
+
+* Smoker insurance preferences: If smokers tend to get insurance and what type of insurance they prefer
+* Insurance charges prediction: personal factors that affect insurance purchasing and premiums. 
+
+In the first part, insurance preferences, we first explore people's insurance preferences and their smoking status in order to investigate if there is potential association between smoking and insurance. We also investigate some other variables that could be potential confounders or interaction factors between the relationship of smoking and insurance.
+
+The second part, Insurance charges, assists our main research topic, since we can use the factors (age, bmi, smoker, etc) to not only explain what kind of personal characteristics would affect insurance cost, but also build a prediction model for health insurance charges. By doing such, we would gain better insights to the underlying relationship between health insurance and smoking, along with other important variables that contributes to the cost variation of insurance.
+
+<br>
+
 ## Datasets
 
 **Datasets for analysis:**

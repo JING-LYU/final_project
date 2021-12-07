@@ -28,11 +28,11 @@ library(haven)
 
 We notice that a lot of smokers complain about their insurance charges. In fact, it is known that the health insurance companies stratify smokers and non-smokers and assign different insurance prices according to smoking status. 
 
-Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, our research topic can be divided into three research questions.We would like to investigate:
+Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, our research topic can be divided into three research questions. We would like to investigate:
 
 * If smokers tend to get insurance; 
 * What type of insurance they prefer; 
-* Factors that affect insurance cost. 
+* Factors that affect insurance purchasing and premiums. 
 
 Another reason that limits access to insurance is lack of information. As such, mapping of health consulting centers, health insurance carriers locations, and medicaid provider location in NYC, along with their contact information and operation hours, are also provided for readers who need more information for insurance and health advice.
 
@@ -55,7 +55,7 @@ These facts inspired us to look deep into the relationship between smoking and h
 We divide our main research topic, the relationship between smoking and health insurance, into two parts: 
 
 * Smoker insurance preferences: If smokers tend to get insurance and what type of insurance they prefer
-* Insurance charges prediction: personal factors that affect insurance cost. 
+* Insurance charges prediction: personal factors that affect insurance purchasing and premiums. 
 
 In the first part, insurance preferences, we first explore people's insurance preferences and their smoking status in order to investigate if there is potential association between smoking and insurance. We also investigate some other variables that could be potential confounders or interaction factors between the relationship of smoking and insurance.
 
@@ -549,15 +549,15 @@ Above table shows the estimates for each variables when charges is transformed t
 
 
 
-```{r, fig.width = 5, fig.height = 3}
+```{r, fig.width = 7, fig.height = 3.5}
+par(mfrow = c(1,2))
 
 boxcox(model_log)
+
+plot(model_log, which = 1)
 ```
 
-```{r, fig.width = 7, fig.height = 5}
-par(mfrow = c(2,2))
-plot(model_log)
-```
+
 
 Lamda is near 1 now, and the residual distribution improved from un-transformed data. We conclude this model is acceptable.
 
@@ -727,17 +727,7 @@ For person older than 65 years old, most of them get Medicare since Medicare is 
 
 3. How does personal factors(age, having children, smoking, bmi) affect insurance purchasing and premiums?
 
-
-During exploration stage, we found that smokers tend to be poorer compare to non-smokers. Being in poor personal financial status may prevent people from spending on insurance. 
-
-Higher proportion of smokers also rated themselves as not in excellent health status compare to non-smokers. Being in unsatisfactory health status should motivate people to get insurance. 
-
-We also found that people tend to get insurance as age increase. 
-
-Heavy smoker have slightly higher bmi compare to other people
-
-We did not find any correlation between bmi and insurance from the survey.
-
+During exploration stage, we found that smoker have lower insured rate than non-smokers. Moreover, smokers tend to have more unsatisfactory financial status compare to non-smokers. Being in poor financial status may prevent people from spending on insurance. We also found that as people age increase, the proportion of people holding insurance also increase. In addition, people who have at least one child have higher insured rate compare to people who do not have children. We could not found association between bmi and insurance from this survey.
 
 During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. In addition, being older, higher body mass index, and having at least 1 children also increase insurance premiums. 
 

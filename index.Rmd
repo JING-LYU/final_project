@@ -34,6 +34,10 @@ We noticed that there are very large amount of New-Yorkers who are not insured.
 <br>
 
 
-Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance.
+Since health insurance is vital for people’s well-being, and the cost is the main reason that stops people from buying insurance, we are interested in exploring the relationship between smoking and health insurance. To be specific, the research topic can be divided into two parts: 
+
+`Smoker insurance preferences:` If smokers tend to get insurance and what type of insurance they prefer;
+
+`Insurance charges prediction:` personal factors that affect insurance purchasing and premiums. 
 
 <br>
