@@ -12,6 +12,12 @@ output:
 
 ## Website overview
 
+* A workthrough of our website:
+
+<iframe width="560" height="315" src="https://youtu.be/rGaaVyWo5ow" frameborder="0" allowfullscreen></iframe>
+
+<br>
+
 In this website, you will find:
 
 * [Analysis - Smokers' Insurance Preference](data-exploration1.html): Investigation of association between smoking and health insurance.
@@ -27,6 +33,8 @@ In this website, you will find:
 * Final formatted [Report](report.html) of our research
 
 You can also reach to us by clicking the email icon on top right corner of the website. Our github page can also be found be clicking the github icon.
+
+
 
 
 <br>
