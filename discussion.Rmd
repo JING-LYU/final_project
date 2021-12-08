@@ -1,6 +1,31 @@
 ---
-title: 
+title: <center>Conclusion and discussion
 output: 
   html_document
-    
 ---
+
+<br>
+
+<style type="text/css">
+.main-container {
+  max-width: 1800px;
+  margin-left: 500;
+  margin-right: auto;
+}
+</style>
+
+<center><img src="images/flow.PNG" style="width:90%"></center>
+
+<br>
+
+## Conclusion
+
+We found that smokers have lower insured rate; people age below 65 tend to get employer insurance while people age above 65 tend to get medicare; Smoking, being older, having higher BMI and having at least one child also increase insurance premiums.
+
+<br>
+
+## Future progression
+
+For people older than 65, they will have access to medicare insurance, which is significantly cheaper than private/self-purchased insurance. Since our prediction model is focused on private insurance, we suggest people older than 65 years old to be mindful when using our prediction interactive page.
+
+For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, social-economic status.

@@ -1,6 +1,6 @@
 ---
-title: <font size="8"> <center>Smoking and Health Insurance</center> </font> 
-#subtitle: <font size="5"><center> Exploring relationship between smoking and health insurance</center></font> 
+title: <font size="8"> <center>Saving as a non-smoker?</center> </font> 
+subtitle: <font size="5"><center> Exploring relationship between smoking and health insurance</center></font> 
 output: 
   html_document
     
