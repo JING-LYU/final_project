@@ -1,4 +1,4 @@
-name: "Yay internet!"
+name: "Yay project!"
 output_dir: "."
 navbar:
   title: "Home"
@@ -24,7 +24,7 @@ navbar:
     - icon: fa-envelope fa-lg
       href: mailto:<yw3772@cumc.columbia.com>
     - icon: fa-github fa-lg
-      href: http://github.com/wyshanw/
+      href: https://github.com/wyshanw/final_project
 output:
   html_document:
     theme: united
