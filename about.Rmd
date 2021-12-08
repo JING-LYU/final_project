@@ -14,7 +14,7 @@ output:
 
 * A [walkthrough video](https://youtu.be/rGaaVyWo5ow) of our website:
 
-<iframe width="560" height="315" src="https://youtu.be/rGaaVyWo5ow" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/rGaaVyWo5ow" frameborder="0" allowfullscreen></iframe>
 
 <br>
 
