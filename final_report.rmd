@@ -7,17 +7,15 @@ output:
     toc: true
     toc_float: true
 ---
-```{r, echo = FALSE, message=FALSE}
+```{r, echo = FALSE, message=FALSE, warning = FALSE}
 knitr::opts_chunk$set(warning = FALSE)
 
 library(ggcorrplot)
 library(olsrr)
 library(MASS)
 library(plotly)
-#library(plyr)
 library(leaflet)
 library(rvest)
-library(httr)
 library(haven)
 library(httr)
 library(summarytools)
