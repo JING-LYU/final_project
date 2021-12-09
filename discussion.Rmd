@@ -1,26 +1,14 @@
 ---
-title: <center>Conclusion and discussion
+title: "Conclusion and discussion"
 output: 
-  html_document
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
 ---
 
-<br>
 
-<style type="text/css">
-.main-container {
-  max-width: 1800px;
-  margin-left: 500;
-  margin-right: auto;
-}
-</style>
-
-<center><img src="images/flow.PNG" style="width:90%"></center>
-
-<br>
-
-
-
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 library(tidyverse)
 library(rvest)
@@ -48,10 +36,13 @@ options(
 
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
+
+
 ```
 
+```{r message=FALSE,warning=FALSE}
 
-```{r message=FALSE}
+
 dataset_basic = read_csv("data/dataset_basic.csv")
 
 dataset_basic = read_csv("data/dataset_basic.csv") %>% 
@@ -63,11 +54,7 @@ dataset_basic = read_csv("data/dataset_basic.csv") %>%
          agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs"))
          ) %>% 
   dplyr::select(insure,agegroup,smoker,bmi,child,sex)
-```
 
-
-
-```{r message=FALSE}
 #| my-chunkn, echo = FALSE, fig.width = 10,
 analyse_smoke_sum = 
   dataset_basic %>%
@@ -101,8 +88,6 @@ uninsure = analyse_smoke_insurancetype %>%
   mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insured"))
   
 
-  
-
 smoke_plot1 = analyse_smoke_insurancetype %>% 
   ggplot(aes(x = smoker , y = freq, fill = insure)) + 
   geom_bar(stat = "identity",position = "dodge") +
@@ -119,16 +104,9 @@ smoke_plot2 = uninsure %>%
     labs(
       x = 'smoking status ',
       y = 'proportion',
-      title = 'The proportion of insurance\nin different smoking group ',
+      title = 'The proportion of insurance in different smoking group ',
       fill = "Insurance status")
 
-ggplotly(smoke_plot1)
-
-
-smoke_plot1
-```
-
-```{r}
 cost_df = read.csv("data/medical_cost_clean.csv") %>% 
   mutate(
     sex = as.factor(sex),
@@ -136,10 +114,6 @@ cost_df = read.csv("data/medical_cost_clean.csv") %>%
     children_group = as.factor(children_group)
   )
 
-```
-
-
-```{r}
 
 cost_df_smoker = 
   cost_df %>%
@@ -173,15 +147,16 @@ smoker_plotly <- smoker_plotly %>%
       title = "Insurance charges",
       zeroline = F
     ),
-    legend=list(title=list(text='<b> Smokering Status </b>'))
+    legend=list(title=list(text='<b> Smokering Status </b>')),
+    title = "Smoking status and insurance charge"
   )
 
 
 ```
 
-## Conclusion and discussion
+## Conclusion
 
-We mainly draw three conclusion from our data analysis.
+We mainly draw three conclusion from our data analysis about [smoker insurance preference](exploration.html)and [insurance charge](medical_cost.html).
 
 1. Smokers have higher uninsured rate
 
@@ -191,14 +166,16 @@ We mainly draw three conclusion from our data analysis.
 
 <br>
 
-To be more specifics about the first conclusion, We find smoking status may influence people's purchase of insurance in two aspects. In the direct aspect, smokers may be required to pay for additional tobacco surcharge, which cost them less willingly to buy health coverage. In the indirect aspect, we find from [our analysis](exploration.html) that socioeconomic factors related to smokers, such as **lower income and worse health status**, may also hinder their access to health insurance.
+## Discussion
+
+To be more specifics about the first conclusion, We find smoking status may influence people's purchase of insurance in two aspects. In the direct aspect, smokers may be required to pay for additional tobacco surcharge, which cost them less willingly to buy health coverage. In the indirect aspect, we find from our analysis that socioeconomic factors related to smokers, such as **lower income and worse health status**, may also hinder their access to health insurance.
 
 ```{r}
 ggplotly(smoke_plot2)
 ```
 
 
-As for the second conclusion. An article from "verywellhealth" mentioned that employers may impose tobacco surcharge on their smoking employees. However, if the employees choose to take part in a tobacco cessation program, they are exempt from their surcharge. Thus, for the exempt of surcharge, employees are more likely to quit smoking to get the insurance. While for employees who insist in smoking, they would face with higher insurance premium, which may decrease their interest in buying employer insurance.Above all could explain our finding that **"current smokers have the less proportion of employer insurance comparing to other groups"**.
+As for the second conclusion. An article from ["verywellhealth"](https://www.verywellhealth.com/health-insurance-surcharges-for-tobacco-users-state-and-federal-rules-5082888) mentioned that employers may impose tobacco surcharge on their smoking employees. However, if the employees choose to take part in a tobacco cessation program, they are exempt from their surcharge. Thus, for the exempt of surcharge, employees are more likely to quit smoking to get the insurance. While for employees who insist in smoking, they would face with higher insurance premium, which may decrease their interest in buying employer insurance.Above all could explain our finding that **"current smokers have the less proportion of employer insurance comparing to other groups"**.
 
 In addition, since the government designs Medicaid for people with lower income, income may play an important role in the association between high proportion of Medicaid and smoker.
 
@@ -213,14 +190,12 @@ smoker_plotly
 ```
 
 
-Overall, smokers' insurance status are substantially influenced by smoking. A research from Jennifer Tolbert (2020) have found that people without health insurance have less access to healthcare due to higher cost. Higher insurance premium for smokers may deprive them of the right of medical care. Therefore, policies in tobacco surcharge should be imposed more prudently and wisely to reduce the healthcare inequality in smokers. 
+Overall, smokers' insurance status are substantially influenced by smoking. A research from [Jennifer Tolbert (2020)](https://www.kff.org/uninsured/issue-brief/key-facts-about-the-uninsured-population/) have found that people without health insurance have less access to healthcare due to higher cost. Higher insurance premium for smokers may deprive them of the right of medical care. Therefore, policies in tobacco surcharge should be imposed more prudently and wisely to reduce the healthcare inequality in smokers, and at the same time advocate smoking cessation.
 
-for employer-sponsored insurance, smokers are offered with two choices regarding to tobacco surcharge.
-
-
+<br>
 
 ## Future progression
 
-For people older than 65, they will have access to medicare insurance, which is significantly cheaper than private/self-purchased insurance. Since our prediction model is focused on private insurance, we suggest people older than 65 years old to be mindful when using our prediction interactive page.
+For people older than 65, they will have access to medicare insurance, which is significantly cheaper than private/self-purchased insurance. Since our prediction model is focused on private insurance, we suggest people older than 65 years old to be mindful when using our [prediction interactive page](https://yiqunjin.shinyapps.io/shiny_dashboard/).
 
 For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, such as different tobacco surcharge across states.

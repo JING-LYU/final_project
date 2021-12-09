@@ -20,9 +20,9 @@ output:
 
 In this website, you will find:
 
-* [Analysis - Smokers' Insurance Preference](data-exploration1.html): Investigation of association between smoking and health insurance.
+* [Analysis - Smokers' Insurance Preference](exploration.html): Investigation of association between smoking and health insurance.
 
-* [Analysis - Insurance Charge Predication](model_building.html): Prediction model building for health insurance premiums.
+* [Analysis - Insurance Charge Predication](medical_cost.html): Prediction model building for health insurance premiums.
 
 * [Discussion](discussion.html): Finding of our research.
 
@@ -30,7 +30,7 @@ In this website, you will find:
 
 * [Interactive tools - Shiny](https://yiqunjin.shinyapps.io/shiny_dashboard/): dashboard for prediction of insurance price. User may enter their age, bmi, whether or not smoking and having children, and the interactive page will give a predicted health insurance price and price range for user.
 
-* Final formatted [Report](report.html) of our research
+* Final formatted [Report](final_report.html) of our research
 
 You can also reach to us by clicking the email icon on top right corner of the website. Our github page can also be found be clicking the github icon.
 

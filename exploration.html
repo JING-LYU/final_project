@@ -13,8 +13,8 @@
 
 <title>Smokers’ Insurance Preference</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/united.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -440,8 +440,8 @@ current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)</code></p
   drop_na() %&gt;% 
   mutate(
   insuredgateway = factor(insuredgateway, levels = c(1,2), labels = c(&quot;yes&quot;, &quot;no&quot;))) %&gt;% 
-  ggplot(aes(x = insuredgateway,fill = insuredgateway))+
-  geom_bar()+
+  ggplot(aes(x = insuredgateway,fill = insuredgateway)) +
+  geom_bar() +
   theme(legend.position = &quot;none&quot;) +
   labs(
     x = &quot;Hold status of insurance&quot;,
@@ -450,8 +450,8 @@ current_smoker = smoke_df %&gt;% filter(smoker == &quot;current&quot;)</code></p
 <pre class="r"><code>insuretype = dataset_basic %&gt;% 
   drop_na() %&gt;% 
   mutate(insure = fct_infreq(insure)) %&gt;% 
-  ggplot(aes(x = insure,fill = insure))+
-  geom_bar()+
+  ggplot(aes(x = insure,fill = insure)) +
+  geom_bar() +
   theme(legend.position = &quot;none&quot;) +
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(
@@ -541,7 +541,7 @@ smoke_df %&gt;%
   dplyr::summarize(
     age_count = n()) %&gt;% 
   mutate(smokegroup_count = smokegroup_count,
-         age_percent = age_count/smokegroup_count)%&gt;% 
+         age_percent = age_count/smokegroup_count) %&gt;% 
   ggplot(aes(x = smoker, y = age_percent, fill = agegroup)) + 
   geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
     labs(
@@ -559,9 +559,9 @@ smoke_df %&gt;%
   drop_na(generalhealth) %&gt;% 
   dplyr::group_by(generalhealth,smoker) %&gt;% 
   dplyr::summarize(
-    count = n())%&gt;% 
+    count = n()) %&gt;% 
   mutate(smokegroup_count = smokegroup_count,
-         health_percent = count/smokegroup_count)%&gt;% 
+         health_percent = count/smokegroup_count) %&gt;% 
   ggplot(aes(x = smoker, y = health_percent, fill = generalhealth)) + 
   geom_bar(stat = &quot;identity&quot;,position = &quot;dodge&quot;) +
     labs(
@@ -600,7 +600,7 @@ smoke_df %&gt;%
   drop_na(bmi,smoker) %&gt;% 
   ggplot(aes(x = smoker, y = bmi,fill = smoker)) + 
   geom_boxplot() +
-  ylim(0,50)+
+  ylim(0,50) +
     labs(
       x = &#39;Smoking status&#39;,
       y = &#39;BMI (kg/m^2)&#39;,
@@ -616,23 +616,23 @@ smoke_df %&gt;%
 <div id="smoking-intensity-and-frequency" class="section level5">
 <h5>Smoking intensity and frequency</h5>
 <pre class="r"><code>type = current_smoker %&gt;%
-  ggplot(aes(x = smoker_cat, fill = everyday))+
-  geom_histogram(stat=&quot;count&quot;) +
+  ggplot(aes(x = smoker_cat, fill = everyday)) +
+  geom_histogram(stat =&quot;count&quot;) +
     labs(
       x = &#39;Smoking intensity&#39;,
       y = &#39;Number of current smokers&#39;,
-      title = &#39;Smoking intensity of current smokers&#39;)+
+      title = &#39;Smoking intensity of current smokers&#39;) +
   theme(legend.position = &quot;none&quot;)</code></pre>
 <pre class="r"><code>consumption = current_smoker %&gt;% 
   ggplot(aes(x = numberperdaya, fill = everyday)) + 
-  geom_histogram()+
-  xlim(0,30)+
+  geom_histogram() +
+  xlim(0,30) +
   labs(
     x = &quot;Average number of cigarattes smoked per day&quot;,
     y = &quot;Number of current smokers&quot;,
     title = &quot;Average number of cigarattes\nsmoked per day&quot;,
     fill = &quot;Smoking frequency&quot;
-       )+
+       ) +
   theme(legend.position = &quot;right&quot;)</code></pre>
 <p><img src="exploration_files/figure-html/my-chunkn1-1.png" width="90%" /></p>
 <p>Most of the current smokers are light smokers. Among those light smokers, nearly half of them smoke everyday, while normal and heavy smokers are more likely to smoke everyday. Casual smokers tend to consume less cigarette than everyday smokers.</p>
@@ -641,10 +641,10 @@ smoke_df %&gt;%
 <div id="bmi-1" class="section level5">
 <h5>BMI</h5>
 <pre class="r"><code>current_smoker %&gt;% 
-  ggplot(aes(x = smoker_cat, y = bmi, fill = smoker_cat))+
+  ggplot(aes(x = smoker_cat, y = bmi, fill = smoker_cat)) +
   geom_boxplot() +
   theme(plot.title = element_text(hjust = 0.5)) +
-  ylim(0,50)+
+  ylim(0,50) +
   #facet_grid(.~smoker_cat,scales = &quot;free&quot;) +
     labs(
       x = &#39;Smoking intensity&#39;,
@@ -658,10 +658,10 @@ smoke_df %&gt;%
 <div id="cost-on-smoke" class="section level5">
 <h5>Cost on smoke</h5>
 <pre class="r"><code>current_smoker %&gt;% 
-  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday))+
+  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday)) +
   geom_point(alpha = .5,size = 3) +
-  xlim(0,50)+
-  ylim(0,40)+
+  xlim(0,50) +
+  ylim(0,40) +
   theme(plot.title = element_text(hjust = 0.5)) +
   #facet_grid(.~smoker_cat,scales = &quot;free&quot;) +
     labs(
@@ -685,7 +685,7 @@ smoke_df %&gt;%
 <h5>Smoking</h5>
 <p><img src="exploration_files/figure-html/my-chunkn-1.png" width="90%" /></p>
 <p>We found that, current smokers have the highest uninsured proportion comparing to other groups.</p>
-<p>Regardless of the smoking status, most people tend to get employer insurance. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.</p>
+<p>Regardless of the smoking status, most people tend to get employer insurance. However,current smokers have the less proportion of employer insurance comparing to other groups. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.</p>
 <p><br></p>
 </div>
 <div id="age" class="section level5">

@@ -416,7 +416,7 @@ smoke_plot2 + smoke_plot1
 
 We found that, current smokers have the highest uninsured proportion comparing to other groups.
 
-Regardless of the smoking status, most people tend to get employer insurance. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.
+Regardless of the smoking status, most people tend to get employer insurance. However,current smokers have the less proportion of employer insurance comparing to other groups. For former smokers, a larger proportion of them get the medicare insurance compare to people who never smoke or currently smoke.
 
 
 <br>

@@ -1445,27 +1445,168 @@ leaflet(medicaid) %>%
 
 ## Discussion
 
-1. Is insured rate differed by smoking status?
 
-Yes. The uninsured rate for current smokers is 44.4% higher than people who currently do not smoke.
+```{r message=FALSE,warning=FALSE}
 
-2. What type of insurance do people tend to get?
 
-For person younger than 65 years old, people tend to get insurance as age increase. Specifically, for those age in the range of 25-64 years old, most of them get employer insurance since they are in working age.
+dataset_basic = read_csv("data/dataset_basic.csv")
 
-For person older than 65 years old, most of them get Medicare since Medicare is only provided for people above 65 years old.
+dataset_basic = read_csv("data/dataset_basic.csv") %>% 
+  mutate(
+         child = factor(child,levels = c(1,2),labels = c("yes","no")),
+         sex = factor(sex,labels = c("male","female")),
+         insure = factor(insure,levels = c(1,2,3,4,5,6,7),labels = c("Employer","Self-purchase","Medicare", "Medicaid/Family Health+", "Milit/CHAMPUS/Tricare", "COBRA/Other", "Uninsured")),
+         smoker = factor(smoker,levels = c(1,2,3),labels = c("never","current","former")),
+         agegroup = factor(agegroup,ordered = TRUE,labels = c("18-24yrs","25-44yrs", "45-64yrs", "65+yrs"))
+         ) %>% 
+  dplyr::select(insure,agegroup,smoker,bmi,child,sex)
 
-3. How does smoking and other personal factors(age, having children, BMI) affect insurance purchasing and premiums?
+#| my-chunkn, echo = FALSE, fig.width = 10,
+analyse_smoke_sum = 
+  dataset_basic %>%
+  mutate(smoker = ifelse(smoker == "current", "smoke", "not_smoke")) %>% 
+  drop_na(smoker,insure) %>% 
+  group_by(smoker,insure) %>% 
+  summarize(n = n()) %>% 
+  mutate(insure = fct_reorder(insure,n)) %>% 
+  ungroup() %>% 
+  group_by(smoker) %>% 
+  summarize(sum = sum(n)) %>% 
+  pull()
 
-During exploration stage, we found that smoker have lower insured rate than non-smokers. Moreover, smokers tend to have more unsatisfactory financial status compare to non-smokers. Being in poor financial status may prevent people from purchasing insurance. We also found that as people age increase, the proportion of people holding insurance increase. In addition, people who have at least one child have higher insured rate compare to people who do not have children. We could not found association between BMI and insurance from this survey.
+analyse_smoke_insurancetype = dataset_basic %>%
+  mutate(smoker = ifelse(smoker == "current", "smoker", "non-smoker")) %>% 
+  drop_na(smoker,insure) %>% 
+  group_by(smoker,insure) %>% 
+  summarize(n = n()) %>% 
+  mutate(insure = fct_reorder(insure,n)
+         ) 
 
-During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. In addition, being older, higher body mass index, and having at least 1 children also increase insurance premiums. 
+analyse_smoke_insurancetype$sum = rep(analyse_smoke_sum, each = 7)
 
-4. Future progression
+analyse_smoke_insurancetype =
+  analyse_smoke_insurancetype %>% 
+  mutate(
+    freq = n/sum
+  )
 
-For people older than 65, they will have access to medicare insurance, which is significantly cheaper than private/self-purchased insurance. Since our prediction model is focused on private insurance, we suggest people older than 65 years old to be mindful when using our prediction interactive page.
+uninsure = analyse_smoke_insurancetype %>% 
+  mutate(insure = ifelse(insure == "Uninsured", "Uninsured", "Insured"))
+  
 
-For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, social-economic status.
+smoke_plot1 = analyse_smoke_insurancetype %>% 
+  ggplot(aes(x = smoker , y = freq, fill = insure)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'smoking status ',
+      y = 'proportion',
+      title = 'The proportion of insurance in different smoking group ',
+      fill = "Insurance type") +
+  theme(legend.position = "right")
+
+smoke_plot2 = uninsure %>% 
+  ggplot(aes(x = smoker , y = freq, fill = insure)) + 
+  geom_bar(stat = "identity",position = "dodge") +
+    labs(
+      x = 'smoking status ',
+      y = 'proportion',
+      title = 'The proportion of insurance in different smoking group ',
+      fill = "Insurance status")
+
+cost_df = read.csv("data/medical_cost_clean.csv") %>% 
+  mutate(
+    sex = as.factor(sex),
+    smoker = as.factor(smoker),
+    children_group = as.factor(children_group)
+  )
+
+
+cost_df_smoker = 
+  cost_df %>%
+  mutate(
+    smoker = fct_recode(
+      smoker,
+      "Smoker" = "1",
+      "Non smoker" = "0"
+      ))
+    
+smoker_plotly <- cost_df_smoker %>% 
+  plot_ly(
+    x = ~smoker,
+    y = ~charges,
+    split = ~smoker,
+    type = 'violin',
+    box = list(
+      visible = T
+    ),
+    meanline = list(
+      visible = T
+    )
+  ) 
+
+smoker_plotly <- smoker_plotly %>%
+  layout(
+    xaxis = list(
+      title = "smokeing status"
+    ),
+    yaxis = list(
+      title = "Insurance charges",
+      zeroline = F
+    ),
+    legend=list(title=list(text='<b> Smokering Status </b>')),
+    title = "Smoking status and insurance charge"
+  )
+
+
+```
+
+### Summary
+
+We mainly draw three conclusion from our data analysis about [smoker insurance preference](exploration.html)and [insurance charge](medical_cost.html)
+
+1. Smokers have higher uninsured rate
+
+2. Smokers have less proportion of employer insurance and higher proportion of Medicaid comparing to non-smokers
+
+3. Smoking increase insurance premiums
+
+<br>
+
+### Discusssion
+
+To be more specifics about the first conclusion, We find smoking status may influence people's purchase of insurance in two aspects. In the direct aspect, smokers may be required to pay for additional tobacco surcharge, which cost them less willingly to buy health coverage. In the indirect aspect, we find from our analysis that socioeconomic factors related to smokers, such as **lower income and worse health status**, may also hinder their access to health insurance.
+
+```{r}
+ggplotly(smoke_plot2)
+```
+
+
+As for the second conclusion. An article from ["verywellhealth"](https://www.verywellhealth.com/health-insurance-surcharges-for-tobacco-users-state-and-federal-rules-5082888) mentioned that employers may impose tobacco surcharge on their smoking employees. However, if the employees choose to take part in a tobacco cessation program, they are exempt from their surcharge. Thus, for the exempt of surcharge, employees are more likely to quit smoking to get the insurance. While for employees who insist in smoking, they would face with higher insurance premium, which may decrease their interest in buying employer insurance.Above all could explain our finding that **"current smokers have the less proportion of employer insurance comparing to other groups"**.
+
+In addition, since the government designs Medicaid for people with lower income, income may play an important role in the association between high proportion of Medicaid and smoker.
+
+```{r}
+ggplotly(smoke_plot1)
+```
+
+Lastly, During the prediction model building process, we found that when holding all other variable fixed, smoking is associated with a 155% increase in insurance charges than non-smokers. 
+
+```{r}
+smoker_plotly
+```
+
+
+Overall, smokers' insurance status are substantially influenced by smoking which is consistent with what we expected. A research from [Jennifer Tolbert (2020)](https://www.kff.org/uninsured/issue-brief/key-facts-about-the-uninsured-population/) have found that people without health insurance have less access to healthcare due to higher cost. Higher insurance premium for smokers may deprive them of the right of medical care. Therefore, policies in tobacco surcharge should be imposed more prudently and wisely to reduce the healthcare inequality in smokers, and at the same time advocate smoking cessation.
+
+<br>
+
+### Future progression
+
+For people older than 65, they will have access to medicare insurance, which is significantly cheaper than private/self-purchased insurance. Since our prediction model is focused on private insurance, we suggest people older than 65 years old to be mindful when using our [prediction interactive page](https://yiqunjin.shinyapps.io/shiny_dashboard/).
+
+For future analysis of relationship between smoking and health insurance, we would like to stratify states in the U.S. in order to eliminate the bias caused by policies, such as different tobacco surcharge across states.
+
+
 
 <br>
 
