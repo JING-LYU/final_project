@@ -79,6 +79,8 @@ The second part, Insurance charges, assists our main research topic, since we ca
 * Yushan Wang
 * Yiqun Jin
 
+<img src="images/pic.png" style="width:60%">
+
 We are Biostatistics students from Columbia University Mailman School of Public Health. This is a project for the course P8105 Data Science.
 
 
