@@ -46,7 +46,7 @@ leaflet(health_center) %>%
 **Time of operation and walk-in:**
 ```{r}
 health_center_table = health_center %>% 
-  select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  dplyr::select(health_center, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
   mutate(
     accept_walk_ins = c(rep("Yes",11))
   ) %>% 
@@ -99,7 +99,7 @@ leaflet(insurance_agency) %>%
 **Time of operation and walk-in:**
 ```{r}
 insurance_agency_table =insurance_agency %>% 
-  select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
+  dplyr::select(insurance_agency, street_address, telephone_number, days_of_operation, hours_of_operation, accept_walk_ins) %>% 
   
   relocate(
     insurance_agency, days_of_operation, hours_of_operation, accept_walk_ins,
