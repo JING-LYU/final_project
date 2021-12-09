@@ -90,8 +90,8 @@ insurehold = read_csv("data/dataset_basic.csv") %>%
   drop_na() %>% 
   mutate(
   insuredgateway = factor(insuredgateway, levels = c(1,2), labels = c("yes", "no"))) %>% 
-  ggplot(aes(x = insuredgateway,fill = insuredgateway))+
-  geom_bar()+
+  ggplot(aes(x = insuredgateway,fill = insuredgateway)) +
+  geom_bar() +
   theme(legend.position = "none") +
   labs(
     x = "Hold status of insurance",
@@ -105,8 +105,8 @@ insurehold = read_csv("data/dataset_basic.csv") %>%
 insuretype = dataset_basic %>% 
   drop_na() %>% 
   mutate(insure = fct_infreq(insure)) %>% 
-  ggplot(aes(x = insure,fill = insure))+
-  geom_bar()+
+  ggplot(aes(x = insure,fill = insure)) +
+  geom_bar() +
   theme(legend.position = "none") +
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(
@@ -170,7 +170,7 @@ smoke_df %>%
   dplyr::summarize(
     age_count = n()) %>% 
   mutate(smokegroup_count = smokegroup_count,
-         age_percent = age_count/smokegroup_count)%>% 
+         age_percent = age_count/smokegroup_count) %>% 
   ggplot(aes(x = smoker, y = age_percent, fill = agegroup)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
@@ -195,9 +195,9 @@ smoke_df %>%
   drop_na(generalhealth) %>% 
   dplyr::group_by(generalhealth,smoker) %>% 
   dplyr::summarize(
-    count = n())%>% 
+    count = n()) %>% 
   mutate(smokegroup_count = smokegroup_count,
-         health_percent = count/smokegroup_count)%>% 
+         health_percent = count/smokegroup_count) %>% 
   ggplot(aes(x = smoker, y = health_percent, fill = generalhealth)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
@@ -246,7 +246,7 @@ smoke_df %>%
   drop_na(bmi,smoker) %>% 
   ggplot(aes(x = smoker, y = bmi,fill = smoker)) + 
   geom_boxplot() +
-  ylim(0,50)+
+  ylim(0,50) +
     labs(
       x = 'Smoking status',
       y = 'BMI (kg/m^2)',
@@ -266,12 +266,12 @@ Next, we focus on the **current smokers** and look at there smoking intensity, f
 
 ```{r message=FALSE, warning=FALSE}
 type = current_smoker %>%
-  ggplot(aes(x = smoker_cat, fill = everyday))+
-  geom_histogram(stat="count") +
+  ggplot(aes(x = smoker_cat, fill = everyday)) +
+  geom_histogram(stat ="count") +
     labs(
       x = 'Smoking intensity',
       y = 'Number of current smokers',
-      title = 'Smoking intensity of current smokers')+
+      title = 'Smoking intensity of current smokers') +
   theme(legend.position = "none")
 ```
 
@@ -279,14 +279,14 @@ type = current_smoker %>%
 ```{r message=FALSE, warning=FALSE}
 consumption = current_smoker %>% 
   ggplot(aes(x = numberperdaya, fill = everyday)) + 
-  geom_histogram()+
-  xlim(0,30)+
+  geom_histogram() +
+  xlim(0,30) +
   labs(
     x = "Average number of cigarattes smoked per day",
     y = "Number of current smokers",
     title = "Average number of cigarattes\nsmoked per day",
     fill = "Smoking frequency"
-       )+
+       ) +
   theme(legend.position = "right")
 ```
 
@@ -305,10 +305,10 @@ Most of the current smokers are light smokers. Among those light smokers, nearly
 ```{r message=FALSE, warning=FALSE}
   
 current_smoker %>% 
-  ggplot(aes(x = smoker_cat, y = bmi, fill = smoker_cat))+
+  ggplot(aes(x = smoker_cat, y = bmi, fill = smoker_cat)) +
   geom_boxplot() +
   theme(plot.title = element_text(hjust = 0.5)) +
-  ylim(0,50)+
+  ylim(0,50) +
   #facet_grid(.~smoker_cat,scales = "free") +
     labs(
       x = 'Smoking intensity',
@@ -328,10 +328,10 @@ For heavy smokers, their BMI are slightly higher than light smokers and normal s
 ```{r message=FALSE, warning=FALSE}
   
 current_smoker %>% 
-  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday))+
+  ggplot(aes(x = numberperdaya, y = cost20cigarettes,color = everyday)) +
   geom_point(alpha = .5,size = 3) +
-  xlim(0,50)+
-  ylim(0,40)+
+  xlim(0,50) +
+  ylim(0,40) +
   theme(plot.title = element_text(hjust = 0.5)) +
   #facet_grid(.~smoker_cat,scales = "free") +
     labs(
@@ -393,17 +393,17 @@ uninsure = analyse_smoke_insurancetype %>%
   
 
 smoke_plot1 = analyse_smoke_insurancetype %>% 
-  ggplot(aes(x =smoker , y = freq, fill = insure)) + 
+  ggplot(aes(x = smoker , y = freq, fill = insure)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'smoking status ',
       y = 'proportion',
       title = 'The proportion of insurance in different smoking group ',
-      fill = "Insurance type")+
+      fill = "Insurance type") +
   theme(legend.position = "right")
 
 smoke_plot2 = uninsure %>% 
-  ggplot(aes(x =smoker , y = freq, fill = insure)) + 
+  ggplot(aes(x = smoker , y = freq, fill = insure)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'smoking status ',
@@ -467,7 +467,7 @@ agegroup_plot1 = analyse_agegroup_insurancetype %>%
   theme(legend.position = "right")
 
 agegroup_plot2 = uninsure %>% 
-  ggplot(aes(x =agegroup , y = freq, fill = insure)) + 
+  ggplot(aes(x = agegroup , y = freq, fill = insure)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'agegroup',
@@ -528,7 +528,7 @@ child_plot1 = analyse_child_insurancetype %>%
   theme(legend.position = "right")
 
 child_plot2 = uninsure %>% 
-  ggplot(aes(x =child , y = freq, fill = insure)) + 
+  ggplot(aes(x = child , y = freq, fill = insure)) + 
   geom_bar(stat = "identity",position = "dodge") +
     labs(
       x = 'have children or not',
